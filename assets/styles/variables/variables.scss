@@ -69,6 +69,7 @@ $spacing-11xl: 10rem; // 160px
 $color-primary: #252525;
 $color-secondary:#f5f5f5;
 $color-tertiary:#A051DE;
+$color-fullsecondary:#FFFF;
 
 
 
@@ -396,4 +397,7 @@ $color-tertiary:#A051DE;
 
 .color-tertiary {
     color: $color-tertiary;
+}
+.font-semibold {
+    font-weight: 600;
 }

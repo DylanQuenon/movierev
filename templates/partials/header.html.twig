@@ -1,0 +1,67 @@
+{% block stylesheets %}
+	{{ encore_entry_link_tags('headerStyle') }}
+{% endblock %}
+
+<header class="header">
+	<div class="flex header_test wrapper justify-between items-center flex-wrap">
+		<div class="header_flex_left flex items-center h-full">
+			<div class="header_logo">
+				<img src="././images/movierevLogo.png" alt="Logo - Movierev" class="w-12 h-12 object-cover">
+			</div>
+
+			<nav class="header_nav">
+				<ul class="flex">
+					{% set navItems = {
+                        'Accueil': { 'route': 'home', 'icon': 'home' },
+                        'Qui sommes-nous ?': { 'route': 'about', 'icon': 'groups' }
+                    } %}
+
+					{% for label, data in navItems %}
+						<li class="{% if app.request.attributes.get('_route') == data.route %}active{% endif %}">
+							<a href="{{ path(data.route) }}" class="text-lg urbanist font-semibold">
+								{{ label }}
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</nav>
+		</div>
+
+		<div class="header_actions noLogged flex">
+			<a href="#" class="text-lg urbanist flex font-semibold bg-tertiary color-secondary items-center">
+				<span class="material-symbols-outlined">person_add</span>
+				<span>Inscription</span>
+			</a>
+			<a href="#" class="text-lg urbanist flex login font-semibold color-tertiary items-center">
+				<span>Connexion</span>
+				<span class="material-symbols-outlined">login</span>
+			</a>
+		</div>
+	</div>
+</header>
+
+<div id="burger">
+	<div class="bar"></div>
+	<div class="bar"></div>
+	<div class="bar"></div>
+</div>
+
+<div id="menuMobile">
+	<nav>
+		<ul>
+			{% set mobileNavItems = {
+                'Accueil': { 'route': 'home', 'icon': 'home' },
+                'Qui sommes-nous ?': { 'route': 'about', 'icon': 'groups' },
+            } %}
+
+			{% for label, data in mobileNavItems %}
+				<li class="{% if app.request.attributes.get('_route') == data.route %}active{% endif %}">
+					<a href="{{ path(data.route) }}" class="display-sm object uppercase flex items-center">
+						<span class="material-symbols-outlined">{{ data.icon }}</span>
+						{{ label }}
+					</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</nav>
+</div>
