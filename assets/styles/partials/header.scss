@@ -20,7 +20,7 @@
             li {
                 a {
                     transition: color 0.3s;
-                    height: 82px;
+                    height: 80px;
                     display: flex;
                     align-items: center;
                     padding: 0 10px;
@@ -73,6 +73,7 @@
         height: 3px;
         background-color: $color-tertiary;
         transition: 0.3s;
+        border-radius: 25px;
     }
 }
 
@@ -165,3 +166,14 @@
     //     font-size: 2em;
     // }
 }
+header{
+    transition: all 0.3s;
+}
+header.hide{
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+  header.show{
+    transform: translateY(0%);
+    opacity: 1;
+  }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_script_tags('app') }}
+    <title>Movierev - Connexion à l'administration</title>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+   <div class="w-full max-w-md bg-white shadow-xl rounded-lg p-8">
+     <div class="mb-8 text-center">
+        <h2 class="text-3xl font-bold text-purple-700"><i class="fas fa-lock"></i> Connexion</h2>
+        <p class="text-gray-500 mt-2">Connectez-vous pour accéder à l'administration</p>
+     </div>
+
+     {% if hasError %}
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
+            <p>Votre login ou votre mot de passe est incorrect</p>
+        </div>
+     {% endif %}
+     
+     {% if loginError %}
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+            {{ loginError }}
+        </div>
+     {% endif %}
+     
+     <form method="POST">
+        <div class="mb-6">
+            <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">Email</label>
+            <input type="text" id="username" name="_username" placeholder="Adresse email..." value="{{ username }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500">
+        </div>
+
+        <div class="mb-6">
+            <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Mot de passe</label>
+            <input type="password" id="password" name="_password" placeholder="Mot de passe..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500">
+        </div>
+
+        <div class="flex items-center justify-between">
+            <button type="submit" class="bg-purple-700 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300">
+                <i class="fas fa-lock-open"></i> Connexion
+            </button>
+            <a href="{{ path('home') }}" class="text-purple-700 hover:underline">
+                <i class="fas fa-arrow-circle-left"></i> Retour au site
+            </a>
+        </div>
+     </form>
+   </div>
+</body>
+</html>
