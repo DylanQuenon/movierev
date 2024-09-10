@@ -18,7 +18,36 @@
 
 		{{ form_end(myForm) }}
 	</div>
+
+ 
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const typeSelect = document.getElementById('media_type');
+        const durationInput = document.getElementById('media_duration');
+
+        function updatePlaceholder() {
+            const selectedType = typeSelect.value;
+            if (selectedType === 'film') {
+                durationInput.placeholder = 'EX: 1h30';
+            } else if (selectedType === 'serie') {
+                durationInput.placeholder = 'EX: 3 saisons';
+            } else {
+                durationInput.placeholder = 'EX: 1h30'; // Valeur par défaut pour les autres types
+            }
+        }
+
+        // Écoute les changements dans le select
+        typeSelect.addEventListener('change', updatePlaceholder);
+
+        // Met à jour le placeholder au chargement initial
+        updatePlaceholder();
+    });
+</script>
+
 {% endblock %}
 
 
-{% block javascripts %}{% endblock %}
+
