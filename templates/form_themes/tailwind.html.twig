@@ -1,0 +1,88 @@
+{% use 'tailwind_2_layout.html.twig' %}
+
+{%- block form_row -%}
+    {%- set row_class = row_class|default('mb-6') -%}
+    <div class="{{ row_class }}">
+        {{ form_label(form) }}
+        {% if form.vars.errors|length > 0 %}
+       
+                {{ form_widget(form, {'attr': {'class': 'mt-1 block w-full rounded-md border-red-500 shadow-sm focus:border-red-500 focus:ring focus:ring-red-200 focus:ring-opacity-50'}}) }}
+                {{ form_errors(form) }}
+ 
+        {% else %}
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+        {% endif %}
+    </div>
+{%- endblock form_row -%}
+
+{%- block widget_attributes -%}
+    {%- set widget_class = widget_class|default('mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50') -%}
+    {{- parent() -}}
+{%- endblock widget_attributes -%}
+
+{%- block form_label -%}
+    {%- set label_class = label_class|default('block text-purple-500 tracking-wider mb-2 text-sm urbanist') -%}
+    {{- parent() -}}
+{%- endblock form_label -%}
+
+{%- block form_help -%}
+    {%- set help_class = help_class|default('mt-1 text-sm text-gray-600') -%}
+    {{- parent() -}}
+{%- endblock form_help -%}
+
+{%- block form_errors -%}
+    {%- set error_item_class = error_item_class|default('text-red-500 text-sm mt-1') -%}
+    {{- parent() -}}
+{%- endblock form_errors -%}
+
+{%- block checkbox_widget -%}
+    {%- set widget_class = widget_class|default('mr-2 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50') -%}
+    {{- parent() -}}
+{%- endblock checkbox_widget -%}
+
+{%- block checkbox_label -%}
+    {%- set label_class = label_class|default('block text-gray-800') -%}
+    {{- block('form_label') -}}
+{%- endblock checkbox_label -%}
+
+{%- block textarea_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ 'rounded border-gray-300 w-full min-h-[250px] resize-none shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50')|trim}) -%}
+    {{- parent() -}}
+{%- endblock textarea_widget -%}
+
+{%- block file_widget -%}
+    {# Masquer le champ de fichier par défaut #}
+    <input type="file" id="{{ form.vars.id }}" name="{{ form.vars.full_name }}" class="hidden" {{ block('widget_attributes') }} {% if multiple is defined and multiple %}multiple="multiple"{% endif %} />
+
+    {# Label stylisé pour le champ de fichier #}
+    <label for="{{ form.vars.id }}" class="flex w-80 items-center justify-center cursor-pointer bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-md shadow-md hover:shadow-lg transition duration-300 ease-in-out">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+        </svg>
+        <span class="font-medium text-sm">Choisir un fichier</span>
+    </label>
+
+    <div id="file-info-{{ form.vars.id }}" class="mt-2 text-sm text-gray-600">
+        <span id="file-name-{{ form.vars.id }}" class="font-medium">{{ form.vars.value|default('Aucun fichier sélectionné') }}</span>
+    </div>
+
+    <script>
+        document.querySelector('#{{ form.vars.id }}').addEventListener('change', function() {
+            var fileInfo = document.querySelector('#file-info-{{ form.vars.id }}');
+            var fileName = document.querySelector('#file-name-{{ form.vars.id }}');
+            
+            if (this.files.length > 0) {
+                var file = this.files[0];
+                fileName.textContent = file.name;
+                fileInfo.innerHTML = `
+                    <span class="font-medium">${file.name}</span><br>
+                    <span class="text-xs text-gray-500">${(file.size / 1024).toFixed(2)} KB - ${file.type}</span>
+                `;
+            } else {
+                fileName.textContent = 'Aucun fichier sélectionné';
+                fileInfo.innerHTML = '<span class="font-medium">Aucun fichier sélectionné</span>';
+            }
+        });
+    </script>
+{%- endblock file_widget -%}

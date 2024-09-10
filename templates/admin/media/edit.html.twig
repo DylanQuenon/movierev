@@ -1,0 +1,55 @@
+{% extends "admin/base.html.twig" %}
+
+{% block title %}Édition du média: {{ media.title }}{% endblock %}
+
+{% form_theme myForm _self %}
+
+{% block body %}
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-semibold mb-4">Modification du média: {{ media.title }}</h1>
+    <a href="{{ path('admin_medias_index') }}" class="inline-block bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300 mb-6">Retour</a>
+    
+    {{ form_start(myForm, {'attr': {'class': 'space-y-6'}}) }}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Formulaire -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h3 class="text-xl font-medium mb-4">Corriger le média</h3>
+            <div class="mb-4">
+                {{ form_widget(myForm) }}
+            </div>
+            <div class="text-right">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">
+                    <i class="fas fa-check mr-2"></i> Enregistrer les Modifications
+                </button>
+            </div>
+        </div>
+
+        <!-- Images -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h3 class="text-xl font-medium mb-4">Images</h3>
+            <div class="space-y-4">
+                {% set images = [
+                    { 'url': oldPosterPath, 'type': 'poster', 'label': 'Affiche du film' },
+                    { 'url': oldCoverPath, 'type': 'cover', 'label': 'Couverture' },
+                ] %}
+                {% for image in images %}
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex-shrink-0 w-24 h-24 mr-4">
+                            <img src="{{ asset('uploads/' ~ image.url) }}" class="object-cover w-full h-full rounded-md border border-gray-300" alt="{{ image.label }}">
+                        </div>
+                        <div class="flex-grow">
+                            <p class="text-lg font-semibold mb-1">{{ image.label }}</p>
+                        </div>
+                        <div>
+                            <a href="{{ path('mediaImgModify', {'slug': media.slug, 'type': image.type | url_encode}) }}" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition duration-300">Modifier</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    {{ form_end(myForm) }}
+</div>
+{% endblock %}

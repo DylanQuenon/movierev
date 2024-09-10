@@ -23,6 +23,8 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('headerStyle', './assets/styles/partials/header.scss')
 
+    .addEntry('burgerJS', './assets/js/burger.js')
+
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
 

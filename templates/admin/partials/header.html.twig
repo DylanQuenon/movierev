@@ -1,41 +1,38 @@
-<nav class="bg-purple-700 p-4">
-  <div class="container mx-auto flex items-center justify-between">
-    <a class="text-white text-lg font-bold" href="#">Admin</a>
-    <button class="lg:hidden text-white focus:outline-none" type="button" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-      <span><i class="fas fa-bars"></i></span>
+<nav class="bg-purple-800 p-4 shadow-md">
+  <div class="container mx-auto flex items-center gap-8">
+    <a class="text-white text-2xl font-bold" href="#">Admin</a>
+    
+    <!-- Button for mobile menu -->
+    <button class="lg:hidden text-white focus:outline-none" type="button" aria-controls="navbarText" aria-expanded="false">
+      <i class="fas fa-bars text-xl"></i>
     </button>
-    <div class="hidden lg:flex lg:items-center w-full lg:w-auto" id="navbarText">
-      <ul class="flex space-x-4 text-white">
+    
+    <!-- Desktop menu -->
+    <div class="hidden lg:flex lg:items-center lg:w-full lg:justify-between" id="navbarText">
+      <ul class="flex space-x-6 text-white">
         <li>
-          <a class="hover:text-gray-300 flex items-center" href="#"><i class="fas fa-chart-line mr-2"></i>Dashboard</a>
+          <a class="hover:text-gray-300 flex items-center transition-colors" href="#"><i class="fas fa-chart-line mr-2"></i>Dashboard</a>
         </li>
         <li>
-          <a class="hover:text-gray-300 flex items-center" href="{{ path('admin_ads_index') }}"><i class="fas fa-hotel mr-2"></i>Annonces</a>
-        </li>
-        <li>
-          <a class="hover:text-gray-300 flex items-center" href="#"><i class="fas fa-folder mr-2"></i>Réservations</a>
-        </li>
-        <li>
-          <a class="hover:text-gray-300 flex items-center" href="#"><i class="fas fa-comments mr-2"></i>Commentaires</a>
-        </li>
-        <li>
-          <a class="hover:text-gray-300 flex items-center" href="#"><i class="fas fa-users mr-2"></i>Utilisateurs</a>
+          <a class="hover:text-gray-300 flex items-center transition-colors" href="{{ path('admin_medias_index') }}"><i class="fas fa-film mr-2"></i>Medias</a>
         </li>
       </ul>
-      <ul class="ml-auto flex space-x-4 text-white">
+      
+      <!-- Right side menu -->
+      <ul class="ml-auto flex items-center space-x-4 text-white">
         <li>
-          <a href="{{ path('homepage') }}" target="_blank" class="hover:text-gray-300 flex items-center"><i class="fas fa-eye mr-2"></i>Voir le site</a>
+          <a href="{{ path('home') }}" target="_blank" class="hover:text-gray-300 flex items-center transition-colors"><i class="fas fa-eye mr-2"></i>Voir le site</a>
         </li>
         {% if app.user %}
           <li class="relative">
             <button class="flex items-center focus:outline-none" id="accountDropdownLink">
-              {% if app.user.picture %}
-                <img src="/uploads/{{ app.user.picture }}" class="w-8 h-8 rounded-full mr-2" alt="Avatar de {{ app.user.fullName }}">
+              {% if app.user.avatar %}
+                <img src="/uploads/{{ app.user.avatar }}" class="w-8 h-8 rounded-full mr-2 border border-gray-300" alt="">
               {% else %}
-                <img src="http://placehold.it/64x64" class="w-8 h-8 rounded-full mr-2" alt="Avatar de {{ app.user.fullName }}">
+                <img src="http://placehold.it/64x64" class="w-8 h-8 rounded-full mr-2 border border-gray-300" alt="">
               {% endif %}
-              <span class="text-black">{{ app.user.fullName }}</span>
-              <i class="fas fa-chevron-down ml-2 text-black"></i>
+              <span class="text-white">{{ app.user.fullName }}</span>
+              <i class="fas fa-chevron-down ml-2 text-white"></i>
             </button>
             <div class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 text-gray-800" id="dropdown">
               <a href="{{ path('admin_account_logout') }}" class="block px-4 py-2 hover:bg-gray-100">Déconnexion</a>
@@ -46,19 +43,73 @@
     </div>
   </div>
 </nav>
-
 {% for label, messages in app.flashes %}
-  <div class="container mx-auto my-4">
-    <div class="bg-{{ label }}-100 border-l-4 border-{{ label }}-500 text-{{ label }}-700 p-4">
-      {% for message in messages %}
-        <p>{{ message | raw }}</p>
-      {% endfor %}
-    </div>
+  <div class="{% if label == 'success' %}bg-green-100 border-green-500 text-green-700{% elseif label == 'error' %}bg-red-100 border-red-500 text-red-700{% else %}bg-blue-100 border-blue-500 text-blue-700{% endif %} border-l-4 p-4 rounded-lg shadow-lg absolute top-4 right-4 max-w-md flash-message" role="alert">
+    <p class="font-bold">
+      {{ {'success': 'Succès', 'error': 'Erreur', 'warning': 'Avertissement', 'info': 'Information'}[label] }}
+    </p>
+    {% for message in messages %}
+      <p>{{ message | raw }}</p>
+    {% endfor %}
+    <button class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 hover:text-gray-800 focus:outline-none" onclick="closeFlashMessage(this.parentNode)">
+      <i class="fas fa-times"></i>
+    </button>
   </div>
 {% endfor %}
+
+
+<style>
+  @keyframes slideOut {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+ 
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  {# .flash-message {
+    transition: opacity 0s ease-in-out;
+  } #}
+
+  .flash-message.slide-out {
+    animation: slideOut 0.5s ease-in-out;
+  }
+</style>
 
 <script>
   document.getElementById('accountDropdownLink').addEventListener('click', function() {
     document.getElementById('dropdown').classList.toggle('hidden');
   });
+
+document.querySelectorAll('.flash-message').forEach(message => {
+  const displayTime = 5000; // 5 seconds
+  let timer;
+
+  function startTimer() {
+    timer = setTimeout(() => {
+      message.classList.add('slide-out');
+      setTimeout(() => message.style.opacity = '0', 0); // Allow animation to complete
+    }, displayTime);
+  }
+
+  startTimer();
+
+  message.addEventListener('mouseenter', () => {
+    clearTimeout(timer);
+  });
+
+  message.addEventListener('mouseleave', () => {
+    startTimer();
+  });
+});
+
+function closeFlashMessage(message) {
+  message.classList.add('slide-out');
+  setTimeout(() => message.style.display = 'none', 500); // Allow animation to complete
+}
+
 </script>

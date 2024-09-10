@@ -1,0 +1,62 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Liste des Médias{% endblock %}
+
+{% block body %}
+<div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">Liste des Médias</h1>
+
+    <div class="mb-4">
+        <a href="{{path('admin_medias_new')}}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Ajouter un média</a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead class="bg-gray-100 border-b border-gray-200">
+                <tr>
+                    <th class="py-3 px-6 text-left text-gray-600">Titre</th>
+                    <th class="py-3 px-6 text-left text-gray-600">Date de Sortie</th>
+                    <th class="py-3 px-6 text-left text-gray-600">Type</th>
+                    <th class="py-3 px-6 text-left text-gray-600">Durée</th>
+                    <th class="py-3 px-6 text-left text-gray-600">Synopsis</th>
+                    <th class="py-3 px-6 text-left text-gray-600">Affiche</th>
+                    <th class="py-3 px-6 text-left text-gray-600">Couverture</th>
+                    <th class="py-3 px-6 text-left text-gray-600">Producteur</th>
+                    <th class="py-3 px-6 text-left text-gray-600">Bande-annonce</th>
+                    <th class="py-3 px-6 text-center text-gray-600">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for media in medias %}
+                <tr class="border-b border-gray-200">
+                    <td class="py-4 px-6">{{ media.title }}</td>
+                    <td class="py-4 px-6">{{ media.releaseDate|date('d/m/Y') }}</td>
+                    <td class="py-4 px-6">{{ media.type }}</td>
+                    <td class="py-4 px-6">{{ media.duration }}</td>
+                    <td class="py-4 px-6">{{ media.synopsis|slice(0, 50) ~ (media.synopsis|length > 50 ? '...' : '') }}</td>
+                    <td class="py-4 px-6"><img src="/uploads/{{ media.poster }}" alt="Affiche" class="w-16 h-16 object-cover"></td>
+                    <td class="py-4 px-6"><img src="/uploads/{{ media.cover }}" alt="Couverture" class="w-24 h-16 object-cover"></td>
+                    <td class="py-4 px-6">{{ media.producer }}</td>
+                    <td class="py-4 px-6"><a href="{{ media.trailer }}" target="_blank" class="text-blue-500 hover:underline">Voir la bande-annonce</a></td>
+                    <td class="py-4 px-6 flex justify-center space-x-2">
+                        <a href="{{ path('admin_medias_edit', { 'slug': media.slug }) }}" class="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600">Modifier</a>
+                        <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('admin_medias_delete', { 'slug': media.slug }) }}', 'Supprimer', 'Annuler')" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">Supprimer</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% include '/partials/_delete_modal.html.twig' with {
+    modal_id: 'deleteModal',
+    form_id: 'deleteForm',
+    title: 'Confirmation de suppression',
+    message: 'Êtes-vous sûr de vouloir supprimer ce média ? Cette action est irréversible.',
+    action_url: '#',  
+    confirm_text: 'Supprimer',
+    cancel_text: 'Annuler'
+} %}
+
+{% endblock %}
