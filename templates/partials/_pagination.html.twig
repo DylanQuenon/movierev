@@ -1,0 +1,65 @@
+<div class="w-full flex justify-center py-4">
+    <nav aria-label="Page navigation example">
+        <ul class="inline-flex -space-x-px text-base">
+        
+            {# Lien première page (désactivé si nous sommes sur la première page) #}
+            {% if page > pages %}
+                    <a href="{{ path(route, {'page': 1}) }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-purple-100 hover:text-purple-700" aria-label="Next">
+                           <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+                    </a>
+                {% else %}
+                    <span class="flex items-center justify-center px-4 h-10 leading-tight text-gray-300 bg-white border border-gray-300 cursor-not-allowed" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+                    </span>
+                {% endif %}
+
+            {# Lien précédent (désactivé si nous sommes sur la première page) #}
+               {% if page > pages %}
+                    <a href="{{ path(route, {'page': page - 1}) }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-purple-100 hover:text-purple-700" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-angle-left"></i></span>
+                    </a>
+                {% else %}
+                    <span class="flex items-center justify-center px-4 h-10 leading-tight text-gray-300 bg-white border border-gray-300 cursor-not-allowed" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-angle-left"></i></span>
+                    </span>
+                {% endif %}
+            {# Boucle pour afficher les numéros de page #}
+            {% set halfWindowSize = 1 %}
+            {% set startPage = (page - halfWindowSize) > 0 ? (page - halfWindowSize) : 1 %}
+            {% set endPage = (page + halfWindowSize) < pages ? (page + halfWindowSize) : pages %}
+
+            {% for i in startPage..endPage %}
+                <li>
+                    <a href="{{ path(route, {'page': i}) }}" {% if page == i %}aria-current="page" class="flex items-center justify-center px-4 h-10 text-white bg-purple-600 border border-gray-300 rounded-md hover:bg-purple-700"{% else %}class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-purple-100 hover:text-purple-700"{% endif %}>
+                        {{ i }}
+                    </a>
+                </li>
+            {% endfor %}
+
+            {# Lien suivant (désactivé si nous sommes sur la dernière page) #}
+            <li>
+                {% if page < pages %}
+                    <a href="{{ path(route, {'page': page + 1}) }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-purple-100 hover:text-purple-700" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-angle-right"></i></span>
+                    </a>
+                {% else %}
+                    <span class="flex items-center justify-center px-4 h-10 leading-tight text-gray-300 bg-white border border-gray-300 cursor-not-allowed" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-angle-right"></i></span>
+                    </span>
+                {% endif %}
+            </li>
+            {# Lien dernière page (désactivé si nous sommes sur la dernière page) #}
+            <li>
+                 {% if page < pages %}
+                    <a href="{{ path(route, {'page': pages}) }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-purple-100 hover:text-purple-700" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+                    </a>
+                {% else %}
+                    <span class="flex items-center justify-center px-4 h-10 leading-tight text-gray-300 bg-white border border-gray-300 cursor-not-allowed" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+                    </span>
+                {% endif %}
+            </li>
+        </ul>
+    </nav>
+</div>

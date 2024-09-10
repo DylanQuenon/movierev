@@ -6,6 +6,7 @@ use App\Entity\Media;
 use App\Form\MediaType;
 use App\Form\ImgModifyType;
 use App\Form\MediaEditType;
+use App\Service\PaginationService;
 use App\Repository\MediaRepository;
 use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,11 +24,14 @@ class AdminMediaController extends AbstractController
      * @param MediaRepository $repo
      * @return Response
      */
-    #[Route('/admin/medias', name: 'admin_medias_index')]
-    public function index(MediaRepository $repo): Response
+    #[Route('/admin/medias/{page<\d+>?1}', name: 'admin_medias_index')]
+    public function index(MediaRepository $repo, PaginationService $pagination, int $page): Response
     {
+        $pagination->setDataSource(Media::class)->setPage($page)->setLimit(9);
+        $medias = $pagination->getData();
         return $this->render('admin/media/index.html.twig', [
-            'medias' => $repo->findAll(),
+            'pagination' => $pagination,
+            'medias' => $medias,
         ]);
     }
 
@@ -183,7 +187,7 @@ class AdminMediaController extends AbstractController
         $manager->remove($media);
         $manager->flush();
         
-        return $this->redirectToRoute('admin_medias_edit', ['slug' => $media->getSlug()]);
+        return $this->redirectToRoute('admin_medias_index');
     }
 
 

@@ -26,7 +26,7 @@ class AppFixtures extends Fixture
                   ->setUsername('dylanqn')
                   ->setEmail('dylan@gmail.com')
                   ->setPrivate(false)
-                  ->setAvatar("https://thispersondoesnotexist.com/")
+                  ->setAvatar("")
                   ->setPassword($this->passwordHasher->hashPassword($adminUser, 'password'))
                   ->setBiography('biographie')
                   ->setDescription('<p>' . join('</p><p>', $faker->paragraphs(3)) . '</p>')
@@ -40,7 +40,7 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setFirstName($firstName)
                 ->setLastName($lastName)
-                ->setAvatar("https://thispersondoesnotexist.com/")
+                ->setAvatar("")
                 ->setUsername(strtolower($firstName[0] . $lastName))
                 ->setEmail($faker->email())
                 ->setPassword($this->passwordHasher->hashPassword($user, 'password'))
@@ -58,8 +58,8 @@ class AppFixtures extends Fixture
                   ->setType($faker->randomElement(['film', 'série']))
                   ->setDuration($faker->numberBetween(60, 180) . ' min')
                   ->setSynopsis($faker->paragraph(5))
-                  ->setPoster("https://via.placeholder.com/150")
-                  ->setCover("https://via.placeholder.com/300x200")
+                  ->setPoster("")
+                  ->setCover("")
                   ->setProducer($faker->name())
                   ->setTrailer("https://www.youtube.com/watch?v=oVzVdvGIC7U");
             $manager->persist($media);

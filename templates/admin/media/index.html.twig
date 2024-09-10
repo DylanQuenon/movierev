@@ -46,7 +46,11 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        {{ pagination.display() }}
     </div>
+
+    
 </div>
 
 {% include '/partials/_delete_modal.html.twig' with {
