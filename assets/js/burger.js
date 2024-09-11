@@ -20,10 +20,14 @@ document.addEventListener('scroll', () => {
     let top = document.documentElement.scrollTop || document.body.scrollTop || 0;
     if (lastScrollValue < top) {
         header.classList.add('hide');
+        burger.classList.add('hide');
         header.classList.remove('show');
+        burger.classList.remove('show');
     } else {
         header.classList.remove('hide');
+        burger.classList.remove('hide');
         header.classList.add('show');
+        burger.classList.add('show');
     }
     lastScrollValue = top;
 });

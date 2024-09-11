@@ -1,0 +1,149 @@
+@import "../variables/variables.scss";
+
+body{
+    overflow-x: hidden;
+}
+#home{
+    min-height: 100vh;
+    padding: $spacing-9xl 0;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+
+    @media all and (max-width: 992px) {
+        min-height: auto !important;
+        background-position: 100% center;
+    }
+    .wrapper{
+     
+        position: relative;
+    }
+    .jumbotron{
+        padding: $spacing-9xl 0;
+        z-index: 10;
+        position: relative;
+        @include flexGap(column, $spacing-4xl);
+        .items_info{
+            border-right: solid 1px $color-secondary;
+            &:last-child{
+                border-right: none;
+            }
+            i{
+                color: #FFDB1E;
+                font-size: 20px;
+            }
+        }
+        &_content{
+            @include flexGap(column, $spacing-4xl);
+            &_heading{
+                @include flexGap(column, $spacing-lg);
+            }
+        }
+
+
+        &_actions{
+            gap: $spacing-2xl;
+            &>*, a , button{
+                padding: $spacing-md $spacing-xl;
+                border-radius: $radius-4xl;
+                transition: all 0.3s;
+                &:hover{
+                    background-color: #D0ABEE;
+                    color: $color-primary;
+                }
+            }
+          
+        }
+    }
+}
+.shadow{
+    width: 1000px;
+    height: 100vh;
+    background-color: rgba(30, 30, 30,0.8);
+    border-radius: 100%;
+    filter: blur(150px);
+    position: absolute;
+    left: -20%;
+    top: 0%;
+    z-index: 5;
+}
+.shadowWhite{
+    width: 140%;
+    height: 30vh;
+    background-color: rgb(255, 255, 255);
+    filter: blur(15px);
+    position: absolute;
+    left: -33%;
+    top: -40px;
+    z-index: 6;
+    @media all and (max-width: 992px) {
+        top:-80px
+    }
+}
+.test{
+    position: relative;
+}
+
+
+.swiper {
+
+   display: flex;
+   .swiper-wrapper{
+    display: flex;
+   }
+    
+  }
+  
+  @media all and (max-width: 640px) {
+
+    .shadow{
+        background-color: rgba(20, 20, 20,0.5);
+    }
+    .jumbotron_infos_secondary{
+        gap: 12px !important;
+        font-size: $text-font-size-md !important;
+        // &>{
+        //     width: 100% !important;
+       
+        // }
+        .items_info{
+            padding-right: 0.5rem !important;
+            span,p{
+                font-size: $text-font-size-md !important;
+            }
+        }
+    }
+    .wrapper{
+        width: 90% !important;
+    }
+
+    iframe{
+        width: 350px !important;
+        height: 300px !important;
+    }
+
+}
+
+.swiper-pagination{
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: flex;
+    gap: $spacing-lg;
+    z-index: 7;
+
+}
+
+.swiper-pagination-bullet{
+    width: 100px !important;
+    height: 12px !important;
+    border-radius: 100px;
+    background-color: $color-secondary !important;
+
+    &-active{
+        background-color: $color-tertiary !important;
+    }
+
+}

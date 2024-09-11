@@ -1,6 +1,6 @@
 @import "../variables/variables.scss";
 .header {
-    height: 80px;
+    height: 65px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -8,11 +8,12 @@
     backdrop-filter: blur(150px);
     position: fixed;
     top: 0;
+    z-index: 100;
     left: 0;
     border-bottom: solid 3px #d6d6d6;
     .header_flex_left {
         gap: $spacing-4xl;
-        min-height: 80px;
+        min-height: 65px;
     }
     .header_nav {
         ul {
@@ -20,7 +21,7 @@
             li {
                 a {
                     transition: color 0.3s;
-                    height: 80px;
+                    height: 65px;
                     display: flex;
                     align-items: center;
                     padding: 0 10px;
@@ -146,6 +147,10 @@
         display: none;
     }
 
+    .header{
+        height: 80px;
+    }
+
     #burger {
         display: flex;
         align-items: center;
@@ -166,14 +171,14 @@
     //     font-size: 2em;
     // }
 }
-header{
+header,#burger{
     transition: all 0.3s;
 }
-header.hide{
+header.hide,#burger.hide{
     transform: translateY(-110%);
     opacity: 0;
   }
-  header.show{
+  header.show,#burger.show{
     transform: translateY(0%);
     opacity: 1;
   }
