@@ -44,7 +44,7 @@ body{
 
         &_actions{
             gap: $spacing-2xl;
-            &>*, a , button{
+            a{
                 padding: $spacing-md $spacing-xl;
                 border-radius: $radius-4xl;
                 transition: all 0.3s;
@@ -146,4 +146,8 @@ body{
         background-color: $color-tertiary !important;
     }
 
+}
+#presentation{
+    z-index: 7;
+    padding: $spacing-9xl;
 }

@@ -29,6 +29,8 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "aos": "^2.3.4",
+        "rough-notation": "^0.5.1",
         "swiper": "^11.1.12"
     }
 }

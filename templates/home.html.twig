@@ -1,119 +1,110 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Accueil
+{% endblock %}
 
 {% block stylesheets %}
-    {{ encore_entry_link_tags('homeStyle') }}
+	{{ encore_entry_link_tags('homeStyle') }}
 {% endblock %}
 
 {% block body %}
-    <!-- Swiper Container -->
-    <div class="swiper" data-aos="fade-right" data-aos-anchor-placement="top-center" data-aos-duration="500">
-        <!-- Swiper Wrapper -->
-        <div class="swiper-wrapper">
-            {% for media in medias %}
-                <!-- Swiper Slide -->
-                <div class="swiper-slide">
-                    <div class="slide" id="home" style="background-image: url('/uploads/{{ media.cover }}')">
-                        <div class="shadow"></div>
-                        <div class="wrapper">
-                            <div class="jumbotron sm:w-12/12 md:w-6/12 z-20">
-                                <!-- Item du dessus -->
-                                <div class="jumbotron_infos_secondary text-lg object uppercase color-secondary flex gap-4">
-                                    <!-- Note -->
-                                    <div class="items_info rating pr-4 flex items-center gap-1">
-                                        <i class="fa-solid fa-star"></i>
-                                        <span class="text-xl object color-secondary">4.5</span>
-                                    </div>
-                                    <!-- Durée -->
-                                    <div class="items_info rating pr-4 flex items-center gap-1">
-                                        {% if media.duration matches '/^[0-9]+ saison(s)?$/' %}
-                                            <p>
-                                                <span class="color-tertiary">{{ media.duration|split(' ')[0] }}</span> 
-                                                {{ media.duration|split(' ')[1] }}
-                                            </p>
-                                    {% elseif media.duration matches '/^[0-9]+h[0-9]+$/' %}
-    <p>
-        <span class="color-secondary">{{ media.duration|split('h')[0] }}<span class="color-tertiary"> h </span></span>
-        {{ media.duration|split('h')[1] }}
-    </p>
-{% else %}
-    <p>{{ media.duration }}</p>
-{% endif %}
+	<!-- Swiper Container -->
+	<div class="swiper" data-aos="fade-right" data-aos-anchor-placement="top-center" data-aos-duration="500">
+		<!-- Swiper Wrapper -->
+		<div class="swiper-wrapper">
+			{% for media in medias %}
+				<!-- Swiper Slide -->
+				<div class="swiper-slide">
+					<div class="slide" id="home" style="background-image: url('/uploads/{{ media.cover }}')">
+						<div class="shadow"></div>
+						<div class="wrapper">
+							<div
+								class="jumbotron sm:w-12/12 md:w-6/12 z-20">
+								<!-- Item du dessus -->
+								<div
+									class="jumbotron_infos_secondary text-lg object uppercase color-secondary flex gap-4">
+									<!-- Note -->
+									<div class="items_info rating pr-4 flex items-center gap-1">
+										<i class="fa-solid fa-star"></i>
+										<span class="text-xl object color-secondary">4.5</span>
+									</div>
+									<!-- Durée -->
+									<div class="items_info rating pr-4 flex items-center gap-1">
+										{% if media.duration matches '/^[0-9]+ saison(s)?$/' %}
+											<p>
+												<span class="color-tertiary">{{ media.duration|split(' ')[0] }}</span>
+												{{ media.duration|split(' ')[1] }}
+											</p>
+										{% elseif media.duration matches '/^[0-9]+h[0-9]+$/' %}
+											<p>
+												<span class="color-secondary">{{ media.duration|split('h')[0] }}<span class="color-tertiary">
+														h
+													</span>
+												</span>
+												{{ media.duration|split('h')[1] }}
+											</p>
+										{% else %}
+											<p>{{ media.duration }}</p>
+										{% endif %}
 
-                                    </div>
-                                    <!-- Catégories & genres -->
-                                    <div class="items_info rating pr-4 flex items-center gap-1 color-tertiary ">
-                                        <p>{{media.type}} & genres</p>
-                                    </div>
-                                </div>
-                                <!-- Info principale -->
-                                <div class="jumbotron_content">
-                                    <div class="jumbotron_content_heading flex-col">
-                                        <h3 class="display-lg object uppercase color-secondary">{{media.title}}</h3>
-                                        <p class="text-lg urbanist color-secondary">{{ media.synopsis|slice(0, 160) ~ '...' }}</p>
-                                    </div>
-                                    <div class="jumbotron_actions flex flex-wrap">
-                                        <button onclick="openTrailer('{{ media.trailer }}')" class="text-lg urbanist color-secondary bg-tertiary flex items-center gap-2 button_trailer">
-                                            <i class="fa-solid fa-play"></i> <span>Regarder le trailer</span>
-                                        </button>
-                                        <a href="#" class="text-lg urbanist color-tertiary bg-secondary items-center button_details flex gap-2">
-                                            <i class="fa-solid fa-plus"></i> <span>Voir les détails</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
+									</div>
+									<!-- Catégories & genres -->
+									<div class="items_info rating pr-4 flex items-center gap-1 color-tertiary ">
+										<p>{{media.type}}
+											& genres</p>
+									</div>
+								</div>
+								<!-- Info principale -->
+								<div class="jumbotron_content">
+									<div class="jumbotron_content_heading flex-col">
+										<h3 class="display-lg object uppercase color-secondary">{{media.title}}</h3>
+										<p class="text-lg urbanist color-secondary">{{ media.synopsis|slice(0, 160) ~ '...' }}</p>
+									</div>
+									<div class="jumbotron_actions flex flex-wrap">
+										{% include 'partials/_trailer_button.html.twig' with { trailerUrl: media.trailer } %}
+										<a href="#" class="text-lg urbanist color-tertiary bg-secondary items-center button_details flex gap-2">
+											<i class="fa-solid fa-plus"></i>
+											<span>Voir les détails</span>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+
+		<div class="swiper-pagination"></div>
+
+
+	</div>
+
+	<div class="test">
+		<div class="shadowWhite"></div>
+	</div>
+
+	<div class="slide relative" id="presentation">
+        <div class="wrapper">
+            <div class="heading flex justify-center">
+            <h1 class="display-xl object text-center w-8/12 uppercase  leading-tight" data-aos="zoom-in">
+    <span class="lasso color-tertiary my">MOVIEREV</span>   , Le cinéma à portée de clic !
+</h1>
+
+            </div>
         </div>
-
-         <div class="swiper-pagination"></div>
-        
-       
     </div>
 
-
-
-    <div class="test">
-        <div class="shadowWhite"></div>
-    </div>
-
-    <div class="slide"></div>
-
-
-        <!-- Modal pour le trailer -->
-    <div id="trailerModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 flex justify-center items-center">
-        <div class="relative bg-black p-4 rounded-lg">
-            <button class="absolute top-2 -right-5 text-white bg-tertiary rounded-full w-10 h-10 flex items-center justify-center text-xl p-2 cursor-pointer z-50 hover:bg-tertiary-dark" onclick="closeTrailer()">
-                &times;
-            </button>
-            <iframe id="trailerIframe" class="w-[800px] h-[488px] rounded-lg" src="" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </div>
 
 {% endblock %}
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('sliderHomeJS') }}
+	{{ encore_entry_script_tags('sliderHomeJS') }}
 
-    <script>
-    
-        function openTrailer(trailerUrl) {
-            const modal = document.getElementById('trailerModal');
-            const iframe = document.getElementById('trailerIframe');
-            iframe.src = trailerUrl;
-            modal.classList.remove('hidden');
-            
+  <script>
 
-        }
 
-        function closeTrailer() {
-            const modal = document.getElementById('trailerModal');
-            const iframe = document.getElementById('trailerIframe');
-            iframe.src = '';
-            modal.classList.add('hidden');
-        }
-    </script>
+</script>
+
+
 {% endblock %}

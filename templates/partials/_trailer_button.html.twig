@@ -1,0 +1,36 @@
+
+
+    <button onclick="openTrailer('{{ trailerUrl }}')" class="text-lg urbanist color-secondary bg-tertiary flex items-center gap-2 button_trailer">
+        <i class="fa-solid fa-play"></i> <span>Regarder le trailer</span>
+    </button>
+
+   
+
+        <!-- Modal pour le trailer -->
+    <div id="trailerModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 flex justify-center items-center">
+        <div class="relative bg-black p-4 rounded-lg">
+            <button class="absolute top-2 -right-5 text-white bg-tertiary rounded-full w-10 h-10 flex items-center justify-center text-xl p-2 cursor-pointer z-50 hover:bg-tertiary-dark" onclick="closeTrailer()">
+                &times;
+            </button>
+            <iframe id="trailerIframe" class="w-[800px] h-[488px] rounded-lg" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    {% block javascripts %}
+        <script>
+        function openTrailer(trailerUrl) {
+            const modal = document.getElementById('trailerModal');
+            const iframe = document.getElementById('trailerIframe');
+            iframe.src = trailerUrl;
+            modal.classList.remove('hidden');
+        }
+
+        function closeTrailer() {
+            const modal = document.getElementById('trailerModal');
+            const iframe = document.getElementById('trailerIframe');
+            iframe.src = '';
+            modal.classList.add('hidden');
+        }
+    </script>
+    {% endblock %}
+
