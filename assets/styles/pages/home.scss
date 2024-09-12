@@ -149,5 +149,136 @@ body{
 }
 #presentation{
     z-index: 7;
-    padding: $spacing-9xl;
+    padding: $spacing-9xl 0;
+    .wrapper{
+        @include flexGap(column,$spacing-9xl)
+    }
+
+    .heading{
+        gap: $spacing-4xl;
+        .team_discover{
+            display: flex;
+            flex-direction: column;
+            gap: $spacing-2xl;
+            align-items: center;
+        }
+        a{
+            padding: $spacing-md $spacing-xl;
+            transition: all 0.23s;
+            &:hover{
+                background-color: $color-tertiary;
+                color: $color-secondary;
+                border: solid 2px  $color-primary;
+                span{
+                    color: $color-secondary;
+                }
+            }
+        }
+        .team-head{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            transform: translateX(8%);
+            .roundPic {
+                width: 66px;
+                height: 66px;
+                border-radius: $radius-full;
+                border: solid 2px $color-tertiary;
+                background-color: red;
+                position: relative;
+              
+                @for $i from 1 through 10 {
+                  &:nth-child(#{$i}) {
+                    z-index: #{11 - $i}; // Z-index décroissant pour que chaque enfant soit au-dessus de celui d'après
+                    left: -#{($i - 1) * 15}px; // Décalage de 10px pour chaque élément supplémentaire
+                  }
+                }
+              
+                &:nth-child(2n+1) {
+                  background-color: #FFDB1E;
+                }
+              
+                // &:first-child {
+                //   z-index: 5 !important;
+                // }
+              }
+              
+            
+        }
+    }
+
+    .cards_stats{
+        padding: $spacing-5xl $spacing-2xl;
+        background-color: #ffff;
+        border-radius: $radius-3xl;
+        box-shadow: 0 4px 25px rgba(160, 81, 222,0.15);
+        @include flexGap(column,$spacing-6xl);
+
+        .cards_stats_high{
+        @include flexGap(column,$spacing-xl);
+
+        }
+        .heading_card{
+        @include flexGap(column,$spacing-2xl);
+            .square_icons{
+                width: 40px;
+                height: 40px;
+                border-radius: $radius-sm;
+                @include flex(row);
+                &:nth-child(1){
+                    background-color: rgba(208, 171, 238,0.3);
+                    border: solid 2px $color-tertiary;
+                    span{
+                        color: $color-tertiary;
+                    }
+
+                }
+
+        
+         
+            }
+            h4{
+                width: 85%;
+            }
+            
+        }
+        .button_card{
+            display: flex;
+            justify-content: end;
+            width: 100%;
+            a{
+                padding: $spacing-md $spacing-xl;
+                background-color: $color-tertiary;
+                color: $color-secondary;
+                border-radius: $radius-full;
+                span{
+                    color: $color-secondary;
+                }
+            }
+        }
+        
+    }
+
+    .row_cards{
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 32px;
+    }
+    #Actualités .square_icons {
+        background-color: rgba(163, 165, 229,0.3);
+        border: solid 2px #A3A5E5;
+        span{
+            color: #A3A5E5;
+        }
+
+    }
+    #Communauté .square_icons{
+        background-color: rgba(70, 237, 217,0.3);
+        border: solid 2px #46EDD9;
+        span{
+            color: #46EDD9;
+        }
+
+    }
+
 }

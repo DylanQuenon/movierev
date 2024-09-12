@@ -4,28 +4,26 @@ import { annotate } from 'rough-notation'; // Import RoughNotation
 document.addEventListener("DOMContentLoaded", function() {
     const element = document.querySelector('.lasso');
     const annotation = annotate(element, {
-        type: 'highlight',  // Type d'annotation
-        color: '#A051DE', // Couleur de surlignage (highlight)
+        type: 'highlight',  // Type d'annotation (highlight pour surligner)
+        color: '#A051DE', // Couleur de surlignage (mauve)
         strokeWidth: 3,   // Épaisseur du trait
         padding: 5        // Espace autour du texte
     });
 
-    // Utilisation de l'IntersectionObserver
+    let observerInitialized = false;
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Ajouter un délai avant d'afficher l'annotation (par exemple, 1 seconde)
-                setTimeout(() => {
-                    annotation.show(); // Affiche l'annotation après le délai
-
-                    // Après l'animation, changer la couleur du texte
-                    setTimeout(() => {
-                        element.style.color = '#FFFFFF'; // Change la couleur du texte 
-                        element.style.transition="0.3s"
-                    }, 500); // 500ms après l'annotation
-                }, 1000); // Délai avant l'annotation (1 seconde)
-                
-                observer.unobserve(entry.target); // Stopper l'observation après l'affichage
+                if (!observerInitialized) {
+                    // Initialiser l'annotation uniquement lorsque l'élément entre dans le viewport
+                    annotation.show();
+                    observerInitialized = true; // Assurez-vous que l'annotation n'est pas réinitialisée
+                }
+            } else {
+                // Réinitialiser l'annotation lorsque l'élément sort du viewport
+                annotation.hide();
+                observerInitialized = false; // Permet de réinitialiser l'annotation lorsqu'il revient
             }
         });
     }, {

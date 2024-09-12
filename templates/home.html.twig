@@ -84,16 +84,102 @@
 		<div class="shadowWhite"></div>
 	</div>
 
-	<div class="slide relative" id="presentation">
-        <div class="wrapper">
-            <div class="heading flex justify-center">
-            <h1 class="display-xl object text-center w-8/12 uppercase  leading-tight" data-aos="zoom-in">
-    <span class="lasso color-tertiary my">MOVIEREV</span>   , Le cinéma à portée de clic !
-</h1>
+	{% set cards = [
+  {
+    icon: 'slideshow',
+    counting: stats.allMedias is empty ? 0 : stats.allMedias,
+    title: 'Films & Séries',
+    paragraph: 'Plongez dans la magie du cinéma à travers les reviews de notre communauté.',
+    button_text: 'Découvrez les films & séries',
+    button_link: '#'
+  },
+  {
+    icon: 'full_coverage',
+    counting: 130,
+    title: 'Actualités',
+    paragraph: 'Restez informé des dernières sorties et des dernières rumeurs du monde du cinéma.',
+    button_text: 'Découvrez les news',
+    button_link: '#'
+  },
+  {
+    icon: 'groups',
+    counting: 100, 
+    title: 'Communauté',
+    paragraph: 'Rejoignez une communauté passionnée prête à vous guider dans vos découvertes cinématographiques',
+    button_text: 'Rejoignez-nous',
+    button_link: '#'
+  }
+] %}
 
-            </div>
-        </div>
-    </div>
+
+	<div class="slide relative" id="presentation">
+		<div class="wrapper">
+			<div class="heading flex flex-col items-center">
+				<h1 class="display-xl object text-center w-8/12 uppercase  leading-tight">
+					<span class="lasso color-secondary my">MOVIEREV</span>   , Le cinéma à portée de clic !
+				</h1>
+				<p class="display-sm urbanist text-center  w-8/12"data-aos="fade-up" data-aos-duration="800">Nous vous faisons découvrir l'univers du cinéma grâce à une communauté soudée et passionnée.</p>
+				<div class="team_discover">
+					<div class="team-head">
+					{#Notre équipe#}
+						<div class="roundPic"data-aos="fade-left" data-aos-duration="300" data-aos-delay="100" ></div>
+						<div class="roundPic"data-aos="fade-left" data-aos-duration="300" data-aos-delay="300"></div>
+						<div class="roundPic"data-aos="fade-left" data-aos-duration="300" data-aos-delay="600"></div>
+						<div class="roundPic"data-aos="fade-left" data-aos-duration="300" data-aos-delay="900"></div>
+					</div>
+					<div data-aos="fade-left"  data-aos-duration="500" data-aos-delay="900">
+					<a href="{{path('about')}}"   class="text-xl urbanist flex items-center rounded-full border-purple-400 border-2 border-solid gap-1 color-tertiary">
+						Découvrez notre équipe 
+						<span class="material-symbols-outlined color-tertiary">
+						arrow_forward
+						</span> 
+					</a>
+					
+					</div>
+				</div>
+			</div>
+			<div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+				{% for card in cards %}
+					<div class="cards_stats" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 200 }}" id={{card.title}}>
+						<div class="cards_stats_high">
+							<div class="heading_card">
+								<div class="square_icons">
+									<span class="material-symbols-outlined">
+									{{ card.icon }}
+									</span>
+								</div>
+								<h4 class="display-md object uppercase color-primary">
+									<span class="color-tertiary">
+									{% if card.title == 'Communauté' %}
+									
+										<span class="counting">{{ card.counting }}</span><span>% </span>
+									{% else %}
+										<span>+ </span><span class="counting">{{ card.counting }}</span>
+									{% endif %}
+									</span>
+									<br>
+									{{ card.title }}
+								</h4>
+							</div>
+							<p class="text-lg urbanist">
+								{{ card.paragraph }}
+							</p>
+						</div>
+						<div class="button_card">
+							<a href="{{ card.button_link }}" class="text-lg urbanist flex gap-1 items-center">
+							{{ card.button_text }}
+							<span class="material-symbols-outlined">
+								arrow_outward
+							</span>
+							</a>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+	<div class="slide"></div>
 
 
 {% endblock %}
@@ -101,7 +187,66 @@
 {% block javascripts %}
 	{{ encore_entry_script_tags('sliderHomeJS') }}
 
+	
+
   <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const counters = document.querySelectorAll('.counting');
+
+    // Fonction pour réinitialiser le compteur
+    function resetCounter(counter) {
+        counter.innerText = '0'; // Réinitialise le compteur
+    }
+
+    // Fonction pour mettre à jour le compteur
+    function updateCount(counter) {
+        const isPercentage = counter.innerText.includes('%');
+        let target = parseInt(counter.getAttribute('data-count'));
+
+        if (isNaN(target)) {
+            target = 0; // Définit une valeur par défaut si la conversion échoue
+        }
+
+        const increment = target / 200; // Ajuste la vitesse ici
+        let count = 0;
+
+        const step = () => {
+            count += increment;
+            if (count < target) {
+                counter.innerText = `${Math.ceil(count)}`;
+                requestAnimationFrame(step);
+            } else {
+                counter.innerText = `${target}`;
+            }
+        };
+
+        step();
+    }
+
+    // Observer d'intersection pour réagir lorsque les éléments deviennent visibles
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counter = entry.target;
+                resetCounter(counter);
+                updateCount(counter);
+            }
+        });
+    }, { threshold: 0.5 }); // Ajustez le seuil selon vos besoins
+
+    // Observez chaque compteur
+    counters.forEach(counter => {
+        counter.setAttribute('data-count', counter.innerText.replace('%', '').replace('+', ''));
+        counter.innerText = '0'; // Initialise le compteur à zéro
+        observer.observe(counter);
+    });
+});
+
+
+
+
+
+
 
 
 </script>
