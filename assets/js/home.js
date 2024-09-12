@@ -1,34 +1,52 @@
 import { annotate } from 'rough-notation'; // Import RoughNotation
 
-// Ajouter le code RoughNotation avec IntersectionObserver
-document.addEventListener("DOMContentLoaded", function() {
-    const element = document.querySelector('.lasso');
-    const annotation = annotate(element, {
-        type: 'highlight',  // Type d'annotation (highlight pour surligner)
-        color: '#A051DE', // Couleur de surlignage (mauve)
-        strokeWidth: 3,   // Épaisseur du trait
-        padding: 5        // Espace autour du texte
-    });
+/**
+ * Initialise l'annotation sur l'élément spécifié et configure l'observateur d'intersection.
+ * @param {string} selector - Le sélecteur CSS pour l'élément à annoter.
+ * @param {Object} annotationOptions - Les options pour l'annotation RoughNotation.
+ */
+function initializeAnnotation(selector, annotationOptions) {
+    const element = document.querySelector(selector);
+    if (!element) return; // Assurez-vous que l'élément existe
 
+    const annotation = annotate(element, annotationOptions);
     let observerInitialized = false;
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 if (!observerInitialized) {
-                    // Initialiser l'annotation uniquement lorsque l'élément entre dans le viewport
                     annotation.show();
-                    observerInitialized = true; // Assurez-vous que l'annotation n'est pas réinitialisée
+                    observerInitialized = true;
                 }
             } else {
-                // Réinitialiser l'annotation lorsque l'élément sort du viewport
                 annotation.hide();
-                observerInitialized = false; // Permet de réinitialiser l'annotation lorsqu'il revient
+                observerInitialized = false;
             }
         });
     }, {
         threshold: 0.5 // Le pourcentage de l'élément visible avant de déclencher (50%)
     });
 
-    observer.observe(element); // Observer l'élément avec la classe 'lasso'
+    observer.observe(element);
+}
+
+// Exemple d'utilisation pour l'élément avec la classe 'lasso'
+initializeAnnotation('.lasso', {
+    type: 'highlight',
+    color: '#A051DE',
+    strokeWidth: 4,
+    padding: 15,
+  
 });
+
+// Exemple d'utilisation pour l'élément avec la classe 'annotation'
+initializeAnnotation('.annotation', {
+    type: 'underline',
+    color: '#A051DE',
+    strokeWidth: 3,
+    padding: 15,
+    iterations: 3,
+    animationDuration: 3000,
+});
+

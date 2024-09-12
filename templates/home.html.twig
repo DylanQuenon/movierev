@@ -9,7 +9,7 @@
 
 {% block body %}
 	<!-- Swiper Container -->
-	<div class="swiper" data-aos="fade-right" data-aos-anchor-placement="top-center" data-aos-duration="500">
+	<div class="swiper">
 		<!-- Swiper Wrapper -->
 		<div class="swiper-wrapper">
 			{% for media in medias %}
@@ -114,6 +114,7 @@
 
 	<div class="slide relative" id="presentation">
 		<div class="wrapper">
+		{# heading our team#}
 			<div class="heading flex flex-col items-center">
 				<h1 class="display-xl object text-center w-8/12 uppercase  leading-tight">
 					<span class="lasso color-secondary my">MOVIEREV</span>   , Le cinéma à portée de clic !
@@ -138,6 +139,7 @@
 					</div>
 				</div>
 			</div>
+			{#cards#}
 			<div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6 w-full">
 				{% for card in cards %}
 					<div class="cards_stats" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 200 }}" id={{card.title}}>
@@ -176,11 +178,54 @@
 					</div>
 				{% endfor %}
 			</div>
+	{% set values = [
+    {
+        icon: '/images/icon1.png',
+        title: 'Passion',
+        description: "Au cœur de MOVIEREV, la passion pour le cinéma est ce qui nous rassemble. Chaque membre de notre communauté partage un amour profond pour le septième art, que ce soit à travers des critiques réfléchies ou des discussions animées.  <span class='urbanist font-semibold color-tertiary'>C'est cette passion qui nous pousse à explorer, partager et célébrer ensemble l'univers cinématographique.</span>"
+    },
+    {
+        icon: '/images/icon2.png',
+        title: 'Authenticité',
+        description: "MOVIEREV valorise l'authenticité dans chaque avis et échange. Nous croyons en l'importance  <span class='urbanist font-semibold color-tertiary'>des critiques sincères et des opinions honnêtes </span> , qui permettent à notre communauté de rester fidèle à elle-même et de bâtir des liens basés sur la confiance et le respect mutuel."
+    },
+    {
+        icon: '/images/icon3.png',
+        title: 'Innovation',
+        description: "L'innovation est au cœur de l'expérience MOVIEREV. Nous cherchons constamment à améliorer notre plateforme, en intégrant <span class='urbanist font-semibold color-tertiary'>les dernières actualités</span> et en écoutant les retours de notre communauté pour offrir une expérience unique et toujours plus immersive du monde du cinéma."
+    }
+] %}
+
+			{#Nos valeurs#}
+			<div class="our_values">
+				<h2 class="display-md object uppercase annotation w-fit">Nos valeurs</h2>
+				<div class="grid  sm:grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+					{% for value in values %}
+						<div class="our_values_content" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 300 }}">
+							<div class="our_values_content_img max-sm:flex max-sm:justify-center"><img src="{{ value.icon }}" alt="Icones 3d"></div>
+							<h4 class="display-sm urbanist uppercase font-semibold color-tertiary max-sm:text-center">{{ value.title }}</h4>
+							<p class="text-md urbanist">{{ value.description|raw }}</p>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+
+			<div class="graphics_love flex max-sm:flex-col lg:flex-row">
+				<div class="bubble bubble1 display-2xl object color-secondary uppercase" data-aos="fade-up" data-aos-duration="500">we</div>
+				<div class="bubble bubble2 display-2xl object color-secondary uppercase "data-aos="fade-down" data-aos-duration="500" data-aos-delay="500">Love</div>
+				<div class="bubble bubble3 display-2xl object color-secondary uppercase"data-aos="fade-up" data-aos-duration="500" data-aos-delay="1000">
+					<span class="material-symbols-outlined">
+					arrow_right_alt
+					</span>
+				</div>
+				<div class="bubble bubble4 display-2xl object color-secondary uppercase" data-aos="fade-down" data-aos-duration="500" data-aos-delay="1500">Cinema</div>
+			</div>
+
 		</div>
 	</div>
 
 	<div class="slide"></div>
-
+{% include 'partials/_trailer_modal.html.twig' %}
 
 {% endblock %}
 
@@ -195,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fonction pour réinitialiser le compteur
     function resetCounter(counter) {
-        counter.innerText = '0'; // Réinitialise le compteur
+        counter.innerText = '0'; 
     }
 
     // Fonction pour mettre à jour le compteur
@@ -207,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function () {
             target = 0; // Définit une valeur par défaut si la conversion échoue
         }
 
-        const increment = target / 200; // Ajuste la vitesse ici
+        const increment = target / 200; //la vitesse 
         let count = 0;
 
         const step = () => {
@@ -232,7 +277,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateCount(counter);
             }
         });
-    }, { threshold: 0.5 }); // Ajustez le seuil selon vos besoins
+    }, { threshold: 0.5 }); 
 
     // Observez chaque compteur
     counters.forEach(counter => {

@@ -311,7 +311,7 @@ $color-fullsecondary:#FFFF;
 }
 
 .text-md {
-    @include font-style($font-family-urbanist, $text-font-size-md, $font-weight-regular, 1.2);
+    @include font-style($font-family-urbanist, $text-font-size-md, $font-weight-regular, 1.4);
 
     &.urbanist {
         font-family: $font-family-urbanist;
