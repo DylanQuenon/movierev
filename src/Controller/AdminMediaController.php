@@ -27,7 +27,7 @@ class AdminMediaController extends AbstractController
     #[Route('/admin/medias/{page<\d+>?1}', name: 'admin_medias_index')]
     public function index(MediaRepository $repo, PaginationService $pagination, int $page): Response
     {
-        $pagination->setDataSource(Media::class)->setPage($page)->setLimit(9);
+        $pagination->setDataSource(Media::class)->setPage($page)->setLimit(9)->setRoute('admin_medias_index');
         $medias = $pagination->getData();
         return $this->render('admin/media/index.html.twig', [
             'pagination' => $pagination,

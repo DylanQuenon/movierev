@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Films & Séries{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+    <h1 class="text-2xl font-bold mb-4">Films & Séries</h1>
+
+    <form action="{{ path('medias') }}" method="get" class="mb-4">
+        <input type="text" name="search" placeholder="Rechercher un titre" value="{{ search }}" class="px-4 py-2 border rounded-md">
+        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md ml-2">Rechercher</button>
+    </form>
+
+    {% for media in medias %}
+        <p class="text-md urbanist">{{ media.title }}</p>
+    {% endfor %}
+
+    {{ pagination.display() }}
+</div>
+{% endblock %}

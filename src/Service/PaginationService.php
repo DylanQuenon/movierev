@@ -1,327 +1,121 @@
-<?php 
+<?php
 
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
+use Doctrine\ORM\QueryBuilder;
 
-class PaginationService{
-
-
-    /**
- * Les données ou requête personnalisée à paginer (entité, QueryBuilder ou tableau de résultats)
- *
- * @var mixed
- */
-private $dataSource;
-    /**
-     * Le nom de l'entité sur laquelle on veut effectuer une pagination
-     *
-     * @var string
-     */
-    private string $entityClass; 
-
-    /**
-     * Le nombre d'enregistrement à récupérer
-     *
-     * @var integer
-     */
+class PaginationService
+{
+    private $dataSource;
+    private string $entityClass;
     private int $limit = 10;
-
-    /**
-     * La page courante
-     *
-     * @var integer
-     */
     private int $currentPage = 1;
-
-    /**
-     * Le manager de Doctrine permettant de trouver le repo
-     *
-     * @var EntityManagerInterface
-     */
     private EntityManagerInterface $manager;
-
-    /**
-     * Le nom de la route que l'on veut utiliser pour les boutons de navigation
-     *
-     * @var string
-     */
-    private string $route;
-
-    /**
-     * Le moteur de template de Twig
-     *
-     * @var Twig\Environment
-     */
+    private string $route = '';  // Initialisation de la propriété
     private Environment $twig;
-
-    /**
-     * Le chemin vers le template qui contient la pagination
-     *
-     * @var string
-     */
     private string $templatePath;
-
-    /**
-     * Ordre de tri des données
-     *
-     * @var array
-     */
     private array $order = [];
 
-    /**
-     * Constructeur du service de pagination 
-     * ATTENTION CHANGER fichier service.yaml afin que Symfony sache quelle valeur utiliser pour le templatePath
-     * 
-     * @param EntityManagerInterface $manager
-     * @param Environment $twig
-     * @param RequestStack $request
-     * @param string $templatePath
-     */
-    public function __construct(EntityManagerInterface $manager,Environment $twig, RequestStack $request,string $templatePath)
+    public function __construct(EntityManagerInterface $manager, Environment $twig, string $templatePath)
     {
         $this->manager = $manager;
         $this->twig = $twig;
         $this->templatePath = $templatePath;
-        $this->route = $request->getCurrentRequest()->attributes->get('_route');
     }
 
-    /**
-     * Permet de spécifier l'entité sur laquelle on souhaite paginer
-     *
-     * @param string $entityClass
-     * @return self
-     */
     public function setEntityClass(string $entityClass): self
     {
         $this->entityClass = $entityClass;
-
         return $this;
     }
 
-    /**
-     * Permet de récupérer l'entité sur laquelle on est entrain de paginer
-     *
-     * @return string
-     */
-    public function getEntityClass(): string
-    {
-        return $this->entityClass;
-    }
-
-    /**
-     * Permet de spécifier le nombre d'enregistrement que l'on souhaite obtenir
-     *
-     * @param integer $limit
-     * @return self
-     */
     public function setLimit(int $limit): self
     {
         $this->limit = $limit;
         return $this;
     }
 
-    /**
-     * Permet de récupérer le nombre d'enregistrement qui seront envoyés
-     *
-     * @return integer
-     */
-    public function getLimit(): int
-    {
-        return $this->limit;
-    }
-    
-
-    /**
-     * Permet de spécifier la page qui est actuellement affichée
-     *
-     * @param integer $page
-     * @return self
-     */
     public function setPage(int $page): self
     {
         $this->currentPage = $page;
         return $this;
     }
 
-    /**
-     * Permet de récupérer la page qui est actuellement affichée
-     *
-     * @return integer
-     */
-    public function getPage(): int
+    public function setDataSource($dataSource): self
     {
-        return $this->currentPage;
+        $this->dataSource = $dataSource;
+        return $this;
     }
 
-    /**
-     * Permet de récupérer les données paginées pour une entité spéficique
-     * @throws Exception si la propriété $entityClass n'est pas définie
-     * @return array
-     */
+    public function setRoute(string $route): self
+    {
+        $this->route = $route;
+        return $this;
+    }
+
     public function getData(): array
     {
         if (empty($this->dataSource)) {
             throw new \Exception("La source de données pour la pagination n'est pas définie !");
         }
-    
-        // Calculer l'offset
+
         $offset = $this->currentPage * $this->limit - $this->limit;
-    
-        // Si c'est une classe d'entité, on utilise Doctrine pour la pagination
+
+        if ($this->dataSource instanceof QueryBuilder) {
+            return $this->dataSource
+                ->setFirstResult($offset)
+                ->setMaxResults($this->limit)
+                ->getQuery()
+                ->getResult();
+        }
+
         if (is_string($this->dataSource)) {
             return $this->manager
-                        ->getRepository($this->dataSource)
-                        ->findBy([], $this->order, $this->limit, $offset);
+                ->getRepository($this->dataSource)
+                ->findBy([], $this->order, $this->limit, $offset);
         }
-    
-        // Si c'est un QueryBuilder ou un tableau, on ajuste
-        if ($this->dataSource instanceof \Doctrine\ORM\QueryBuilder) {
-            return $this->dataSource
-                        ->setFirstResult($offset)
-                        ->setMaxResults($this->limit)
-                        ->getQuery()
-                        ->getResult();
-        }
-    
-        // Si c'est un tableau de résultats
+
         if (is_array($this->dataSource)) {
             return array_slice($this->dataSource, $offset, $this->limit);
         }
-    
+
         throw new \Exception("Type de source de données non supporté pour la pagination !");
     }
-    
 
-    // fais la fonction setData pour pouvoir modifier ce que je pagine
-    public function setData(array $data): self
-    {
-        $this->data = $data;
-        return $this;
-    }
-
-    public function setDataSource($dataSource): self
-{
-    $this->dataSource = $dataSource;
-    return $this;
-}
-
-    /**
-     * Permet de récupérer le nombre de page qui existe sur une entité particulière
-     * @throws Exception si la propriété $entityClass n'est pas configurée
-     * @return integer
-     */
     public function getPages(): int
     {
         if (empty($this->dataSource)) {
             throw new \Exception("La source de données pour la pagination n'est pas définie !");
         }
-    
-        // Si c'est une entité
-        if (is_string($this->dataSource)) {
-            $total = count($this->manager->getRepository($this->dataSource)->findAll());
-        }
-        // Si c'est un QueryBuilder
-        elseif ($this->dataSource instanceof \Doctrine\ORM\QueryBuilder) {
+
+        if ($this->dataSource instanceof QueryBuilder) {
             $total = (clone $this->dataSource)
-                        ->select('COUNT(e)')
-                        ->getQuery()
-                        ->getSingleScalarResult();
-        }
-        // Si c'est un tableau
-        elseif (is_array($this->dataSource)) {
+                ->select('COUNT(m.id)')
+                ->getQuery()
+                ->getSingleScalarResult();
+        } elseif (is_string($this->dataSource)) {
+            $total = count($this->manager->getRepository($this->dataSource)->findAll());
+        } elseif (is_array($this->dataSource)) {
             $total = count($this->dataSource);
         } else {
             throw new \Exception("Type de source de données non supporté pour la pagination !");
         }
-    
+
         return ceil($total / $this->limit);
     }
-    
 
-    /**
-     * Permet d'afficher le rendu de la navigation au sein d'un template Twig
-     * On se sert ici de notre moteur de rendu afin de compiler le template qui se trouve au chemin de notre propriété $templatePath, en lui passant les variables page, pages et route
-     *
-     * @return void
-     */
     public function display(): void
     {
+        if (empty($this->route)) {
+            throw new \Exception("La route de pagination n'est pas définie !");
+        }
+
         $this->twig->display($this->templatePath, [
             'page' => $this->currentPage,
             'pages' => $this->getPages(),
             'route' => $this->route
         ]);
     }
-
-    /**
-     * Permet de choisir un template de pagination
-     *
-     * @param string $templatePath
-     * @return self
-     */
-    public function setTemplatePath(string $templatePath):self 
-    {
-        $this->templatePath = $templatePath;
-
-        return $this;
-    }
-
-    /**
-     * Permet de récupérer le templatePath actuellement utilisé
-     *
-     * @return string
-     */
-    public function getTemplatePath():string 
-    {
-        return $this->templatePath;
-    }
-
-    /**
-     * Permet de changer la route par défaut pour les liens de la navigation
-     *
-     * @param string $route
-     * @return self
-     */
-    public function setRoute(string $route):self
-    {
-        $this->route = $route;
-
-        return $this;
-    }
-
-    /**
-     * Permet de récupérer le nom de la route qui sera utilisée sur les liens de la pagination
-     *
-     * @return string
-     */
-    public function getRoute():string 
-    {
-        return $this->route;
-    }
-
-    /**
-     * Permet de définir l'ordre de tri des données
-     *
-     * @param array $order
-     * @return self
-     */
-    public function setOrder(array $order): self
-    {
-        $this->order = $order;
-        return $this;
-    }
-
-    /**
-     * Permet de récupérer l'ordre de tri des données
-     *
-     * @return array
-     */
-    public function getOrder(): array
-    {
-        return $this->order;
-    }
-
 }
