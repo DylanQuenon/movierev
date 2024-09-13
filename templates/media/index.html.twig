@@ -1,20 +1,82 @@
 {% extends 'base.html.twig' %}
 
+
 {% block title %}Films & Séries{% endblock %}
+{% block stylesheets %}{{encore_entry_link_tags('movieStyle')}}{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
-    <h1 class="text-2xl font-bold mb-4">Films & Séries</h1>
+<div class="slide" id="mediaPage">
+    <div class="wrapper">
+        <div class="mediaPage_heading flex justify-between wrap">
+        <div>
+            <h2 class="display-xl object uppercase font-bold mb-4 color-tertiary">Films <span class="color-primary">&</span> Séries</h2>
+            <p class="text-lg urbanist color-primary md:w-6/12">Découvrez les films et séries incontournables. Explorez les dernières sorties, plongez dans les classiques et laissez-vous guider par notre sélection pour enrichir vos soirées cinéma.</p>
+        
+        </div>
+        {% include "partials/_search.html.twig" %}
 
-    <form action="{{ path('medias') }}" method="get" class="mb-4">
-        <input type="text" name="search" placeholder="Rechercher un titre" value="{{ search }}" class="px-4 py-2 border rounded-md">
-        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md ml-2">Rechercher</button>
-    </form>
-
+        
+        </div>
+        <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 w-full">
     {% for media in medias %}
-        <p class="text-md urbanist">{{ media.title }}</p>
+    <a href="#" class="media_card flex items-center">  <!-- Le lien englobe toute la carte -->
+        <div class="w-full">
+            <div class="photos">
+            {% if media.poster %}
+                <img src="/uploads/{{ media.cover }}" alt="Poster du film {{ media.title }}" class="">
+            {% else %}
+                <img src="/images/default.jpg" alt="Pas de poster disponible" class="">
+            {% endif %}
+            
+            </div>
+
+            <div class="media_card_infos">
+                <div class="media_card_infos_content">
+
+                    <div data-tippy-content="Enregistrer dans une liste" class="saving_list w-full flex justify-end">
+                        <span class="material-symbols-outlined color-tertiary">
+                            bookmark
+                        </span>
+                    </div>
+
+                    <div class="media_card_infos_heading">
+                        <div class="card_infos_heading_main">
+                            <h5 class="text-xl object uppercase">{{ media.title }}</h5>
+                            <p class="text-md urbanist color-tertiary font-semibold">{{ media.releaseDate|date('Y') }}</p>
+                        </div>
+                    </div>
+
+                    <p class="text-lg urbanist">{{ media.synopsis|slice(0, 100) ~ '...' }}</p>
+                </div>
+
+                <div class="media_card_actions flex justify-end w-full">
+                    {% include 'partials/_trailer_button.html.twig' with {'trailerUrl': media.trailer} %}
+                    <span class="text-md flex items-center gap-1 color-secondary background-tertiary actions">
+                        <span class="material-symbols-outlined">
+                            add_circle
+                        </span>
+                        Voir les détails
+                    </span>
+                </div>
+            </div>
+        </div>
+    </a>
     {% endfor %}
+</div>
+
+    
+    </div>
 
     {{ pagination.display() }}
+
+    {% include 'partials/_trailer_modal.html.twig' %}
+    
 </div>
+
+    {# <form action="{{ path('medias') }}" method="get" class="mb-4">
+        <input type="text" name="search" placeholder="Rechercher un titre" value="{{ search }}" class="px-4 py-2 border rounded-md">
+        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md ml-2">Rechercher</button>
+    </form> #}
+
+
 {% endblock %}

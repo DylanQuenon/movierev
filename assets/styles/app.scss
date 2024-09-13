@@ -21,3 +21,127 @@
         color: $color-primary;
     }
 }
+/* Personnalisation générale de la police du tooltip */
+.tippy-box {
+    font-family: $font-family-urbanist;
+    background-color: $color-tertiary;
+    color: $color-secondary;
+ 
+}
+
+
+.tippy-arrow {
+    color: $color-tertiary; /* Couleur de la flèche */
+  }
+/* Exemple d'effet scale */
+.tippy-box[data-theme~='scale-theme'] {
+  transition: transform 0.2s ease-in-out;
+}
+
+.tippy-box[data-theme~='scale-theme'][data-state='visible'] {
+  transform: scale(1);
+}
+
+.tippy-box[data-theme~='scale-theme'][data-state='hidden'] {
+  transform: scale(0.9);
+}
+.pagi{
+    font-family: $font-family-urbanist;
+    font-weight: 600;
+}
+.pagination{
+    a,span{
+        transition: all 0.2s;
+    }
+
+}
+
+#search-form input{
+
+    padding-left: 40px;
+    margin-right: 10px
+  }
+    #search-form{
+      i{
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        transform: translateY(-50%);
+        color: $color-secondary !important;
+        z-index: 5;
+      }
+  
+      
+    }
+  #search-input{
+    border-radius: 80px;
+    box-shadow: none;
+    outline: none;
+    background-color: $color-secondary;
+    border: solid 1px $color-tertiary;
+    font-family: $font-family-urbanist;
+    font-size: $text-font-size-md;
+    color: $color-tertiary;
+    z-index: 5;
+    &::placeholder{
+      color: $color-secondary;
+    }
+  }
+
+  #search-results ul li{
+    border-bottom: 1px solid $color-tertiary;
+    border-spacing: 1rem;
+    font-family: $font-family-urbanist;
+    font-size: $text-font-size-md;
+    padding: 8px;
+    
+    transition: all 0.3s;
+    
+    a{
+        display: flex;
+        font-weight: 600;
+      border: none;
+      text-decoration: none;
+      }
+        &:hover{
+          background-color: #585858;
+        }
+    &:last-of-type{
+        border:none;
+    }
+  }
+  #search-results ul li a,#search-results .dropdown-item{
+    color: $color-tertiary!important;
+  }
+  #search-results{
+    background: $color-secondary;
+    border: solid 1px $color-tertiary;
+    width: fit-content;
+    top: 68%;
+    z-index: 2;
+ 
+  }
+
+  #search-form input{
+    // position: relative;
+    padding-left: 40px;
+    &::placeholder{
+        color: $color-tertiary;
+    }
+  }
+  .search-bar{
+    z-index: 20;
+  }
+    #search-form{
+      
+      i{
+        position: absolute;
+        top: 50%;
+        left: 1%;
+        transform: translateY(-50%);
+        color: $color-tertiary !important;
+        z-index: 5;
+      }
+  
+      
+    }

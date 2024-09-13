@@ -6,7 +6,7 @@
 	<div class="flex header_test wrapper justify-between items-center flex-wrap">
 		<div class="header_flex_left flex items-center h-full">
 			<div class="header_logo">
-				<img src="././images/movierevLogo.png" alt="Logo - Movierev" class="w-12 h-12 object-cover">
+				<img src="/images/movierevLogo.png" alt="Logo - Movierev" class="w-12 h-12 object-cover">
 			</div>
 
 			<nav class="header_nav">
@@ -14,7 +14,7 @@
 					{% set navItems = {
                         'Accueil': { 'route': 'home', 'icon': 'home' },
                         'Qui sommes-nous ?': { 'route': 'about', 'icon': 'groups' },
-                        'Films & Séries': { 'route': 'medias', 'icon': 'play' }
+                        'Films & Séries': { 'route': 'medias', 'icon': 'slideshow' }
                     } %}
 
 					{% for label, data in navItems %}
@@ -50,12 +50,9 @@
 <div id="menuMobile">
 	<nav>
 		<ul>
-			{% set mobileNavItems = {
-                'Accueil': { 'route': 'home', 'icon': 'home' },
-                'Qui sommes-nous ?': { 'route': 'about', 'icon': 'groups' },
-            } %}
+			
 
-			{% for label, data in mobileNavItems %}
+			{% for label, data in navItems %}
 				<li class="{% if app.request.attributes.get('_route') == data.route %}active{% endif %}">
 					<a href="{{ path(data.route) }}" class="display-sm object uppercase flex items-center">
 						<span class="material-symbols-outlined">{{ data.icon }}</span>

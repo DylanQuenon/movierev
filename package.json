@@ -31,6 +31,7 @@
     "dependencies": {
         "aos": "^2.3.4",
         "rough-notation": "^0.5.1",
-        "swiper": "^11.1.12"
+        "swiper": "^11.1.12",
+        "tippy.js": "^6.3.7"
     }
 }

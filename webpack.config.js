@@ -23,6 +23,7 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('headerStyle', './assets/styles/partials/header.scss')
     .addEntry('homeStyle', './assets/styles/pages/home.scss')
+    .addEntry('movieStyle', './assets/styles/pages/movies.scss')
 
     .addEntry('burgerJS', './assets/js/burger.js')
     .addEntry('sliderHomeJS', './assets/js/sliderHome.js')

@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Media;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Media>
@@ -40,4 +41,11 @@ class MediaRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findByTitle(string $term): QueryBuilder
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.title LIKE :term')
+            ->setParameter('term', '%' . $term . '%');
+    }
 }
