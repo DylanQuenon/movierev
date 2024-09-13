@@ -19,48 +19,7 @@
         </div>
         <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 w-full">
     {% for media in medias %}
-    <a href="#" class="media_card flex items-center">  <!-- Le lien englobe toute la carte -->
-        <div class="w-full">
-            <div class="photos">
-            {% if media.poster %}
-                <img src="/uploads/{{ media.cover }}" alt="Poster du film {{ media.title }}" class="">
-            {% else %}
-                <img src="/images/default.jpg" alt="Pas de poster disponible" class="">
-            {% endif %}
-            
-            </div>
-
-            <div class="media_card_infos">
-                <div class="media_card_infos_content">
-
-                    <div data-tippy-content="Enregistrer dans une liste" class="saving_list w-full flex justify-end">
-                        <span class="material-symbols-outlined color-tertiary">
-                            bookmark
-                        </span>
-                    </div>
-
-                    <div class="media_card_infos_heading">
-                        <div class="card_infos_heading_main">
-                            <h5 class="text-xl object uppercase">{{ media.title }}</h5>
-                            <p class="text-md urbanist color-tertiary font-semibold">{{ media.releaseDate|date('Y') }}</p>
-                        </div>
-                    </div>
-
-                    <p class="text-lg urbanist">{{ media.synopsis|slice(0, 100) ~ '...' }}</p>
-                </div>
-
-                <div class="media_card_actions flex justify-end w-full">
-                    {% include 'partials/_trailer_button.html.twig' with {'trailerUrl': media.trailer} %}
-                    <span class="text-md flex items-center gap-1 color-secondary background-tertiary actions">
-                        <span class="material-symbols-outlined">
-                            add_circle
-                        </span>
-                        Voir les détails
-                    </span>
-                </div>
-            </div>
-        </div>
-    </a>
+   {% include "partials/_card_media.html.twig" with {'media': media} %}
     {% endfor %}
 </div>
 
