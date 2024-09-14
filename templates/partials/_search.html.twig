@@ -31,23 +31,27 @@
                                 data.forEach((result) => {
                                   
                                     const item = document.createElement('li');
+                                    item.style.width = '100%'; // Ajout de la taille au li
                                     const link = document.createElement('a');
                                     link.href = `/medias/${result.slug}`;
                                       console.log(result.poster)
                                     const posterSrc = `/uploads/${result.poster}`;
                                     link.innerHTML = `
-                                        <img src="/uploads/${result.poster}" alt="${result.title}" 
-                                        style="width:40px; height:80px; object-fit:cover; margin-right: 10px;">
-                                        ${result.title}<br>
-                                        ${result.releaseDate}<br>
-                                        ${result.synopsis}
+                                 
+                                            <img src="/uploads/${result.poster}" alt="${result.title}" class="search-result-poster" style="height:100px; width:60px; object-fit:cover;">
+                                            <div class="search-result-info">
+                                                <h4 class="search-result-title">${result.title}</h4>
+                                                <p class="search-result-date text-md urbanist font-semibold color-primary ">${result.releaseDate}</p>
+                                                <p class="search-result-synopsis text-sm urbanist">${result.synopsis}</p>
+                                            </div>
+                                  
                                     `;
                                     item.appendChild(link);
                                     resultsList.appendChild(item);
                                 });
                             } else {
                                 searchResults.style.display = 'block';
-                                resultsList.innerHTML = '<li class="text-md urbanist color-primary">Aucun résultat</li>';
+                                resultsList.innerHTML = '<li class="text-md urbanist color-primary" style="width:100%;">Aucun résultat</li>';
                             }
                         });
                 } else {

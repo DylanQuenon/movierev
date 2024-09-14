@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}{{media.title}}{% endblock %}
+{% block stylesheets %}{{encore_entry_link_tags('mediaIndiv')}}{% endblock %}
+
+{% block body %}
+<div class="slide" id="mediaIndiv">
+    <div class="banneerCover relative"><img src="/uploads/{{media.cover}}" alt="Image du film {{media.title}}">   <div class="shadowWhite"></div></div>
+             
+    <div class="wrapper">
+        <div class="media_presentation flex flex-wrap gap-12  w-full">
+            {# <div class="media_presentation_left relative w-3/12"> #}
+                <img src="/uploads/{{media.poster}}" class=" max-sm:w-full max-sm:h-3/5 md:w-3/12 object-cover" alt="Image du film {{media.title}}">
+            {# </div> #}
+            <div class="media_presentation_content_global max-sm:w-full  w-8/12">
+                <h3 class="display-2xl object uppercas">{{media.title}}</h3>
+                <div class="media_presentation_content flex-wrap flex max-sm:gap-5 gap-20">
+                    <div class="media_presentation_content_left max-sm:w-12/12  md:w-8/12 justify-between">
+                        <div class="flex gap-5 flex-col">
+                            <p class="text-sm urbanist items-center w-max bg-purple-200 color-tertiary flex gap-1 px-4 font-semibold py-2 rounded-full"><i class="fa-solid fa-hourglass"></i> {{media.duration}}</p>
+                            <p class="text-lg urbanist">{{media.synopsis|raw|nl2br}}</p>
+                        </div>
+                        <div class="media_presentation_content_left_actions items-center flex flex-wrap gap-6">
+                            {% include "partials/_trailer_button.html.twig" with {'trailerUrl': media.trailer} %}
+                            <a href="#" class="text-lg urbanist flex gap-1">   <span class="material-symbols-outlined color-tertiary">
+                            bookmark
+                        </span>Enregistrer dans une liste</a>
+                            
+                        </div>
+                    </div>
+                    <div class="media_presentation_content_right max-sm:flex-row flex flex-wrap flex-col gap-5">
+                        <div class="people max-sm:pt-0 relative real">
+                        <p class="text-lg bord bold color-tertiary urbanist font-semibold uppercase">Réalisateur</p>
+                        <p class="text-md color-primary urbanist">{{media.producer}}</p>
+                        </div>
+                    </div>
+                
+                </div>
+            
+            </div>
+
+        
+        </div>
+    </div>
+</div>
+
+{% include "partials/_trailer_modal.html.twig"  %}
+
+{% endblock %}

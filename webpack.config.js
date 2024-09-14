@@ -24,6 +24,7 @@ Encore
     .addEntry('headerStyle', './assets/styles/partials/header.scss')
     .addEntry('homeStyle', './assets/styles/pages/home.scss')
     .addEntry('movieStyle', './assets/styles/pages/movies.scss')
+    .addEntry('mediaIndiv', './assets/styles/pages/mediaindiv.scss')
 
     .addEntry('burgerJS', './assets/js/burger.js')
     .addEntry('sliderHomeJS', './assets/js/sliderHome.js')

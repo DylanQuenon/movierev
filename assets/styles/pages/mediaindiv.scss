@@ -1,0 +1,86 @@
+@import "../variables/variables.scss";
+
+.banneerCover{
+    overflow: hidden;
+    img{
+      height: 30rem;
+      width: 100%;
+      object-fit: cover;
+    }
+    
+    .shadowWhite{
+      width: 140%;
+      height: 100px;
+      background-color: rgb(255, 255, 255);
+      filter: blur(15px);
+      position: absolute;
+      left: -33%;
+      bottom: -64px;
+      z-index: 6;
+      @media all and (max-width: 992px) {
+          bottom:-50px
+      }
+  }
+  }
+
+//   .media_presentation img{
+//     width: 404px;
+//     height: 554px;
+//   }
+
+.wrapper{
+    padding: $spacing-9xl 0;
+    .media_presentation{
+        img{
+            border-radius: $radius-4xl;
+            box-shadow: 0 4px 25px rgba(165, 30, 223,0.3)
+        }
+        &_content{
+            &_global{
+                @include flexGap(column,$spacing-2xl);
+            }
+            &_left{
+                @include flexGap(column,$spacing-4xl);
+                &_actions{
+                    a{
+                        padding: $spacing-md $spacing-xl;
+                        border-radius: $radius-full;
+                        border: solid 1px $color-tertiary;
+                        color: $color-tertiary;
+                    }
+                    &>*{
+                        transition: all 0.3s;
+                        &:hover{
+                            background-color: #d99ef5;
+                            color: $color-primary;
+                            span{
+                             
+                                color: $color-primary;
+                            }
+                        }
+                    }
+                }
+            }
+            &_right{
+                @include flexGap(column,$spacing-5xl);
+                transform: translateY(13%);
+                .people{
+                    position:relative;
+                    padding-top: 15px;
+                    ::before{
+                        position: absolute;
+                    top: -2%;
+                    content: '';
+                    width: 215px;
+                    left: 0;
+                    height: 2px;
+                    background-color: $color-tertiary;
+                }
+            }
+            @media screen and (max-width: 640px) {
+                transform: translateY(0%);
+            }
+            }
+        }
+    }
+}

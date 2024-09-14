@@ -16,6 +16,8 @@
     padding: $spacing-md $spacing-xl;
     border-radius: $radius-4xl;
     transition: all 0.3s;
+    z-index: 999;
+    position: relative;
     &:hover{
         background-color: #D0ABEE;
         color: $color-primary;
@@ -94,18 +96,18 @@
     font-family: $font-family-urbanist;
     font-size: $text-font-size-md;
     padding: 8px;
+
     
     transition: all 0.3s;
     
     a{
         display: flex;
+        gap: $spacing-2xl;
         font-weight: 600;
       border: none;
       text-decoration: none;
       }
-        &:hover{
-          background-color: #585858;
-        }
+      
     &:last-of-type{
         border:none;
     }
@@ -114,9 +116,9 @@
     color: $color-tertiary!important;
   }
   #search-results{
-    background: $color-secondary;
-    border: solid 1px $color-tertiary;
-    width: fit-content;
+    background: white;
+    border-radius: 20px;
+    width: 400px;
     top: 68%;
     z-index: 2;
  
@@ -144,4 +146,8 @@
       }
   
       
+    }
+    #trailerModal{
+      z-index: 999;
+
     }

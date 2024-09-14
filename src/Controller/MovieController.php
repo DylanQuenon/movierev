@@ -46,11 +46,21 @@ class MovieController extends AbstractController
                 'title' => $media->getTitle(),
                 'slug' => $media->getSlug(),
                 'poster' => $media->getPoster(),
-                'synopsis' => substr($media->getSynopsis(), 0, 50) . "...",
+                'synopsis' => substr($media->getSynopsis(), 0, 100) . "...",
                 'releaseDate' => $media->getReleaseDate()->format('Y'),
             ];
         }, $results);
 
         return new JsonResponse($jsonResults);
     }
+
+    #[Route('/medias/{slug}', name: 'medias_show')]
+    public function show(Media $media){
+        return $this->render('media/show.html.twig', [
+            'media' => $media,
+        ]);
+
+    }
+
+    
 }
