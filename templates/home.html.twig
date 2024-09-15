@@ -76,13 +76,8 @@
 		</div>
 
 		<div class="swiper-pagination"></div>
-
-
 	</div>
 
-	<div class="test">
-		<div class="shadowWhite"></div>
-	</div>
 
 	{% set cards = [
   {
@@ -119,16 +114,18 @@
 				<h1 class="display-xl object text-center w-8/12 uppercase  leading-tight">
 					<span class="lasso color-secondary my">MOVIEREV</span>   , Le cinéma à portée de clic !
 				</h1>
-				<p class="display-sm urbanist text-center  w-8/12"data-aos="fade-up" data-aos-duration="800">Nous vous faisons découvrir l'univers du cinéma grâce à une communauté soudée et passionnée.</p>
+
+				<p class="display-sm urbanist text-center  w-8/12" data-aos="fade-up" data-aos-duration="170" >Nous vous faisons découvrir l'univers du cinéma grâce à une communauté soudée et passionnée.</p>
 				<div class="team_discover">
-					<div class="team-head">
+					<div class="team-head overflow-hidden w-full flex justify-center">
 					{#Notre équipe#}
-						<div class="roundPic"data-aos="fade-left" data-aos-duration="300" data-aos-delay="100" ></div>
-						<div class="roundPic"data-aos="fade-left" data-aos-duration="300" data-aos-delay="300"></div>
-						<div class="roundPic"data-aos="fade-left" data-aos-duration="300" data-aos-delay="600"></div>
-						<div class="roundPic"data-aos="fade-left" data-aos-duration="300" data-aos-delay="900"></div>
+						<div class="roundPic" data-aos="fade-left" data-aos-duration="300" data-aos-delay="100" ></div>
+						<div class="roundPic" data-aos="fade-left" data-aos-duration="300" data-aos-delay="300" ></div>
+						<div class="roundPic" data-aos="fade-left" data-aos-duration="300" data-aos-delay="600" ></div>
+						<div class="roundPic" data-aos="fade-left" data-aos-duration="300" data-aos-delay="900" ></div>
 					</div>
-					<div data-aos="fade-left"  data-aos-duration="500" data-aos-delay="900">
+
+				
 					<a href="{{path('about')}}"   class="text-xl urbanist flex items-center rounded-full border-purple-400 border-2 border-solid gap-1 color-tertiary">
 						Découvrez notre équipe 
 						<span class="material-symbols-outlined color-tertiary">
@@ -136,13 +133,14 @@
 						</span> 
 					</a>
 					
-					</div>
+				
 				</div>
 			</div>
 			{#cards#}
 			<div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6 w-full">
 				{% for card in cards %}
-					<div class="cards_stats" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 200 }}" id={{card.title}}>
+
+					<div class="cards_stats" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 200 }}" data-aos-duration="170"  id={{card.title}}>
 						<div class="cards_stats_high">
 							<div class="heading_card">
 								<div class="square_icons">
@@ -201,7 +199,8 @@
 				<h2 class="display-md object uppercase annotation w-fit">Nos valeurs</h2>
 				<div class="grid  sm:grid-cols-1 lg:grid-cols-3 gap-6 w-full">
 					{% for value in values %}
-						<div class="our_values_content" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 300 }}">
+
+						<div class="our_values_content" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 300 }}" data-aos-duration="170" >
 							<div class="our_values_content_img max-sm:flex max-sm:justify-center"><img src="{{ value.icon }}" alt="Icones 3d"></div>
 							<h4 class="display-sm urbanist uppercase font-semibold color-tertiary max-sm:text-center">{{ value.title }}</h4>
 							<p class="text-md urbanist">{{ value.description|raw }}</p>
@@ -211,14 +210,18 @@
 			</div>
 
 			<div class="graphics_love flex max-sm:flex-col lg:flex-row">
-				<div class="bubble bubble1 display-2xl object color-secondary uppercase" data-aos="fade-up" data-aos-duration="500">we</div>
-				<div class="bubble bubble2 display-2xl object color-secondary uppercase "data-aos="fade-down" data-aos-duration="500" data-aos-delay="500">Love</div>
-				<div class="bubble bubble3 display-2xl object color-secondary uppercase"data-aos="fade-up" data-aos-duration="500" data-aos-delay="1000">
+
+
+
+				<div class="bubble bubble1 display-2xl object color-secondary uppercase" data-aos="fade-up" data-aos-duration="500" >we</div>
+				<div class="bubble bubble2 display-2xl object color-secondary uppercase" data-aos="fade-down" data-aos-duration="500" data-aos-delay="300" >Love</div>
+				<div class="bubble bubble3 display-2xl object color-secondary uppercase" data-aos="fade-up" data-aos-duration="500" data-aos-delay="600" >
 					<span class="material-symbols-outlined">
 					arrow_right_alt
 					</span>
 				</div>
-				<div class="bubble bubble4 display-2xl object color-secondary uppercase" data-aos="fade-down" data-aos-duration="500" data-aos-delay="1500">Cinema</div>
+
+				<div class="bubble bubble4 display-2xl object color-secondary uppercase" data-aos="fade-down" data-aos-duration="500" data-aos-delay="900" >Cinema</div>
 			</div>
 
 		</div>

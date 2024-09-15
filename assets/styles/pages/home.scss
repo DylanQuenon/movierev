@@ -12,7 +12,7 @@ body{
     position: relative;
 
     @media all and (max-width: 992px) {
-        min-height: auto !important;
+       
         background-position: 100% center;
     }
     .wrapper{
@@ -68,27 +68,39 @@ body{
     top: 0%;
     z-index: 5;
 }
-.shadowWhite{
-    width: 140%;
-    height: 30vh;
-    background-color: rgb(255, 255, 255);
-    filter: blur(15px);
-    position: absolute;
-    left: -33%;
-    top: -40px;
-    z-index: 6;
-    @media all and (max-width: 992px) {
-        top:-80px
-    }
-}
-.test{
-    position: relative;
-}
+// .shadowWhite{
+//     width: 119%;
+//     height: 30vh;
+//     background-color: rgb(245, 245, 245);
+//     filter: blur(15px);
+//     position: absolute;
+//     left: -40px;
+//     top: -53px;
+//     z-index: 6;
+  
+
+// }
+
 
 
 .swiper {
 
    display: flex;
+   overflow: hidden !important;
+   max-width: 100%;
+   min-width: 100%;
+   position: relative;
+   &::after{
+        width: 119%;
+    height: 30vh;
+    background-color: rgb(255, 255, 255);
+    filter: blur(15px);
+    position: absolute;
+    left: -40px;
+    bottom: -160px;
+    content: '';
+
+   }
    .swiper-wrapper{
     display: flex;
    }
@@ -127,7 +139,7 @@ body{
 
 .swiper-pagination{
     position: absolute;
-    bottom: 10%;
+    bottom: 20%;
     left: 50%;
     transform: translate(-50%,-50%);
     display: flex;

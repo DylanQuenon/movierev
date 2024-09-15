@@ -2,24 +2,23 @@
 
 .banneerCover{
     overflow: hidden;
+    position: relative;
     img{
       height: 30rem;
       width: 100%;
       object-fit: cover;
     }
     
-    .shadowWhite{
-      width: 140%;
-      height: 100px;
-      background-color: rgb(255, 255, 255);
-      filter: blur(15px);
-      position: absolute;
-      left: -33%;
-      bottom: -64px;
-      z-index: 6;
-      @media all and (max-width: 992px) {
-          bottom:-50px
-      }
+    &::after{
+        width: 119%;
+    height: 30vh;
+    background-color: rgb(255, 255, 255);
+    filter: blur(15px);
+    position: absolute;
+    left: -40px;
+    bottom: -160px;
+    content: ''
+   
   }
   }
 
