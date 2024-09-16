@@ -1,0 +1,56 @@
+{# templates/security/login.html.twig #}
+{% extends "/base/base_form.html.twig" %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block form %}
+      <div class="login flex flex-col gap-6">
+      <div class="heading flex flex-col gap-2">
+        <h2 class="display-sm object uppercase color-tertiary">Connectez-vous</h2>
+        <p class="text-md urbanist">De retour parmi-nous !</p>
+      </div>
+    <form action="{{ path('account_login') }}" method="POST" class="space-y-4">
+                <div class="mb-4">
+            <label for="email" class="block text-sm font-medium text-gray-700">Entrez votre adresse e-mail:</label>
+            <input type="text" name="_username" id="email" class="mt-1 block text-md urbanist w-full rounded-md border-gray-300 shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50" placeholder="Adresse email..." required value="{{ username }}">
+        </div>
+        <div class="mb-4">
+            <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+            <div class="relative">
+                <input type="password" name="_password" id="password" class="mt-1 block w-full rounded-md relative border-gray-300 shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50 text-md urbanist" placeholder="Votre mot de passe..." required>
+                <span id="togglePassword" class="material-symbols-outlined" data-tippy-content="Voir le mot de passe">
+                visibility
+                </span>
+            </div>
+        </div>
+        <div class="submit">
+            <button type="submit" class="text-lg urbanist w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-tertiary hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">C'est parti</button>
+        </div>
+    </form>
+    <div class="forgotpassword w-full flex justify-end">
+        <p class="text-xs underline urbanist color-primary">Mot de passe oublié ?</p>
+    </div>
+    <div class="dontAccount flex justify-center text-md">
+    <p class="text-md urbanist color-primary">Vous n'avez pas de compte? <a href="#" class="text-md urbanist font-semibold color-tertiary underline">S'inscrire</a></p>
+
+    </div>
+              
+        </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function() {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        
+        if (type === 'password') {
+            this.textContent = 'visibility';
+        } else {
+            this.textContent = 'visibility_off';
+        }
+    });
+});
+</script>
+{% endblock %}

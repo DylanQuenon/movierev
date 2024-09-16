@@ -25,9 +25,11 @@ Encore
     .addEntry('homeStyle', './assets/styles/pages/home.scss')
     .addEntry('movieStyle', './assets/styles/pages/movies.scss')
     .addEntry('mediaIndiv', './assets/styles/pages/mediaindiv.scss')
+    .addEntry('baseForm', './assets/styles/templates/baseForm.scss')
 
     .addEntry('burgerJS', './assets/js/burger.js')
     .addEntry('sliderHomeJS', './assets/js/sliderHome.js')
+    .addEntry('sliderLog', './assets/js/sliderLog.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
