@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use DateTime;
 use Cocur\Slugify\Slugify;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MediaRepository;
@@ -59,6 +61,9 @@ class Media
 
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
+
+    #[ORM\Column(length: 255)]
+    private ?array $genres = null;
 
          /**
      * Permet de créer un slug automatiquement avec le nom et prénom de l'utilisateur
@@ -200,4 +205,17 @@ class Media
 
         return $this;
     }
+
+// Getter et Setter pour genres
+public function getGenres(): array
+{
+    return $this->genres;
+}
+
+public function setGenres(array $genres): self
+{
+    $this->genres = $genres;
+
+    return $this;
+}
 }

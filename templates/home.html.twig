@@ -51,7 +51,11 @@
 									<!-- Catégories & genres -->
 									<div class="items_info rating pr-4 flex items-center gap-1 color-tertiary ">
 										<p>{{media.type}}
-											& genres</p>
+										&
+										{% for genre in media.getGenres() %}
+										<span class="color-secondary">{{ genre }}</span>
+											{% if not loop.last %} • {% endif %}
+										{% endfor %}
 									</div>
 								</div>
 								<!-- Info principale -->

@@ -1,53 +1,57 @@
 {% extends "admin/base.html.twig" %}
 
-
-{% block title %}Création d'un média
-{% endblock %}
+{% block title %}Création d'un média{% endblock %}
 
 {% form_theme myForm _self %}
 
 {% block body %}
-	    <div class="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div class="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg">
         <h1 class="text-2xl font-bold mb-6">Création d'un nouveau média</h1>
-	
 
-		{{ form_start(myForm) }}
-		{{form_widget(myForm)}}
-		<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Créer un média</button>
-
-
-		{{ form_end(myForm) }}
-	</div>
-
- 
+        {{ form_start(myForm) }}
+        {{ form_widget(myForm) }}
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Créer un média</button>
+        {{ form_end(myForm) }}
+    </div>
 {% endblock %}
 
 {% block javascripts %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const typeSelect = document.getElementById('media_type');
-        const durationInput = document.getElementById('media_duration');
+    {{ parent() }}
 
-        function updatePlaceholder() {
-            const selectedType = typeSelect.value;
-            if (selectedType === 'film') {
-                durationInput.placeholder = 'EX: 1h30';
-            } else if (selectedType === 'serie') {
-                durationInput.placeholder = 'EX: 3 saisons';
-            } else {
-                durationInput.placeholder = 'EX: 1h30'; // Valeur par défaut pour les autres types
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser Choices.js sur les champs de sélection multiples
+            const genreSelects = document.querySelectorAll('.choices-multiple');
+            genreSelects.forEach(select => {
+                new Choices(select, {
+                    removeItemButton: true,
+                    searchEnabled: true,
+                    itemSelectText: '',
+                    placeholder: true,
+                    placeholderValue: 'Sélectionnez ou ajoutez des genres'
+                });
+            });
+
+            // Exemple pour mettre à jour le placeholder en fonction du type de média
+            const typeSelect = document.getElementById('media_type');
+            const durationInput = document.getElementById('media_duration');
+
+            function updatePlaceholder() {
+                const selectedType = typeSelect.value;
+                if (selectedType === 'film') {
+                    durationInput.placeholder = 'EX: 1h30';
+                } else if (selectedType === 'serie') {
+                    durationInput.placeholder = 'EX: 3 saisons';
+                } else {
+                    durationInput.placeholder = 'EX: 1h30'; // Valeur par défaut pour les autres types
+                }
             }
-        }
 
-        // Écoute les changements dans le select
-        typeSelect.addEventListener('change', updatePlaceholder);
+            // Écoute les changements dans le select
+            typeSelect.addEventListener('change', updatePlaceholder);
 
-        // Met à jour le placeholder au chargement initial
-        updatePlaceholder();
-    });
-</script>
-
+            // Met à jour le placeholder au chargement initial
+            updatePlaceholder();
+        });
+    </script>
 {% endblock %}
-
-
-

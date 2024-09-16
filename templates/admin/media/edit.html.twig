@@ -4,7 +4,12 @@
 
 {% form_theme myForm _self %}
 
+{% block stylesheets %}
+
+{% endblock %}
+
 {% block body %}
+
 <div class="container mx-auto p-6">
     <h1 class="text-3xl font-semibold mb-4">Modification du média: {{ media.title }}</h1>
     <a href="{{ path('admin_medias_index') }}" class="inline-block bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300 mb-6">Retour</a>
@@ -52,4 +57,52 @@
     
     {{ form_end(myForm) }}
 </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Inclure Choices.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+
+    <!-- Inclure Choices.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser Choices.js sur les champs de sélection multiples
+            const genreSelects = document.querySelectorAll('.choices-multiple');
+            genreSelects.forEach(select => {
+                new Choices(select, {
+                    removeItemButton: true,
+                    searchEnabled: true,
+                    itemSelectText: '',
+                    placeholder: true,
+                    placeholderValue: 'Sélectionnez ou ajoutez des genres'
+                });
+            });
+
+            // Exemple pour mettre à jour le placeholder en fonction du type de média
+            const typeSelect = document.getElementById('media_type');
+            const durationInput = document.getElementById('media_duration');
+
+            function updatePlaceholder() {
+                const selectedType = typeSelect.value;
+                if (selectedType === 'film') {
+                    durationInput.placeholder = 'EX: 1h30';
+                } else if (selectedType === 'serie') {
+                    durationInput.placeholder = 'EX: 3 saisons';
+                } else {
+                    durationInput.placeholder = 'EX: 1h30'; // Valeur par défaut pour les autres types
+                }
+            }
+
+            // Écoute les changements dans le select
+            typeSelect.addEventListener('change', updatePlaceholder);
+
+            // Met à jour le placeholder au chargement initial
+            updatePlaceholder();
+        });
+    </script>
 {% endblock %}

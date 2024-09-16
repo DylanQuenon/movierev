@@ -14,8 +14,8 @@ class HomeController extends AbstractController
     public function index(MediaRepository $repo, StatsService $stats): Response
     {
         $totalMedia = $stats->getMediaCount();
-
         $lastMovies = $repo->findBy([], ['id' => 'DESC'], 3);
+
         return $this->render('home.html.twig', [
             'medias'=> $lastMovies,
             'stats' => [
