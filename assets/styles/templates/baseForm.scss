@@ -110,3 +110,169 @@
         @include flexGap(column,$spacing-lg)
     }
 }
+.stepper{
+ 
+li {
+    position: relative !important;
+    z-index: 5 !important;
+    font-family: $font-family-urbanist;
+}
+    li span{
+        position: relative;
+        z-index: 1;
+        &.bg-tertiary{
+            &::before{
+        
+                background-color: $color-tertiary !important;
+              
+            }
+
+        }  
+
+        &::before{
+            content: "";
+            position: absolute;
+            width: 3.02rem;
+            height: 2px;
+            background-color: #ddd;
+            top: 50%;
+            right: 104%;
+            @media all and (max-width:640px) {
+                width: 2.5rem;
+                
+            }
+        }
+    }
+
+    li {
+        &:first-child {
+            span {
+                &::before {
+                    content: none;
+                }
+            }
+        }
+    }
+}
+
+.prev-step{
+    padding: $spacing-md $spacing-xl;
+    background-color: #D0ABEE !important;
+    font-family: $font-family-urbanist;
+}
+.next-step{
+    padding: $spacing-md $spacing-xl;
+    background-color: $color-tertiary;
+    font-family: $font-family-urbanist;
+}
+.registrationForm{
+    // button{
+    //     width: fit-content;
+    //     transition: all 0.3s;
+    //     &:hover{
+    //         background-color: #D0ABEE;
+
+    //     }
+    // }
+}
+.step{
+    // button{
+    //     &:hover{
+    //         background-color: #835fa0 !important;
+    //     }
+    // }
+}
+
+
+.button {
+    grid-column-gap: .625rem;
+    grid-row-gap: .625rem;
+    color: $color-secondary;
+    text-align: center;
+    background-color: #a151de;
+    border-radius: 100vw;
+    justify-content: flex-start;
+    align-items: center;
+    // padding: .625rem .9375rem .625rem 1.875rem;
+    padding: $spacing-md $spacing-xl $spacing-md $spacing-4xl;
+    text-decoration: none;
+    transition: padding .5s cubic-bezier(.165,.84,.44,1),background-color .5s cubic-bezier(.165,.84,.44,1),font-size .5s cubic-bezier(.165,.84,.44,1);
+    display: flex;
+    position: relative;
+    &:hover{
+            color: $color-secondary;
+            background-color: #A051DE;
+            padding-left: 2.9rem;
+
+            font-size: 6rem;
+          
+    }
+    .w-inline-block {
+        max-width: 100%;
+        display: inline-block;
+      }
+
+  }
+  .button_dot {
+    aspect-ratio: 1;
+    background-color: currentColor;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    width: .3125em;
+    height: .312em;
+    transition-property: background-color,left;
+    transition-duration: .5s,.5s;
+    transition-timing-function: cubic-bezier(.165,.84,.44,1),cubic-bezier(.165,.84,.44,1);
+    display: flex;
+    position: absolute;
+    left: .9375rem;
+    overflow: hidden;
+  }
+  @media screen and (min-width: 992px) {
+    .button:hover .button_dot {
+      left: 0.5rem;
+    }
+  }
+  @media screen and (min-width: 992px) {
+    .button:hover .button_arrow {
+      transform: translateX(0%);
+    }
+  }
+  .button_arrow {
+    aspect-ratio: 1;
+    color: $color-primary;
+    justify-content: center;
+    align-items: center;
+    width: .75rem;
+    transition: transform 1s cubic-bezier(.165,.84,.44,1);
+    display: flex;
+    position: absolute;
+    transform: translate(-200%);
+  }
+  .w-embed::before, .w-embed::after {
+    content: " ";
+    grid-area: 1/1/2/2;
+    display: table;
+  }
+  svg:not(:root) {
+    overflow: hidden;
+  }
+  .w-embed::after {
+    clear: both;
+  }
+  .button_text{
+    white-space: nowrap;
+  font-size: 1rem;
+  transition: color .3s cubic-bezier(.165,.84,.44,1);
+
+  }
+
+  #registration_biography{
+    padding-right: 64px;
+  }
+  #biography-char-count{
+    position: absolute;
+  right: 3%;
+  top: 54%;
+  }

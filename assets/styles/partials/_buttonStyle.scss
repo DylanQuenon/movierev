@@ -1,0 +1,89 @@
+@import "../variables/variables.scss";
+.button {
+    grid-column-gap: .625rem;
+    grid-row-gap: .625rem;
+    color: $color-secondary;
+    text-align: center;
+    width: fit-content;
+    background-color: #a151de;
+    border-radius: 100vw;
+    justify-content: flex-start;
+    align-items: center;
+    // padding: .625rem .9375rem .625rem 1.875rem;
+    padding: $spacing-md $spacing-xl $spacing-md $spacing-4xl;
+    text-decoration: none;
+    transition: padding .5s cubic-bezier(.165,.84,.44,1),background-color .5s cubic-bezier(.165,.84,.44,1),font-size .5s cubic-bezier(.165,.84,.44,1);
+    display: flex;
+    position: relative;
+    &:hover{
+            color: $color-secondary;
+            background-color: #A051DE;
+            padding-left: 2.9rem;
+
+            font-size: 6rem;
+          
+    }
+    .w-inline-block {
+        max-width: 100%;
+        display: inline-block;
+      }
+
+  }
+  .button_dot {
+    aspect-ratio: 1;
+    background-color: currentColor;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    width: .3125em;
+    height: .312em;
+    transition-property: background-color,left;
+    transition-duration: .5s,.5s;
+    transition-timing-function: cubic-bezier(.165,.84,.44,1),cubic-bezier(.165,.84,.44,1);
+    display: flex;
+    position: absolute;
+    left: .9375rem;
+    overflow: hidden;
+  }
+  @media screen and (min-width: 992px) {
+    .button:hover .button_dot {
+      left: 0.5rem;
+    }
+  }
+  @media screen and (min-width: 992px) {
+    .button:hover .button_arrow {
+      transform: translateX(0%);
+    }
+  }
+  .button_arrow {
+    aspect-ratio: 1;
+    color: $color-primary;
+    justify-content: center;
+    align-items: center;
+    width: .75rem;
+    transition: transform 1s cubic-bezier(.165,.84,.44,1);
+    display: flex;
+    position: absolute;
+    transform: translate(-200%);
+  }
+  .w-embed::before, .w-embed::after {
+    content: " ";
+    grid-area: 1/1/2/2;
+    display: table;
+  }
+  svg:not(:root) {
+    overflow: hidden;
+  }
+  .w-embed::after {
+    clear: both;
+  }
+  .button_text{
+    white-space: nowrap;
+  font-size: 1rem;
+  transition: color .3s cubic-bezier(.165,.84,.44,1);
+
+  }
+  svg{
+  
+    color: $color-tertiary;
+  }

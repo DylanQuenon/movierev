@@ -43,14 +43,20 @@
             padding: $spacing-md $spacing-xl;
             border-radius: $radius-2xl;
             gap: $spacing-sm;
+            transition: all 0.3s;
+            border: solid 2px $color-tertiary;
             .material-symbols-outlined {
                 font-size: 22px;
             }
             &.login {
-                border: solid 2px $color-tertiary;
                 .material-symbols-outlined {
                     width: 18px;
                 }
+            }
+            &:hover{
+                background-color: rgba(160, 81, 222,0.3);
+                border: solid 2px $color-tertiary;
+                color: $color-tertiary;
             }
         }
     }

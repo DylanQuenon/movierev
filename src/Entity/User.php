@@ -8,11 +8,14 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ORM\HasLifecycleCallbacks]
+#[UniqueEntity(fields:["email"], message:"Un utilisateur ayant cette adresse E-mail existe déjà")]
+#[UniqueEntity(fields:["username"], message:"Un utilisateur ayant ce nom d'utilisateur existe déjà")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -21,6 +24,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank(message: "L'adresse E-mail est obligatoire")]
+    #[Assert\Email(message: "Le format de l'adresse E-mail doit être valide")]
     private ?string $email = null;
 
     /**
@@ -33,18 +38,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Le mot de passe est obligatoire")]
+    #[Assert\Length(min: 5, minMessage:"Votre mot de passe doit faire plus de 5 caractères")]
     private ?string $password = null;
 
+    #[Assert\EqualTo(propertyPath:"password", message:"Vous n'avez pas correctement confirmé votre mot de passe")]
+    public ?string $passwordConfirm = null;    
+
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le prénom est obligatoire")]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom est obligatoire")]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom d'utilisateur est obligatoire")]
     private ?string $username = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Image(mimeTypes:['image/png','image/jpeg', 'image/jpg', 'image/gif', 'image/webp'], mimeTypesMessage:"Vous devez upload un fichier jpg, jpeg, webp, png ou gif")]
+    #[Assert\File(maxSize:"1024k", maxSizeMessage: "La taille du fichier est trop grande")]
     private ?string $avatar = null;
 
     #[ORM\Column]
@@ -54,6 +69,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $biography = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "La description est obligatoire")]
+    #[Assert\Length(min: 50, minMessage:"Votre description doit faire plus de 50 caractères")]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
@@ -226,12 +243,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isPrivate(): ?bool
+    public function getIsPrivate(): ?bool
     {
         return $this->isPrivate;
     }
 
-    public function setPrivate(bool $isPrivate): static
+    public function setisPrivate(bool $isPrivate): static
     {
         $this->isPrivate = $isPrivate;
 

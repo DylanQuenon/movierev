@@ -64,25 +64,45 @@
     </label>
 
     <div id="file-info-{{ form.vars.id }}" class="mt-2 text-sm text-gray-600">
-        <span id="file-name-{{ form.vars.id }}" class="font-medium">{{ form.vars.value|default('Aucun fichier sélectionné') }}</span>
+        <span id="file-name-{{ form.vars.id }}" class="font-medium">
+            {% if form.vars.value is not empty %}
+                {{ form.vars.value }}
+            {% else %}
+                Aucun fichier sélectionné
+            {% endif %}
+        </span>
     </div>
 
     <script>
-        document.querySelector('#{{ form.vars.id }}').addEventListener('change', function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            var fileInput = document.querySelector('#{{ form.vars.id }}');
             var fileInfo = document.querySelector('#file-info-{{ form.vars.id }}');
             var fileName = document.querySelector('#file-name-{{ form.vars.id }}');
             
-            if (this.files.length > 0) {
-                var file = this.files[0];
+            // Vérifiez si un fichier est déjà sélectionné
+            if (fileInput.files.length > 0) {
+                var file = fileInput.files[0];
                 fileName.textContent = file.name;
                 fileInfo.innerHTML = `
                     <span class="font-medium">${file.name}</span><br>
                     <span class="text-xs text-gray-500">${(file.size / 1024).toFixed(2)} KB - ${file.type}</span>
                 `;
-            } else {
-                fileName.textContent = 'Aucun fichier sélectionné';
-                fileInfo.innerHTML = '<span class="font-medium">Aucun fichier sélectionné</span>';
             }
+
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    var file = this.files[0];
+                    fileName.textContent = file.name;
+                    fileInfo.innerHTML = `
+                        <span class="font-medium">${file.name}</span><br>
+                        <span class="text-xs text-gray-500">${(file.size / 1024).toFixed(2)} KB - ${file.type}</span>
+                    `;
+                } else {
+                    fileName.textContent = 'Aucun fichier sélectionné';
+                    fileInfo.innerHTML = '<span class="font-medium">Aucun fichier sélectionné</span>';
+                }
+            });
         });
     </script>
 {%- endblock file_widget -%}
+

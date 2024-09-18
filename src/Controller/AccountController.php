@@ -2,10 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\RegistrationType;
+use App\Service\FileUploaderService;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\TooManyLoginAttemptsAuthenticationException;
 
 class AccountController extends AbstractController
@@ -35,4 +41,41 @@ class AccountController extends AbstractController
     public function logout(): void
     {
     }
+
+
+   #[Route("/register", name:"account_register")]
+   public function register(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher, FileUploaderService $fileUploader): Response
+   {
+       $user = new User();
+       $form = $this->createForm(RegistrationType::class, $user);
+       $form->handleRequest($request);
+
+       // partie traitement du formulaire
+       if($form->isSubmitted() && $form->isValid())
+       {
+           
+           // gestion de l'image
+           $file = $form['avatar']->getData();
+   
+           if($file){
+               $imageName = $fileUploader->upload($file);
+               $user->setAvatar($imageName);
+           }
+
+           // gestion de l'inscription dans la bdd
+           $hash = $hasher->hashPassword($user, $user->getPassword());
+           $user->setPassword($hash);
+
+           $manager->persist($user);
+           $manager->flush();
+
+
+           return $this->redirectToRoute('account_login');
+       }
+
+
+       return $this->render("account/registration.html.twig",[
+           'myForm' => $form->createView()
+       ]);
+   }
 }

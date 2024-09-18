@@ -29,11 +29,11 @@
 		</div>
 
 		<div class="header_actions noLogged flex">
-			<a href="#" class="text-lg urbanist flex font-semibold bg-tertiary color-secondary items-center">
+			<a href="{{path('account_register')}}" class="text-lg urbanist flex font-semibold bg-tertiary color-secondary items-center">
 				<span class="material-symbols-outlined">person_add</span>
 				<span>Inscription</span>
 			</a>
-			<a href="#" class="text-lg urbanist flex login font-semibold color-tertiary items-center">
+			<a href="{{path('account_login')}}" class="text-lg urbanist flex login font-semibold color-tertiary items-center">
 				<span>Connexion</span>
 				<span class="material-symbols-outlined">login</span>
 			</a>
@@ -50,9 +50,16 @@
 <div id="menuMobile">
 	<nav>
 		<ul>
+		{% set mobileNavItems = {
+                'Accueil': { 'route': 'home', 'icon': 'home' },
+                'Qui sommes-nous ?': { 'route': 'about', 'icon': 'groups' },
+				'Films & Séries': { 'route': 'medias', 'icon': 'slideshow' },
+				'Connexion':{'route': 'account_login','icon': 'login'},
+				'Inscription':{'route': 'account_register','icon': 'person_add'}
+            } %}
 			
 
-			{% for label, data in navItems %}
+			{% for label, data in mobileNavItems %}
 				<li class="{% if app.request.attributes.get('_route') == data.route %}active{% endif %}">
 					<a href="{{ path(data.route) }}" class="display-sm object uppercase flex items-center">
 						<span class="material-symbols-outlined">{{ data.icon }}</span>
@@ -60,6 +67,7 @@
 					</a>
 				</li>
 			{% endfor %}
+			<li></li>
 		</ul>
 	</nav>
 </div>

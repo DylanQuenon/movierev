@@ -25,7 +25,7 @@ const swiper = new Swiper('.swiper', {
     },
     autoplay:true,
     autoplay: {
-        delay: 2000, // Durée entre chaque changement de slide en millisecondes
+        delay: 3000, // Durée entre chaque changement de slide en millisecondes
         disableOnInteraction: true, // Empêche l'autoplay de s'arrêter lors d'une interaction utilisateur (par défaut true)
     }
   

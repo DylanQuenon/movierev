@@ -22,6 +22,7 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('headerStyle', './assets/styles/partials/header.scss')
+    .addEntry('buttonStyle', './assets/styles/partials/_buttonStyle.scss')
     .addEntry('homeStyle', './assets/styles/pages/home.scss')
     .addEntry('movieStyle', './assets/styles/pages/movies.scss')
     .addEntry('mediaIndiv', './assets/styles/pages/mediaindiv.scss')

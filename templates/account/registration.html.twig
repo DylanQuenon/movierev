@@ -1,0 +1,289 @@
+{% extends "/base/base_form.html.twig" %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block form %}
+
+<div class="flex flex-col gap-6">
+
+    <div class="heading flex flex-col gap-2">
+        <h2 class="display-sm object uppercase color-tertiary">Inscrivez-vous</h2>
+        <p class="text-md urbanist">Rejoignez une communauté <span class="font-semibold color-tertiary">soudée et passionnée !</span> </p>
+      </div>
+<!-- Barre de progression (Stepper) -->
+<ol class=" stepper items-center w-full  flex max-sm:justify-between sm:space-x-12 max-sm:space-y-0 rtl:space-x-reverse">
+    {% for i in 1..5 %}
+        <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 rtl:space-x-reverse step-item" data-step="{{ i }}">
+            <span class="flex items-center justify-center w-8 h-8 border rounded-full shrink-0 step-circle" data-step="{{ i }}">
+                {{ i }}
+            </span>
+        
+        </li>
+    {% endfor %}
+</ol>
+
+<form action="{{ path('account_register') }}" method="POST" enctype="multipart/form-data" class="space-y-4" id="registrationform" enctype="multipart/form-data">
+    <div id="multistep-form" >
+
+        <!-- Étape 1 : Informations personnelles -->
+        <div class="step flex flex-col gap-6" id="step-1">
+            <div class="space-y-6">
+                {{ form_row(myForm.firstName) }}
+                {{ form_row(myForm.lastName) }}
+                {{ form_row(myForm.username) }}
+            </div>
+
+
+                      <button type="button" class="w-fit next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
+        </div>
+
+        <!-- Étape 2 : Informations de contact -->
+        <div class="step hidden flex flex-col gap-6" id="step-2">
+            <div class="space-y-6">
+                {{ form_row(myForm.email) }}
+                {{ form_row(myForm.password) }}
+                {{ form_row(myForm.passwordConfirm) }}
+            </div>
+            <div class="flex justify-between mt-4">
+
+
+                <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
+                <button type="button" class="next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
+            </div>
+        </div>
+
+        <!-- Étape 3 : Informations de sécurité -->
+        <div class="step hidden flex flex-col gap-6" id="step-3">
+            <div class="space-y-6">
+                <div class="relative">
+                    {{ form_row(myForm.biography) }}
+                    <div class="text-sm text-purple-600">
+                            <span id="biography-char-count">255/255</span>
+                        </div>
+                
+                </div>
+                {{ form_row(myForm.description) }}
+            </div>
+            <div class="flex justify-between mt-4">
+
+
+                <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
+                <button type="button" class="next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
+            </div>
+        </div>
+
+        <!-- Étape 4 : Avatar et confidentialité -->
+        <div class="step hidden flex flex-col gap-6" id="step-4">
+            <div class="space-y-6">
+                {{ form_row(myForm.avatar) }}
+                <div class="flex flex-col gap-3">
+                    {{ form_label(myForm.isPrivate, 'Confidentialité du compte', {'label_attr': {'class': 'text-sm font-medium text-gray-900 dark:text-gray-300'}}) }}
+                    <div class="flex gap-3 items-center">
+                        <label class="inline-flex items-center cursor-pointer">
+                            {{ form_widget(myForm.isPrivate, {'attr': {'class': 'sr-only peer', 'id': 'privacyToggle'}}) }}
+                            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                        </label>
+
+                        <!-- Texte et icône dynamiques -->
+                        <div id="privacyStatus" class="flex items-center text-sm font-medium text-gray-900 dark:text-gray-300">
+                            <span class="material-symbols-outlined" id="privacyIcon">lock</span>
+                            <span id="privacyText" class="ml-2">Privé</span>
+                        </div>
+                    </div>
+</div>
+
+
+            </div>
+            <div class="flex justify-between mt-4">
+
+
+                <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
+                <button type="button" class="next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
+            </div>
+        </div>
+
+        <!-- Étape 5 : Récapitulatif -->
+        <div class="step hidden flex flex-col gap-6" id="step-5">
+            <h3 class="text-lg font-semibold">Récapitulatif de vos informations</h3>
+           <ul class="list-none space-y-4 text-gray-600">
+        <li class="flex justify-between">
+            <span class="text-lg font-semibold urbanist color-primary">Prénom:</span>
+            <span id="recap-firstName" class="text-lg color-tertiary text-right"></span>
+        </li>
+        <li class="flex justify-between">
+            <span class="text-lg font-semibold urbanist color-primary">Nom:</span>
+            <span id="recap-lastName" class="text-lg color-tertiary text-right"></span>
+        </li>
+        <li class="flex justify-between">
+            <span class="text-lg font-semibold urbanist color-primary">Nom d'utilisateur:</span>
+            <span id="recap-username" class="text-lg color-tertiary text-right"></span>
+        </li>
+        <li class="flex justify-between">
+            <span class="text-lg font-semibold urbanist color-primary">Email:</span>
+            <span id="recap-email" class="text-lg color-tertiary text-right"></span>
+        </li>
+        <li class="flex justify-between">
+            <span class="text-lg font-semibold urbanist color-primary">Confidentialité du compte:</span>
+            <span id="recap-private" class="text-lg color-tertiary text-right"></span>
+        </li>
+        <li class="flex justify-between">
+            <span class="text-lg font-semibold urbanist color-primary">Biographie:</span>
+            <span id="recap-biographie" class="text-lg color-tertiary text-right"></span>
+        </li>
+        <li class="flex justify-between">
+            <span class="text-lg font-semibold urbanist color-primary">Description:</span>
+            <span id="recap-description" class="text-lg color-tertiary text-right"></span>
+        </li>
+    </ul>
+            <div class="flex justify-between mt-4 ">
+
+                <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
+                {{ form_widget(myForm) }}
+
+              <button type="submit" class="button w-inline-block">
+                <div class="button_dot">
+                    <div class="button_arrow w-embed">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><title>arrow-right</title><g fill="currentcolor"><path d="M1,7H8.586L6.293,9.293a1,1,0,1,0,1.414,1.414l4-4a1,1,0,0,0,0-1.416l-4-4A1,1,0,0,0,6.293,2.707L8.586,5H1A1,1,0,0,0,1,7Z" fill="currentColor"></path></g></svg>
+                    </div>
+                </div>
+                <div class="button_text text-lg urbanist">Confirmer</div></button>
+            </div>
+        </div>
+
+    </div>
+</form>
+    <div class="dontAccount flex justify-center text-md">
+    <p class="text-md urbanist color-primary">Vous avez déjà un compte? <a href="#" class="text-md urbanist font-semibold color-tertiary underline">Se connecter</a></p>
+
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let currentStep = 1;
+    const totalSteps = 5;
+
+    function showStep(step) {
+        document.querySelectorAll('.step').forEach((element, index) => {
+            element.classList.toggle('hidden', index + 1 !== step);
+        });
+
+        // Met à jour le stepper
+        document.querySelectorAll('.step-item').forEach((item) => {
+            const stepNumber = parseInt(item.dataset.step);
+            const circle = item.querySelector('.step-circle');
+
+            if (stepNumber < currentStep) {
+                circle.classList.add('bg-tertiary', 'text-white');
+                circle.classList.remove('border-gray-500');
+            } else if (stepNumber === currentStep) {
+                circle.classList.add('bg-tertiary', 'text-white');
+                circle.classList.remove('border-gray-500');
+            } else {
+                circle.classList.remove('bg-tertiary', 'text-white');
+                circle.classList.add('border-gray-500');
+            }
+        });
+    }
+
+    function saveToSession(step) {
+        document.querySelectorAll(`#step-${step} input, #step-${step} textarea`).forEach(element => {
+            if (element.type === 'file') {
+                sessionStorage.setItem(element.id, element.files[0] ? element.files[0].name : '');
+            } else if (element.tagName.toLowerCase() === 'textarea') {
+                sessionStorage.setItem(element.id, element.value);
+            } else {
+                sessionStorage.setItem(element.id, element.value);
+            }
+        });
+    }
+
+    function updateRecap() {
+        document.getElementById('recap-firstName').textContent = sessionStorage.getItem('registration_firstName') || '';
+        document.getElementById('recap-lastName').textContent = sessionStorage.getItem('registration_lastName') || '';
+        document.getElementById('recap-username').textContent = sessionStorage.getItem('registration_username') || '';
+        document.getElementById('recap-email').textContent = sessionStorage.getItem('registration_email') || '';
+        document.getElementById('recap-biographie').textContent = sessionStorage.getItem('registration_biography') || '';
+        document.getElementById('recap-private').textContent = sessionStorage.getItem('registration_isPrivate') === 'true' ? 'Privé' : 'Public';
+        document.getElementById('recap-description').textContent = sessionStorage.getItem('registration_description') || '';
+    }
+
+    function validateStep(step) {
+        let isValid = true;
+        document.querySelectorAll(`#step-${step} input, #step-${step} textarea`).forEach(input => {
+            if (!input.checkValidity()) {
+                isValid = false;
+                input.classList.add('border-red-500');
+            } else {
+                input.classList.remove('border-red-500');
+            }
+        });
+        return isValid;
+    }
+
+    function updateCharCount() {
+        const biographyInput = document.querySelector('#registration_biography');
+        const charCountDisplay = document.getElementById('biography-char-count');
+        const maxLength = 255;
+        const remainingChars = maxLength - biographyInput.value.length;
+
+        charCountDisplay.textContent = `${remainingChars} / 255`;
+    }
+
+    document.querySelectorAll('.next-step').forEach(button => {
+        button.addEventListener('click', function () {
+            if (validateStep(currentStep)) {
+                saveToSession(currentStep);
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    if (currentStep === totalSteps) updateRecap();
+                    showStep(currentStep);
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('.prev-step').forEach(button => {
+        button.addEventListener('click', function () {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        });
+    });
+
+    document.getElementById('step-3').addEventListener('input', updateCharCount);
+
+    showStep(currentStep);
+});
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const privacyToggle = document.getElementById('registration_isPrivate');
+        const privacyIcon = document.getElementById('privacyIcon');
+        const privacyText = document.getElementById('privacyText');
+
+        function updatePrivacyStatus() {
+            if (privacyToggle.checked) {
+                // Private mode
+                privacyIcon.textContent = 'lock';
+                privacyText.textContent = 'Privé';
+            } else {
+                // Public mode
+                privacyIcon.textContent = 'public';
+                privacyText.textContent = 'Public';
+            }
+        }
+
+        // Initialize the status on page load
+        updatePrivacyStatus();
+
+        // Update the status when the toggle is clicked
+        privacyToggle.addEventListener('change', updatePrivacyStatus);
+    });
+</script>
+
+
+
+{% endblock %}
+
