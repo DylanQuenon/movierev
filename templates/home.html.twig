@@ -123,10 +123,12 @@
 				<div class="team_discover">
 					<div class="team-head overflow-hidden w-full flex justify-center">
 					{#Notre équipe#}
-						<div class="roundPic" data-aos="fade-left" data-aos-duration="300" data-aos-delay="100" ></div>
-						<div class="roundPic" data-aos="fade-left" data-aos-duration="300" data-aos-delay="300" ></div>
-						<div class="roundPic" data-aos="fade-left" data-aos-duration="300" data-aos-delay="600" ></div>
-						<div class="roundPic" data-aos="fade-left" data-aos-duration="300" data-aos-delay="900" ></div>
+
+					{% for team in teams %}
+						<div class="roundPic p-relative overflow-hidden" data-aos="fade-left" data-aos-duration="300" data-aos-delay="{{ loop.index0 * 300 }}">
+							<img src="/uploads/{{team.avatar}}" class="w-full h-full object-cover" alt="Photo de profil de {{team.fullName}}">
+						</div>
+					{% endfor %}
 					</div>
 
 				

@@ -11,10 +11,13 @@
     <div class="hidden lg:flex lg:items-center lg:w-full lg:justify-between" id="navbarText">
       <ul class="flex space-x-6 text-white">
         <li>
-          <a class="hover:text-gray-300 flex items-center transition-colors" href="#"><i class="fas fa-chart-line mr-2"></i>Dashboard</a>
+          <a class="hover:text-gray-300 flex items-center transition-colors" href="{{path('admin_dashboard_index')}}"><i class="fas fa-chart-line mr-2"></i>Dashboard</a>
         </li>
         <li>
           <a class="hover:text-gray-300 flex items-center transition-colors" href="{{ path('admin_medias_index') }}"><i class="fas fa-film mr-2"></i>Medias</a>
+        </li>
+        <li>
+          <a class="hover:text-gray-300 flex items-center transition-colors" href="{{ path('admin_users_index') }}"><i class="fas fa-film mr-2"></i>Utilisateurs</a>
         </li>
       </ul>
       

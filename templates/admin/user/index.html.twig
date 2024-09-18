@@ -1,0 +1,49 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des utilisateurs{% endblock %}
+
+{% block body %}
+
+    <div class="container mx-auto px-4">
+        <h1 class="text-2xl font-bold my-4">Gestion des utilisateurs</h1>
+
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="px-4 py-2">Id</th>
+                        <th class="px-4 py-2">Nom & Prénom</th>
+                        <th class="px-4 py-2 text-center">Email</th>
+                        <th class="px-4 py-2 text-center">Rôles</th>
+                        <th class="px-4 py-2 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr class="hover:bg-gray-100">
+                            <td class="border px-4 py-2">{{ user.id }}</td>
+                            <td class="border px-4 py-2">{{ user.fullName }}</td>
+                            <td class="border px-4 py-2 text-center">{{ user.email }}</td>
+                            <td class="border px-4 py-2 text-center">
+                                {% for role in user.roles %}
+                                <span class="inline-block bg-blue-500 text-white rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">{{ role }}</span>
+                                {% endfor %}
+                            </td>
+                            <td class="border px-4 py-2 text-center">
+                               <a href="{{path("admin_users_edit",{"id":user.id})}}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
+                                   <i class="fa-solid fa-list-check"></i> Modifier les rôles
+                               </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {# pagination #}
+        <div class="mt-4">
+            {{ pagination.display() }}
+        </div>
+    </div>
+
+{% endblock %}

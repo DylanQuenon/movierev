@@ -1,0 +1,29 @@
+{% extends "admin/base.html.twig" %}
+
+{% block title %}Edition de l'utilisateur: {{user.fullName}}{% endblock %}
+
+{% form_theme myForm _self %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">Modification de l'utilisateur {{user.fullName}}</h1>
+        <a href="{{path('admin_users_index')}}" class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out mb-6">Retour</a>
+        {{form_start(myForm)}}
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="bg-gray-100 px-6 py-4 border-b border-gray-200">
+                <h4 class="text-xl font-semibold text-gray-800">Corriger le user?</h4>
+            </div>
+            <div class="p-6">
+                {{form_widget(myForm)}}
+                <button type="submit" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Enregistrer les Modifications
+                </button>
+            </div>
+        </div>
+        {{form_end(myForm)}}
+    </div>
+
+{% endblock %}
+
+
