@@ -2,8 +2,101 @@
 
 {% block title %}Qui sommes-nous ?{% endblock %}
 
+{% block stylesheets %}{{encore_entry_link_tags('aboutStyle')}}{% endblock %}
+
 {% block body %}
-<div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
-Qui sommes-nous
+<div class="slide" id="about">
+    <div class="wrapper flex justify-center py-24">
+        <div class="our_team">
+            <div class="our_team_heading flex flex-col gap-4 w-full">
+                <h2 class="display-md text-center object uppercase">Notre <span class="color-tertiary">équipe</span> </h2>
+                <p class="max-sm:w-full w-[50%] mx-auto text-xl urbanist text-center">Plongez au cœur de Movierev en découvrant l'équipe passionnée qui fait vivre votre expérience cinéma.</p>
+            </div>
+            <div class="our_team_presentation flex flex-wrap w-full justify-center gap-11">
+            {% for team in teams %}
+                <div class="our_team_presentation_card relative flex p-5" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                    <div class="our_team_presentation_card_img rounded-3xl relative">
+                        <img src="/uploads/{{team.avatar}}" alt="Photo de profil de {{team.fullName}}" class="object-cover rounded-3xl">
+                    </div>
+                    <div class="our_team_presentation_card_text flex flex-col justify-between">
+                        <div class="name">
+                            <p class="display-sm urbanist font-semibold color-primary">{{team.fullName}}</p>
+                            <p class="text-md urbanist color-tertiary">
+                                {% if 'ROLE_REDACTEUR' in team.roles %}
+                                    Rédacteur
+                                {% elseif 'ROLE_MODERATEUR' in team.roles %}
+                                    Modérateur
+                                {% endif %}
+                            </p>
+                        </div>
+                            <div class="our_team_presentation_follow flex justify-between">
+                                <div class="reviews flex text-lg urbanist color-primary flex-col gap-1">
+                                    <span class="text-xl urbanist font-semibold color-tertiary text-center">34</span>
+                                    Reviews
+                                </div>
+                                <div class="reviews flex text-lg urbanist color-primary flex-col gap-1">
+                                    <span class="text-xl urbanist font-semibold color-tertiary text-center">1555</span>
+                                    Abonné(e)s
+                                </div>
+                                <div class="reviews flex text-lg urbanist color-primary flex-col gap-1">
+                                    <span class="text-xl urbanist font-semibold color-tertiary text-center">200</span>
+                                    Suivis
+                                </div>
+                            
+                            </div>
+                            <div class="our_team_presentation_actions flex justify-between">
+                                {% include "partials/_button.html.twig" with {"text": "Voir le profil", "href":"home"} %}
+                                <a href="#" class="text-lg followlink urbanist px-[20px] py-2 flex items-center gap-2 bg-secondary color-tertiary border-purple-400 border-solid border-2">S'abonner</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                </div>
+                
+            {% endfor %}
+            
+            </div>
+        </div>
+    </div>
+    <div class="team_roles w-full flex  ">
+
+        <video src="/video/video.mp4" autoplay muted playsinline loop ></video>
+
+    <div class="team_roles_right flex flex-col gap-4 pt-24 w-1/2">
+            <h4 class="display-xl object uppercase color-primary">Nos <span class="color-tertiary">rédacteurs</span></h4>
+            <p class="text-lg urbanist">Les rédacteurs de Movierev sont les artisans des actualités qui rythment notre site. Chaque jour, ils scrutent l'univers du cinéma pour vous apporter les dernières nouvelles, les rumeurs les plus intrigantes, et les annonces les plus attendues. Grâce à leur passion et leur réactivité, ils vous tiennent informés en temps réel, vous offrant un aperçu des coulisses du septième art. Leur travail est essentiel pour que MovieRev soit toujours à la pointe de l'actualité cinématographique.</p>
+    </div>
 </div>
+<div class="slide"></div>
+{% endblock %}
+{% block javascripts %}
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Sélectionner la vidéo
+    const video = document.querySelector('video');
+
+    // Créer un observateur d'intersection
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            // Si la section est visible au centre de l'écran
+            if (entry.isIntersecting) {
+                video.play(); // Lancer la vidéo
+            } else {
+                video.pause(); // Mettre en pause la vidéo
+            }
+        });
+    }, {
+        root: null, // utiliser le viewport comme racine
+        rootMargin: '0px',
+        threshold: [0.7] // Déclencher lorsque 50% de la section est visible
+    });
+
+    // Observer la section contenant la vidéo
+    observer.observe(document.querySelector('video'));
+});
+</script>
+
+
 {% endblock %}
