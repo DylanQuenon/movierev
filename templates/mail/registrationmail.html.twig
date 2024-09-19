@@ -1,0 +1,45 @@
+
+
+
+{% block title %}Bienvenue {{user.fullName}}{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+    <div class="bg-gray-100 py-10">
+        <div class="max-w-2xl mx-auto py-10 px-6 bg-white shadow-lg rounded-lg">
+            <!-- Logo centré -->
+            <div class="text-center mb-8">
+                <img src="/images/movierevLogo.png" alt="Logo" class="h-16 mx-auto">
+            </div>
+
+            <!-- Texte centré -->
+            <div class="text-center ">
+                <h1 class="text-xl urbanist font-bold text-gray-800 mb-4">Bienvenue à toi {{user.username}} !</h1>
+                <p class="text-lg urbanist color_tertiary">Nous sommes heureux de te compter parmi nous.</p>
+                <p class="mt-4 text-lg text-purple-400">
+                    Sois prêt à découvrir une multitude de <span class="font-semibold color-tertiary">films & séries</span>, 
+                    soigneusement sélectionnés pour ton plaisir !
+                </p>
+            </div>
+
+            <!-- Bouton d'action -->
+            <div class="text-center mt-8">
+                <a href="#" class="inline-block bg-blue-500 text-white font-semibold px-6 py-3 rounded-md hover:bg-blue-600">
+                    Découvrir maintenant
+                </a>
+            </div>
+
+            <!-- Signature -->
+            <div class="text-center mt-10">
+                <p class="text-sm color-tertiary ">L'équipe de Movierev</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Ici, tu peux ajouter des scripts spécifiques si nécessaire -->
+{% endblock %}
+
+

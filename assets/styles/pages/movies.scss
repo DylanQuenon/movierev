@@ -88,6 +88,8 @@
         &_actions{
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
+       gap: 20px;
 
             .actions{
                 padding: $spacing-md $spacing-xl;

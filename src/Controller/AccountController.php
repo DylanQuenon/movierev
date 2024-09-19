@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationType;
+use Symfony\Component\Mime\Email;
 use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,7 +46,7 @@ class AccountController extends AbstractController
 
 
    #[Route("/register", name:"account_register")]
-   public function register(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher, FileUploaderService $fileUploader): Response
+   public function register(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher, FileUploaderService $fileUploader, MailerInterface $mailer): Response
    {
        $user = new User();
        $form = $this->createForm(RegistrationType::class, $user);
@@ -66,8 +68,19 @@ class AccountController extends AbstractController
            $hash = $hasher->hashPassword($user, $user->getPassword());
            $user->setPassword($hash);
 
+            $email = (new Email())
+            ->from('contact@laligzz.dylanquenon.com')  
+            ->to($user->getEmail()) 
+            ->replyTo($user->getEmail())
+            ->subject("Bienvenue chez Movierev")
+            ->html('<p>See Twig integration for better HTML integration!</p>');
+    
+
+            $mailer->send($email);
            $manager->persist($user);
            $manager->flush();
+
+       // Envoi de l'e-mail
 
 
            return $this->redirectToRoute('account_login');

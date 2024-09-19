@@ -10,8 +10,8 @@
 {% block body %}
     <div class="slide bg-secondary" id="baseform">
         <div class="wrapper py-24 flex w-full justify-center">
-            <div class="content_block bg-white  max-sm:w-full max-sm:rounded-bl-[100px] flex-wrap  w-[85%] min-h-[100vh] flex justify-between">
-                <div class="left_baseform  max-sm:w-full w-1/2  max-sm:p-5 p-24">
+            <div class="content_block bg-white max-md:w-full max-md:rounded-bl-[100px] flex-wrap  w-[85%] min-h-[100vh] flex justify-between">
+                <div class="left_baseform  max-lg:w-full w-1/2  max-md:p-5 p-24">
                     <img src="/images/movierevlogo.png" alt="Logo - Movierev" class= "w-[100px] mb-3">
                     {% block form %}
                         {# Le contenu du formulaire sera inséré ici #}
@@ -38,7 +38,7 @@
                         'movie': 'Un p\'tit truc en plus'
                     },
                 ] %}
-                <div class="slider_baseform max-sm:mt-3 max-sm:w-full w-1/2 min-h-[100vh] relative">
+                <div class="slider_baseform max-md:mt-3 max-lg:w-full w-1/2 min-h-[100vh] relative">
                     <div class="swiper h-full">
                         <div class="swiper-wrapper flex  ">
                             {% for slide in slides %}
@@ -47,7 +47,7 @@
                                     <div class="swiper-slide-content flex flex-col h-full gap-10 pb-16 px-6 justify-end">
                                         <p class="display-md urbanist color-secondary">{{slide.quote}}</p>
                                         <div class="info-secondary flex flex-col gap-2">
-                                            <p class=" author display-sm max-sm:text-xl urbanist color-secondary">
+                                            <p class=" author display-sm max-md:text-xl urbanist color-secondary">
                                             {{slide.author}}
                                             </p>
                                             <p class="text-md urbanist color-secondary">{{slide.movie}}</p>
