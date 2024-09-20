@@ -15,8 +15,15 @@
     </div>
 {% endblock %}
 
+
 {% block javascripts %}
     {{ parent() }}
+
+    <!-- Inclure Choices.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+
+    <!-- Inclure Choices.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

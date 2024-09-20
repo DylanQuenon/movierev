@@ -62,9 +62,16 @@ class Media
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 255)]
-    private ?array $genres = null;
+    /**
+     * @var Collection<int, Genre>
+     */
+    #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'media')]
+    private Collection $genres;
 
+    public function __construct()
+    {
+        $this->genres = new ArrayCollection();
+    }
 
          /**
      * Permet de créer un slug automatiquement avec le nom et prénom de l'utilisateur
@@ -207,14 +214,28 @@ class Media
         return $this;
     }
 
-// Getter et Setter pour genres
-public function getGenres(): array
-{
-    return $this->genres;
-}
-public function setGenres(array $genres): self
-{
-    $this->genres = $genres;
-    return $this;
-}
+    /**
+     * @return Collection<int, Genre>
+     */
+    public function getGenres(): Collection
+    {
+        return $this->genres;
+    }
+
+    public function addGenre(Genre $genre): static
+    {
+        if (!$this->genres->contains($genre)) {
+            $this->genres->add($genre);
+        }
+
+        return $this;
+    }
+
+    public function removeGenre(Genre $genre): static
+    {
+        $this->genres->removeElement($genre);
+
+        return $this;
+    }
+
 }

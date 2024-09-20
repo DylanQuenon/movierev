@@ -93,16 +93,13 @@ class MediaEditType extends ApplicationType
                 ])
             ->add('synopsis', TextareaType::class, $this->getConfiguration('Synopsis', 'EX:Titanic est un film épique de 1997 réalisé par James Cameron. L\'histoire se déroule en 1912 à bord du luxueux paquebot RMS Titanic, qui fait son voyage inaugural de Southampton à New York. Le film suit la romance tragique entre Jack Dawson, un artiste pauvre, et Rose DeWitt Bukater, une jeune femme de la haute société engagée à un homme riche et dédaigneux. Alors que le Titanic rencontre son destin fatal après avoir heurté un iceberg, Jack et Rose luttent pour survivre dans les eaux glaciales de l\'Atlantique Nord. La profondeur de leur amour contraste avec le désastre imminent, illustrant la lutte pour la survie et les choix déchirants qu\'ils doivent faire. Le film est une réflexion poignante sur l\'amour, le sacrifice et les classes sociales, le tout avec une reconstitution spectaculaire du naufrage.'))
             ->add('duration',TextType::class,$this->getConfiguration('Durée','EX: 6 saisons, 1h56'))
-            ->add('genres', ChoiceType::class, [
-                'choices' => $genres,
-                'choice_value' => function ($choice) {
-                    return $choice;
-                },
-                'multiple' => true,  // Permet la sélection multiple
-                'expanded' => false, 
+            ->add('genres', EntityType::class, [
+                'class' => Genre::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => false,
                 'label' => 'Genres',
                 'attr' => ['class' => 'choices-multiple mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50']
-                
             ])
       
             ->add('producer',TextType::class,$this->getConfiguration('Réalisateur','Qui est le réalisateur'))
