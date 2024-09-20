@@ -81,6 +81,7 @@
 
 		<div class="swiper-pagination"></div>
 	</div>
+	<div class="shadowWhite"></div>
 
 
 	{% set cards = [
@@ -94,7 +95,7 @@
   },
   {
     icon: 'full_coverage',
-    counting: 130,
+    counting: stats.allNews is empty ? 0 : stats.allNews,
     title: 'Actualités',
     paragraph: 'Restez informé des dernières sorties et des dernières rumeurs du monde du cinéma.',
     button_text: 'Découvrez les news',
@@ -229,7 +230,6 @@
 		</div>
 	</div>
 
-	<div class="slide"></div>
 {% include 'partials/_trailer_modal.html.twig' %}
 
 {% endblock %}

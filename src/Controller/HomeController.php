@@ -15,6 +15,7 @@ class HomeController extends AbstractController
     public function index(MediaRepository $repo, StatsService $stats, UserRepository $userRepo): Response
     {
         $totalMedia = $stats->getMediaCount();
+        $totalNews = $stats->getNewsCount();
         $lastMovies = $repo->findBy([], ['id' => 'DESC'], 3);
 
 
@@ -30,6 +31,7 @@ class HomeController extends AbstractController
             'medias'=> $lastMovies,
             'stats' => [
                 'allMedias' => $totalMedia,
+                'allNews' => $totalNews,
          
             ],
             'teams' => $users, 

@@ -68,18 +68,25 @@ body{
     top: 0%;
     z-index: 5;
 }
-// .shadowWhite{
-//     width: 119%;
-//     height: 30vh;
-//     background-color: rgb(245, 245, 245);
-//     filter: blur(15px);
-//     position: absolute;
-//     left: -40px;
-//     top: -53px;
-//     z-index: 6;
+.shadowWhite{
+    width: 119%;
+    height: 30vh;
+    background-color: rgb(245, 245, 245);
+    filter: blur(15px);
+    position: absolute;
+    left: -40px;
+    bottom: -130px;
+    z-index: 6;
+    @media all and (max-width:1400px) {
+        display: none;
+        
+    }
   
 
-// }
+}
+
+
+
 
 
 
@@ -90,17 +97,21 @@ body{
    max-width: 100%;
    min-width: 100%;
    position: relative;
-   &::after{
+   @media all and (max-width:1400px) {
+       &::after{
         width: 119%;
     height: 30vh;
     background-color: rgb(255, 255, 255);
     filter: blur(15px);
     position: absolute;
     left: -40px;
-    bottom: -160px;
+    bottom: -137px;
     content: '';
 
    }
+    
+}
+
    .swiper-wrapper{
     display: flex;
    }

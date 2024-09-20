@@ -28,16 +28,16 @@ class  StatsService{
     {
         return $this->manager->createQuery("SELECT COUNT(a) FROM App\Entity\Media a")->getSingleScalarResult();
     }
-    // /**
-    //  * Permet de récup le nombre d'équipes
-    //  *
-    //  * @return integer|null
-    //  */
-    // public function getNewsCount(): ?int
-    // {
-    //     return $this->manager->createQuery("SELECT COUNT(n) FROM App\Entity\News n")->getSingleScalarResult();
-    // }
-  
+    /**
+     * Permet de récup le nombre de medias
+     *
+     * @return integer|null
+     */
+    public function getNewsCount(): ?int
+    {
+        return $this->manager->createQuery("SELECT COUNT(a) FROM App\Entity\News a")->getSingleScalarResult();
+    }
+
 
 }
 
