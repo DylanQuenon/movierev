@@ -40,19 +40,16 @@
 
 <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-        tinymce.init({
-            selector: 'textarea[name="news[content]"]',
-            setup: function (editor) {
-                editor.on('change', function () {
-                    editor.save();
-                });
-            },
-            // ... autres options
-        });
-    }, 100); // 100 ms de délai
-});
-
+  tinymce.init({
+    selector: 'textarea',
+    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+    language: "fr_FR",
+    width: '100%',
+    height: 500,
+	  content_style:
+    "@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap'); body { font-family: Oswald; }",
+	
+  });
 </script>
 {% endblock %}

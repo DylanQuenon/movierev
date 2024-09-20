@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -68,8 +69,8 @@ class NewsController extends AbstractController
     #[Route("/news/{slug}", name:"news_show")]
     public function show(string $slug, News $news, NewsRepository $newsRepository, Request $request, EntityManagerInterface $manager): Response
     {
-        // $news->setViewsCount($news->getViewsCount() + 1);
-        // $manager->flush();
+        $news->setViewsCount($news->getViewsCount() + 1);
+        $manager->flush();
    
         return $this->render("news/show.html.twig", [
             'news' => $news,

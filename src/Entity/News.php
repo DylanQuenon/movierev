@@ -33,9 +33,9 @@ class News
     private ?string $slug = null;
 
     
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Image(mimeTypes:['image/png','image/jpeg', 'image/jpg', 'image/gif', 'image/webp'], mimeTypesMessage:"Vous devez upload un fichier jpg, jpeg, webp, png ou gif")]
-    #[Assert\File(maxSize:"2048k", maxSizeMessage: "La taille du fichier est trop grande")]
+    #[ORM\Column(length: 255)]
+    // #[Assert\Image(mimeTypes:['image/png','image/jpeg', 'image/jpg', 'image/gif', 'image/webp'], mimeTypesMessage:"Vous devez upload un fichier jpg, jpeg, webp, png ou gif")]
+    // #[Assert\File(maxSize:"2048k", maxSizeMessage: "La taille du fichier est trop grande")]
     private ?string $cover = null;
 
     #[ORM\ManyToOne(inversedBy: 'news')]
