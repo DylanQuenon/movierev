@@ -110,3 +110,39 @@
     color: #2D34CD;
     border: solid 1px #2D34CD;
 }
+.toread{
+    position: sticky;
+    top: 20px;
+    left: 0;
+    margin-bottom: 40px;
+    height: fit-content;
+    @media all and  (max-width: 1024px)
+    {
+        position: static;
+        margin: 20px 0;
+        
+    }
+}
+.toread{
+    &_card{
+        padding: 10px 15px;
+        background-color: white;
+        box-shadow: 0 4px 25px rgba(160, 81, 222,0.15);
+        border-radius: $radius-3xl;
+        &_info{
+            &_title{
+                p{
+                    font-weight: bold !important;
+
+                }
+            }
+            &_status{
+                p{
+                    padding: 5px;
+                    border-radius: 100px;
+                    width: fit-content;
+                }
+            }
+        }
+    }
+}

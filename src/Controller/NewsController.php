@@ -71,9 +71,20 @@ class NewsController extends AbstractController
     {
         $news->setViewsCount($news->getViewsCount() + 1);
         $manager->flush();
+
+           // Récupère les trois dernières actualités, excluant celle affichée
+    $latestNews = $newsRepository->createQueryBuilder('n')
+    ->where('n.id != :currentNewsId')
+    ->setParameter('currentNewsId', $news->getId())
+    ->orderBy('n.createdAt', 'DESC')
+    ->setMaxResults(3)
+    ->getQuery()
+    ->getResult();
+
    
         return $this->render("news/show.html.twig", [
             'news' => $news,
+            'latestNews' => $latestNews,
         ]);
     }
 
