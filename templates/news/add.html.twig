@@ -1,0 +1,58 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Ajout d'une actualité
+{% endblock %}
+
+{% form_theme myForm _self %}
+
+{% block body %}
+						<div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+							<div class="relative py-3 sm:max-w-4xl sm:mx-auto">
+								<div class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-light-blue-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+								<div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+									<div class="max-w-3xl mx-auto">
+										<div>
+											<h1 class="text-2xl font-semibold text-center">Ajout d'une actualité</h1>
+										</div>
+										<div class="divide-y divide-gray-200">
+											{{ form_start(myForm, {'attr': {'class': 'mt-8 space-y-6'}}) }}
+												<div class="space-y-4">
+													{{ form_widget(myForm) }}
+												</div>
+												<div class="pt-4 flex items-center justify-between">
+													<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+														Enregistrer
+													</button>
+												</div>
+											{{ form_end(myForm) }}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+	
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdn.tiny.cloud/1/woaocyzfgvhd1m78wd2jna73doxq2a6b3cudjgrl66uluh6f/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        tinymce.init({
+            selector: 'textarea[name="news[content]"]',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            },
+            // ... autres options
+        });
+    }, 100); // 100 ms de délai
+});
+
+</script>
+{% endblock %}

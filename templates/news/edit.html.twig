@@ -1,0 +1,56 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Modification d'une actualité
+{% endblock %}
+
+{% form_theme myForm _self %}
+
+{% block body %}
+	<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+		<div class="max-w-3xl mx-auto">
+			<div class="bg-white shadow-md rounded-lg overflow-hidden">
+				<div class="bg-gray-800 px-4 py-5 sm:px-6">
+					<h1 class="text-2xl font-bold text-white text-center">Modification d'une actualité</h1>
+				</div>
+				<div class="px-4 py-5 sm:p-6">
+					{{ form_start(myForm, {'attr': {'class': 'space-y-6'}}) }}
+					{{ form_widget(myForm) }}
+					<div class="flex justify-between items-center mt-6">
+						<button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+							Enregistrer
+						</button>
+						<div>
+							<button type="button" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2" data-bs-toggle="modal" data-bs-target="#deleteModal">
+								Supprimer la news
+							</button>
+						</div>
+					</div>
+					{{ form_end(myForm) }}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdn.tiny.cloud/1/woaocyzfgvhd1m78wd2jna73doxq2a6b3cudjgrl66uluh6f/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        tinymce.init({
+            selector: 'textarea',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            },
+            // ... autres options
+        });
+    }, 100); // 100 ms de délai
+});
+
+</script>
+{% endblock %}

@@ -65,6 +65,7 @@ class Media
     #[ORM\Column(length: 255)]
     private ?array $genres = null;
 
+
          /**
      * Permet de créer un slug automatiquement avec le nom et prénom de l'utilisateur
      *
@@ -211,11 +212,9 @@ public function getGenres(): array
 {
     return $this->genres;
 }
-
 public function setGenres(array $genres): self
 {
     $this->genres = $genres;
-
     return $this;
 }
 }

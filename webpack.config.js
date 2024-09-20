@@ -26,6 +26,7 @@ Encore
     .addEntry('homeStyle', './assets/styles/pages/home.scss')
     .addEntry('movieStyle', './assets/styles/pages/movies.scss')
     .addEntry('aboutStyle', './assets/styles/pages/about.scss')
+    .addEntry('newIndivStyle', './assets/styles/pages/newindiv.scss')
     .addEntry('mediaIndiv', './assets/styles/pages/mediaindiv.scss')
     .addEntry('baseForm', './assets/styles/templates/baseForm.scss')
 

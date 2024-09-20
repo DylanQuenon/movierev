@@ -1,0 +1,225 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+	{{encore_entry_link_tags('newIndivStyle')}}
+{% endblock %}
+
+{% block title %}
+	{{ news.title }}
+{% endblock %}
+
+{% block body %}
+	<div class="slide bg-secondary" id="news_page">
+		<div class="wrapper">
+         <div class="w-full flex justify-between flex-wrap ">
+            <div class="max-md:w-full flex flex-col gap-5 lg:w-7/12">
+               <div class="card_news flex flex-col gap-5 p-5">
+                  <div class="card_news_cover w-full h-[400px] relative">
+                     <img src="/uploads/{{news.cover}}" alt="Couverture de l'actualité {{news.title}}" class="w-full h-100% object-cover">
+                  </div>
+                  <div class="card_news_content flex flex-col gap-5">
+                     <div class="card_news_content_info2 flex justify-between">
+                        <div class="card_news_content_info2_status">
+                           {% if news.status == 'officiel' %}
+                              <p class="font-semibold urbanist uppercase text-lg status-officiel">{{news.status}}</p>
+                           {% elseif news.status == 'rumeur' %}
+                              <p class="font-semibold urbanist uppercase text-lg status-rumeur">{{news.status}}</p>
+                           {% elseif news.status == 'recommandations' %}
+                              <p class="font-semibold urbanist uppercase text-lg status-recommandations">{{news.status}}</p>
+                           {% elseif news.status == 'box office' %}
+                              <p class="font-semibold urbanist uppercase text-lg status-box-office">{{news.status}}</p>
+                           {% else %}
+                              <p class="font-semibold urbanist uppercase text-lg">{{news.status}}</p>
+                           {% endif %}
+                        </div>
+                        <div class="card_news_content_info2_stats flex gap-5">
+                           <p class="text-xl object color-tertiary uppercase flex gap-2">
+                              <span class="material-symbols-outlined">
+                                 visibility
+                              </span>
+                              {{news.viewsCount}}</p>
+                           <p class="text-xl object color-tertiary uppercase flex gap-2">
+                              <span class="material-symbols-outlined">
+                                 chat
+                              </span>
+                              {{news.viewsCount}}</p>
+                           <p class="text-xl object color-tertiary uppercase flex gap-2">
+                              <span class="material-symbols-outlined">
+                                 share
+                              </span>
+                              <span>{{news.shareCount}}</span></p>
+                        </div>
+                     </div>
+                     <div class="card_news_content_rating flex gap-2">
+                        <div class="flex">
+                           <svg class="w-6 h-6 text-purple-500 fill-current" viewbox="0 0 24 24">
+                              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                           </svg>
+                           <svg class="w-6 h-6 text-purple-500 fill-current" viewbox="0 0 24 24">
+                              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                           </svg>
+                           <svg class="w-6 h-6 text-purple-500 fill-current" viewbox="0 0 24 24">
+                              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                           </svg>
+                           <svg class="w-6 h-6 text-purple-500 fill-current" viewbox="0 0 24 24">
+                              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                           </svg>
+                           <svg class="w-6 h-6 text-gray-300 fill-current" viewbox="0 0 24 24">
+                              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                           </svg>
+                        </div>
+                        <span class="text-xl urbanist color-primary uppercase font-semibold">4/5</span>
+                     </div>
+                     <div class="card_news_content_info1 flex max-sm:flex-col justify-between">
+                        <p class="w-[83%] display-md urbanist font-semibold my-5">{{news.title}}</p>
+                        <div class="card_news_content_info1_actions flex max-sm:flex-row md:flex-col gap-4">
+                           <button id="copyLink" class="w-fit text-lg urbanist font-semibold py-2 px-4 flex gap-2">
+                              <span class="material-symbols-outlined">
+                                 link
+                              </span class="textCopyLink">Copier le lien</button>
+                           <button id="shareLink" class="w-fit text-lg urbanist font-semibold py-2 px-4 flex gap-2">
+                              <span class="material-symbols-outlined">
+                                 share
+                              </span>Partager sur</button>
+                        </div>
+                     </div>
+                     <div class="card_news_content_info1_author">
+                        <div class="card_news_content_info1_author_infos flex items-center gap-3">
+                           <div class="card_news_content_info1_author_infos_avatar">
+                              <img src="/uploads/{{news.author.avatar}}" alt="Avatar de {{news.author.fullName}}" class="w-[40px] h-[40px] rounded-full object-cover">
+                           </div>
+                           <div class="card_news_content_info1_author_infos_name flex flex-col gap-1">
+                              <p class="text-sm text-gray-400 urbanist">Par
+                                 <a href="#" class="font-semibold color-primary">{{news.author.fullName}}</a>
+                              </p>
+                              <p class="text-sm text-gray-400 urbanist">Publié le
+                                 <span class="font-semibold color-primary">{{news.createdAt |date('d/m/Y', 'Europe/Paris')}}</span>
+                                 à
+                                 <span class="font-semibold color-primary">{{news.createdAt |date('H','Europe/Paris')}}</span>
+                                 <span class="font-semibold color-primary">h</span>
+                                 <span class="font-semibold color-primary">{{news.createdAt |date('i', 'Europe/Paris')}}</span>
+                              </p>
+
+
+                           </div>
+
+                        </div>
+                     </div>
+                  </div>
+
+               </div>
+               <div class="text-lg urbanist">
+                  {{news.content|raw|nl2br}}
+               </div>
+            </div>
+            <div class="lg:w-4/12 toread ">
+               <div class="w-full flex items-center justify-between">
+                  <p class="display-md object color-primary uppercase">à lire aussi</p>
+                  <a href="#" class="text-md urbanist flex gap-2 items-center">Voir tout <span class="material-symbols-outlined">arrow_right_alt</span></a>
+               </div>
+               
+               
+            </div>
+         
+         </div>
+         
+		</div>
+
+	</div>
+
+
+<div id="share-overlay" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center hidden z-50">
+    <div class="bg-white p-8 rounded-lg shadow-lg">
+        <h3 class="text-2xl font-bold mb-6 font-urbanist text-gray-800">Partager cette page</h3>
+        <div class="flex gap-6 text-lg urbanist">
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ app.request.uri }}" target="_blank" class="flex items-center share-button justify-center bg-blue-600 text-white px-6 py-3 rounded-full font-urbanist transition-all hover:bg-blue-700">
+                <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                </svg>
+                Facebook
+            </a>
+            <a href="https://twitter.com/intent/tweet?url={{ app.request.uri }}" target="_blank" class="flex items-center share-button justify-center bg-black text-white px-6 py-3 rounded-full font-urbanist transition-all hover:bg-gray-800">
+                <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                X (Twitter)
+            </a>
+            <button id="copyLink" class="flex items-center justify-center bg-gray-600 text-white px-6 py-3 rounded-full font-urbanist transition-all hover:bg-gray-700">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+                Copier le lien
+            </button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const copyLinkButton = document.getElementById('copyLink');
+        const textCopyLink = document.querySelector('#copyLink span.textCopyLink');
+        const openShareOverlay = document.getElementById('shareLink');
+        const shareOverlay = document.getElementById('share-overlay');
+
+        // Copier le lien de la page
+        copyLinkButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            navigator.clipboard.writeText(window.location.href).then(function() {
+                copyLinkButton.innerHTML = '<span class="material-symbols-outlined">link</span><span class="textCopyLink">Lien copié</span>';
+                setTimeout(function() {
+                    copyLinkButton.innerHTML = '<span class="material-symbols-outlined">link</span><span class="textCopyLink">Copier le lien</span>';
+                }, 3000);
+            }, function(err) {
+                console.error('Erreur lors de la copie du lien : ', err);
+            });
+        });
+
+        // Ouvrir l'overlay de partage
+        openShareOverlay.addEventListener('click', function(event) {
+            event.preventDefault();
+            shareOverlay.classList.remove('hidden');
+        });
+
+        // Fermer l'overlay en cliquant en dehors de la boîte
+        shareOverlay.addEventListener('click', function(event) {
+            if (event.target === shareOverlay) {
+                shareOverlay.classList.add('hidden');
+            }
+        });
+
+        // Incrémenter le compteur de partages
+        const incrementShareCount = () => {
+            fetch(`/news/{{ news.slug }}/incrementationsharecounts`, { // Utilise le slug de la news ici
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors de l\'incrémentation du compteur de partage');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Compteur de partage mis à jour :', data);
+                // Met à jour l'affichage du compteur de partages
+                document.querySelector('.card_news_content_info2_stats p:nth-child(3) span:nth-child(2)').innerText = data.newShareCount;
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        };
+
+        // Appel de la fonction lors du clic sur un bouton de partage
+        document.querySelectorAll('.share-button').forEach(button => {
+            button.addEventListener('click', function() {
+                incrementShareCount();
+            });
+        });
+    });
+</script>
+{% endblock %}
+
