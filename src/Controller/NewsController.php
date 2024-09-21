@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\News;
 use App\Form\NewsType;
+use App\Entity\ImgModify;
 use App\Form\NewsEditType;
+use App\Form\ImgModifyMainType;
 use App\Repository\NewsRepository;
 use App\Service\PaginationService;
 use App\Service\FileUploaderService;
@@ -170,6 +172,82 @@ class NewsController extends AbstractController
             "myForm" => $form->createView()
         ]);
     }
+
+    #[Route("/news/{slug}/imgmodify", name:"news_img")]
+    public function imgModify(Request $request, EntityManagerInterface $manager, News $news, FileUploaderService $fileUploader): Response
+    {
+        $imgModify = new ImgModify();
+        $form = $this->createForm(ImgModifyMainType::class, $imgModify);
+        $form->handleRequest($request);
+        
+        
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            
+            if(!$news->getCover() || !empty($news->getCover()))
+            {
+                unlink($this->getParameter('uploads_directory').'/'.$news->getCover());
+            }
+
+                // gestion de l'image
+                $file = $form['newPicture']->getData();
+                if($file){
+                    $imageName = $fileUploader->upload($file);
+                    $news->setCover($imageName);
+                }
+                $manager->persist($news);
+                $manager->flush();
+
+                $this->addFlash(
+                'success',
+                'La couverture a bien été modifiée'
+                );
+
+                return $this->redirectToRoute('news_show',[
+                'slug' => $news->getSlug()
+                
+            ]);
+        }
+
+        return $this->render("news/imgModify.html.twig",[
+            'myForm' => $form->createView(),
+            
+        'news' => $news 
+            
+        ]);
+    }
+
+      /**
+     * Efface les news
+     *
+     * @param News $news
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    #[Route("/news/{slug}/delete", name: "news_delete")]
+    #[IsGranted(
+        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
+        subject: new Expression('args["news"].getAuthor()'),
+        message: "Cette annonce ne vous appartient pas, vous ne pouvez pas la supprimer"
+    )]
+    public function delete(News $news, EntityManagerInterface $manager): Response
+    {
+        if(!empty($news->getCover()))
+        {
+            unlink($this->getParameter('uploads_directory').'/'.$news->getCover());
+        }
+      
+        $this->addFlash(
+            "success",
+            "L'annonce <strong>".$news->getTitle()."</strong> a bien été supprimée"
+        );
+        $manager->remove($news);
+        $manager->flush();
+        
+        return $this->redirectToRoute('news_index');
+    }
+ 
     
 
 

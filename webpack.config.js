@@ -34,6 +34,7 @@ Encore
 
     .addEntry('burgerJS', './assets/js/burger.js')
     .addEntry('sliderHomeJS', './assets/js/sliderHome.js')
+    .addEntry('sliderNews', './assets/js/sliderNews.js')
     .addEntry('sliderLog', './assets/js/sliderLog.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

@@ -20,10 +20,14 @@
 						<button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
 							Enregistrer
 						</button>
+
+							<div>
+							<a href="{{path('news_img', {'slug': news.slug})}}" type="button" class="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+								Modifier la cover 
+							</a>
+						</div>
 						<div>
-							<button type="button" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2" data-bs-toggle="modal" data-bs-target="#deleteModal">
-								Supprimer la news
-							</button>
+						    <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('news_delete', { 'slug': news.slug }) }}', 'Supprimer', 'Annuler')" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">Supprimer</button>
 						</div>
 					</div>
 					{{ form_end(myForm) }}
@@ -31,6 +35,15 @@
 			</div>
 		</div>
 	</div>
+{% include '/partials/_delete_modal.html.twig' with {
+    modal_id: 'deleteModal',
+    form_id: 'deleteForm',
+    title: 'Confirmation de suppression',
+    message: 'Êtes-vous sûr de vouloir supprimer cette actualité ? Cette action est irréversible.',
+    action_url: '#',  
+    confirm_text: 'Supprimer',
+    cancel_text: 'Annuler'
+} %}
 {% endblock %}
 
 {% block javascripts %}

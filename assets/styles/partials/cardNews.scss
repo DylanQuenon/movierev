@@ -4,6 +4,7 @@
     border-radius: $radius-3xl;
     width: 80%;
     transition: all 0.3s;
+    box-shadow: 0 4px 25px rgba(160, 81, 222,0.15);
     height: 424px;
     &:hover{
         transform: translateY(-10px);
