@@ -17,7 +17,7 @@ class MovieController extends AbstractController
     public function index(Request $request, MediaRepository $repo, PaginationService $pagination, int $page): Response
     {
     
-        $pagination->setDataSource(Media::class)->setPage($page)->setLimit(8)->setRoute('medias');
+        $pagination->setDataSource(Media::class)->setPage($page)->setLimit(9)->setRoute('medias');
         $medias = $pagination->getData();
 
         return $this->render('media/index.html.twig', [

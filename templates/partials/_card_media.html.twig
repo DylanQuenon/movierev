@@ -30,12 +30,8 @@
 
                 <div class="media_card_actions flex justify-end w-full">
                     {% include 'partials/_trailer_button.html.twig' with {'trailerUrl': media.trailer} %}
-                    <a href="{{ path('medias_show', {'slug': media.slug}) }}" class="text-md flex items-center gap-1 color-secondary background-tertiary actions">
-                        <span class="material-symbols-outlined">
-                            add_circle
-                        </span>
-                        Voir les détails
-                    </a>
+                    {% include "partials/_button.html.twig" with {'text': 'Voir plus', 'href': path('medias_show', {'slug': media.slug})} %}
+                  
                 </div>
             </div>
         </div>

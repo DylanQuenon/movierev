@@ -1,0 +1,8 @@
+@import "../variables/variables.scss";
+#newsPage{
+    background: $color-secondary;
+    .wrapper{
+        padding: $spacing-9xl 0;
+        @include flexGap(column,$spacing-2xl)
+    }
+}

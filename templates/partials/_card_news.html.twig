@@ -1,0 +1,55 @@
+ {% block stylesheets %}{{encore_entry_link_tags('cardNewsStyle')}}{% endblock %}
+ 
+  <a href="{{path('news_show', {'slug': actu.slug})}}" class="card_actus p-5 flex flex-col gap-5 justify-between col-span-1 ">
+                <div class="card_actus_cover w-full">
+                    <img src="/uploads/{{actu.cover}}" alt="Image de l'actualité" class="w-full h-[200px] object-cover">
+                </div>
+                <div class="flex flex-col gap-2">
+                    <div class="card_actus_content flex flex-col gap-5">
+                        <div class="card_actus_content_stats w-full justify-between flex ">
+                            <div class="flex">
+                                <svg class="w-6 h-6 text-purple-500 fill-current" viewbox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <svg class="w-6 h-6 text-purple-500 fill-current" viewbox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <svg class="w-6 h-6 text-purple-500 fill-current" viewbox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <svg class="w-6 h-6 text-purple-500 fill-current" viewbox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <svg class="w-6 h-6 text-gray-300 fill-current" viewbox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                              <p class="text-lg object color-tertiary uppercase flex gap-2">
+                              <span class="material-symbols-outlined">
+                                 visibility
+                              </span>
+                              {{actu.viewsCount}}</p>
+                        
+                        </div>
+                    </div>
+                    <div class="card_actus_content_title">
+                        <p class="text-xl urbanist font-semibold">
+                            {{actu.title}}
+                        </p>
+                    </div>
+                
+                </div>
+                <div class="card_actus_content_author flex items-center gap-2">
+                    <img src="/uploads/{{actu.author.avatar}}" alt="Avatar de {{actu.author.fullName}}" class="w-[40px] h-[40px] object-cover rounded-full">
+                    <div class="flex flex-col gap-2">
+                        <p class="text-sm urbanist font-semibold">{{actu.author.fullName}}</p>
+                        <p class="text-xs urbanist color-tertiary">{{actu.createdAt |date('d F Y', 'Europe/Paris')|format_datetime(pattern="d MMMM yyyy", locale='fr')}}</p>
+                    
+                    </div>
+                </div>
+
+
+          
+
+                
+                </a>

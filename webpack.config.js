@@ -22,12 +22,14 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('headerStyle', './assets/styles/partials/header.scss')
+    .addEntry('cardNewsStyle', './assets/styles/partials/cardNews.scss')
     .addEntry('buttonStyle', './assets/styles/partials/_buttonStyle.scss')
     .addEntry('homeStyle', './assets/styles/pages/home.scss')
     .addEntry('movieStyle', './assets/styles/pages/movies.scss')
     .addEntry('aboutStyle', './assets/styles/pages/about.scss')
     .addEntry('newIndivStyle', './assets/styles/pages/newindiv.scss')
     .addEntry('mediaIndiv', './assets/styles/pages/mediaindiv.scss')
+    .addEntry('newsStyle', './assets/styles/pages/newsStyle.scss')
     .addEntry('baseForm', './assets/styles/templates/baseForm.scss')
 
     .addEntry('burgerJS', './assets/js/burger.js')

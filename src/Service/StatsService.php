@@ -29,7 +29,7 @@ class  StatsService{
         return $this->manager->createQuery("SELECT COUNT(a) FROM App\Entity\Media a")->getSingleScalarResult();
     }
     /**
-     * Permet de récup le nombre de medias
+     * Permet de récup le nombre d'actus
      *
      * @return integer|null
      */

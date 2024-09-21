@@ -6,6 +6,7 @@ use App\Entity\News;
 use App\Form\NewsType;
 use App\Form\NewsEditType;
 use App\Repository\NewsRepository;
+use App\Service\PaginationService;
 use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,11 +20,50 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class NewsController extends AbstractController
 {
-    #[Route('/news', name: 'app_news')]
-    public function index(): Response
+
+
+    #[Route('/news/search/ajax', name: 'news_search_ajax', methods: ['GET'])]
+    /**
+     * Effectue la recherche
+     *
+     * @param Request $request
+     * @param NewsRepository $newsRepo
+     * @return JsonResponse
+     */
+    public function searchAjax(Request $request, NewsRepository $newsRepo): JsonResponse
     {
+        $query = $request->query->get('query', '');
+
+        if (empty($query)) {
+            return new JsonResponse([]); // Renvoie un tableau vide si aucun terme
+        }
+
+        $results = $newsRepo->findByNewsTitle($query)
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+
+        $jsonResults = array_map(function ($news) {
+            return [
+                'title' => $news->getTitle(),
+                'author' => $news->getAuthor()->getFullName(),
+                'slug' => $news->getSlug(),
+            ];
+        }, $results);
+
+        return new JsonResponse($jsonResults);
+    }
+    #[Route('/news/{page<\d+>?1}', name: 'news_index')]
+    public function index(Request $request, NewsRepository $repo, PaginationService $pagination, int $page): Response
+    {
+    
+        $pagination->setDataSource(News::class)->setPage($page)->setLimit(8)->setRoute('news_index');
+        $news = $pagination->getData();
+
         return $this->render('news/index.html.twig', [
-            'controller_name' => 'NewsController',
+            'pagination' => $pagination,
+            'news' => $news,
+            
         ]);
     }
 
@@ -111,6 +151,7 @@ class NewsController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
+            $news->setSlug('');
             $manager->persist($news);
             $manager->flush();
     

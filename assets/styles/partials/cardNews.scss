@@ -1,0 +1,21 @@
+@import "../variables/variables.scss";
+.card_actus{
+    background-color: #FFFFFF;
+    border-radius: $radius-3xl;
+    width: 80%;
+    transition: all 0.3s;
+    height: 424px;
+    &:hover{
+        transform: translateY(-10px);
+    }
+    .material-symbols-outlined{
+        color: #a4a4a4;
+    }
+    &_cover{
+        img{
+            border-radius: $radius-3xl;
+
+        }
+    }
+ 
+}

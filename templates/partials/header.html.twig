@@ -14,7 +14,9 @@
 					{% set navItems = {
                         'Accueil': { 'route': 'home', 'icon': 'home' },
                         'Qui sommes-nous ?': { 'route': 'about', 'icon': 'groups' },
-                        'Films & Séries': { 'route': 'medias', 'icon': 'slideshow' }
+                        'Films & Séries': { 'route': 'medias', 'icon': 'slideshow' },
+						'Actualités': { 'route': 'news_index', 'icon': 'newspaper' },
+						
                     } %}
 
 					{% for label, data in navItems %}
@@ -54,6 +56,7 @@
                 'Accueil': { 'route': 'home', 'icon': 'home' },
                 'Qui sommes-nous ?': { 'route': 'about', 'icon': 'groups' },
 				'Films & Séries': { 'route': 'medias', 'icon': 'slideshow' },
+				'Actualités': { 'route': 'news_index', 'icon': 'newspaper' },
 				'Connexion':{'route': 'account_login','icon': 'login'},
 				'Inscription':{'route': 'account_register','icon': 'person_add'}
             } %}

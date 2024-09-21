@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\News;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<News>
@@ -40,4 +41,12 @@ class NewsRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    
+    public function findByNewsTitle(string $term): QueryBuilder
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.title LIKE :term ')  // Rechercher par titre ou nom de l'auteur
+            ->setParameter('term', '%' . $term . '%');
+    }
 }
