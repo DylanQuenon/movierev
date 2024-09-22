@@ -109,7 +109,8 @@ class MediaType extends ApplicationType
             ->add('castings', CollectionType::class, [
                 'entry_type' => CastingType::class,
                 'allow_add' => true, // pour le data_prototype
-                'allow_delete' => true
+                'allow_delete' => true,
+                
             ])
             ->add('poster', FileType::class, $this->getConfiguration("Poster du film", "EX : PosterTitanic.jpg"))
             ->add('cover', FileType::class, $this->getConfiguration("Couverture du film", "EX : Titanic_qui_coule.png"))
