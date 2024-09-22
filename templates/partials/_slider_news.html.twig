@@ -1,0 +1,46 @@
+        {% block stylesheets %}
+            {{encore_entry_link_tags('sliderNewsStyle')}}
+        {% endblock %}
+		<div class="flex flex-col gap-10 py-24">
+			<h2 class="text-center display-2xl object uppercase">Restez au courant des
+				<span class="color-tertiary">dernières
+					<br>
+					<span id="typewriter"></span>
+				</span>
+			</h2>
+			<div class="relative">
+				<div class="swiper relative">
+					<!-- Swiper Wrapper -->
+					<div class="swiper-wrapper">
+						{% for news in lastNews %}
+							<!-- Swiper Slide -->
+							<div class="swiper-slide">
+								{% include "partials/_card_news.html.twig" with {'actu': news} %}
+							</div>
+
+						{% endfor %}
+
+					</div>
+				</div>
+				<div class="swiper-pagination">
+					<span class="material-symbols-outlined swiper-button-prev">
+						chevron_left
+					</span>
+
+					<span class="material-symbols-outlined swiper-button-next">
+						chevron_right
+					</span>
+
+				</div>
+
+			</div>
+            <div class="flex justify-center w-full">
+                {% include "partials/_button.html.twig" with {'text':"Voir toutes les reviews", 'href': '#'} %}
+            </div>
+
+
+		</div>
+
+{% block javascripts %}
+    {{encore_entry_script_tags('sliderNews')}}
+{% endblock %}

@@ -1,0 +1,71 @@
+@import "../variables/variables.scss";
+.cursor {
+    border-right: 2px solid $color-tertiary;
+    animation: blink 0.7s steps(1) infinite;
+  }
+  
+  @keyframes blink {
+    from, to {
+      border-color: transparent;
+    }
+    50% {
+      border-color: $color-tertiary;
+    }
+  }
+  .swiper{
+    width: 85%;
+    padding-top: 40px;
+    margin: 0 auto;
+    display: flex;
+    overflow: hidden;
+
+
+    .swiper-wrapper{
+        display: flex;
+     
+    }
+
+    .swiper-slide{
+        transform: scale(0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s;
+        padding-right: -30px !important;
+        .card_actus{
+            width: 80%;
+        }
+        &-next{
+            transform: scale(1);
+        }
+       
+    }
+   
+  }
+  .swiper-pagination{
+    position: absolute;
+    top: 40%;
+    display: flex;
+    justify-content: space-between;
+    left: 0;
+    width: 100%;
+    padding: 0 5.5%;
+   
+    span{
+       font-size: 60px;
+       color: $color-tertiary;
+       display: flex;
+       width: 70px;
+       user-select: none;
+       height: 70px;
+       justify-content: center;
+       align-items: center;
+       transition: all 0.3s ease-in-out;
+       &:hover{
+           background-color: #FFFFFF;
+           border-radius: 100%;
+
+       }
+       
+    }
+}
