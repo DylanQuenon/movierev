@@ -2,7 +2,7 @@
 
 {% block title %}Création d'un média{% endblock %}
 
-{% form_theme myForm _self %}
+{% form_theme myForm 'admin/media/_collection.html.twig' %}
 
 {% block body %}
     <div class="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg">
@@ -17,6 +17,7 @@
 
 
 {% block javascripts %}
+    {{encore_entry_script_tags('casting')}}
     {{ parent() }}
 
     <!-- Inclure Choices.js CSS -->

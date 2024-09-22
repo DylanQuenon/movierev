@@ -52,6 +52,8 @@ class AdminMediaController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
+
+        
             $file = $form['cover']->getData();
             if($file){
                 $imageName = $fileUploader->upload($file);
@@ -64,6 +66,11 @@ class AdminMediaController extends AbstractController
                 $media->setPoster($imageName);
             }
            
+            foreach($media->getCastings() as $casting)
+            {
+                $casting->setMedia($media);
+                $manager->persist($casting);
+            }
 
             // je persiste mon objet media
             $manager->persist($media);
@@ -120,8 +127,14 @@ class AdminMediaController extends AbstractController
     
         if ($form->isSubmitted() && $form->isValid()) {
             $media
-                ->setPoster($poster)
-                ->setCover($cover);
+            ->setPoster($poster)
+            ->setCover($cover);
+            
+                        foreach($media->getCastings() as $casting)
+                        {
+                            $casting->setMedia($media);
+                            $manager->persist($casting);
+                        }
             
 
             $manager->persist($media);

@@ -68,9 +68,16 @@ class Media
     #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'media')]
     private Collection $genres;
 
+    /**
+     * @var Collection<int, Casting>
+     */
+    #[ORM\OneToMany(targetEntity: Casting::class, mappedBy: 'media',orphanRemoval: true)]
+    private Collection $castings;
+
     public function __construct()
     {
         $this->genres = new ArrayCollection();
+        $this->castings = new ArrayCollection();
     }
 
          /**
@@ -234,6 +241,36 @@ class Media
     public function removeGenre(Genre $genre): static
     {
         $this->genres->removeElement($genre);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Casting>
+     */
+    public function getCastings(): Collection
+    {
+        return $this->castings;
+    }
+
+    public function addCasting(Casting $casting): static
+    {
+        if (!$this->castings->contains($casting)) {
+            $this->castings->add($casting);
+            $casting->setMedia($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCasting(Casting $casting): static
+    {
+        if ($this->castings->removeElement($casting)) {
+            // set the owning side to null (unless already changed)
+            if ($casting->getMedia() === $this) {
+                $casting->setMedia(null);
+            }
+        }
 
         return $this;
     }

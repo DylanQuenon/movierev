@@ -1,0 +1,17 @@
+{% extends "admin/base.html.twig" %}
+
+{% block title %}Création d'un acteur{% endblock %}
+
+{% form_theme myForm _self %}
+
+{% block body %}
+    <div class="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg">
+        <h1 class="text-2xl font-bold mb-6">Création d'un nouvel acteur</h1>
+
+        {{ form_start(myForm) }}
+        {{ form_widget(myForm) }}
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Créer un acteur</button>
+        {{ form_end(myForm) }}
+    </div>
+{% endblock %}
+

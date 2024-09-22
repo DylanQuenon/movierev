@@ -2,11 +2,7 @@
 
 {% block title %}Édition du média: {{ media.title }}{% endblock %}
 
-{% form_theme myForm _self %}
-
-{% block stylesheets %}
-
-{% endblock %}
+{% form_theme myForm 'admin/media/_editCollection.html.twig' %}
 
 {% block body %}
 
@@ -62,6 +58,10 @@
 
 {% block javascripts %}
     {{ parent() }}
+    
+
+   {{encore_entry_script_tags('casting')}}
+
 
     <!-- Inclure Choices.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">

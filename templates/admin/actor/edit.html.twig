@@ -1,0 +1,31 @@
+{% extends "admin/base.html.twig" %}
+
+{% block title %}Modification de l'acteur {{actor.fullName}}{% endblock %}
+
+{% form_theme myForm _self %}
+
+{% block body %}
+    <div class="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg">
+        <h1 class="text-2xl font-bold mb-6">Modification d'un acteur</h1>
+
+        {{ form_start(myForm) }}
+        {{ form_widget(myForm) }}
+       	<div class="flex justify-between items-center mt-6">
+						<button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+							Modifier
+						</button>
+
+							<div>
+							<a href="{{path('admin_actors_img', {'slug': actor.slug})}}" type="button" class="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+								Modifier la cover 
+							</a>
+						</div>
+						<div>
+						    {# <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('news_delete', { 'slug': news.slug }) }}', 'Supprimer', 'Annuler')" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">Supprimer</button> #}
+						</div>
+					</div>
+
+        {{ form_end(myForm) }}
+    </div>
+{% endblock %}
+

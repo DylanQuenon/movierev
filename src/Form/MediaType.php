@@ -5,6 +5,7 @@ namespace App\Form;
 
 use App\Entity\Genre;
 use App\Entity\Media;
+use App\Form\CastingType;
 use App\Form\ApplicationType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class MediaType extends ApplicationType
 {
@@ -104,6 +106,11 @@ class MediaType extends ApplicationType
            
             ->add('producer',TextType::class,$this->getConfiguration('Réalisateur','Qui est le réalisateur'))
             ->add('trailer',UrlType::class,$this->getConfiguration('Url du trailer','URL YOUTUBE'))
+            ->add('castings', CollectionType::class, [
+                'entry_type' => CastingType::class,
+                'allow_add' => true, // pour le data_prototype
+                'allow_delete' => true
+            ])
             ->add('poster', FileType::class, $this->getConfiguration("Poster du film", "EX : PosterTitanic.jpg"))
             ->add('cover', FileType::class, $this->getConfiguration("Couverture du film", "EX : Titanic_qui_coule.png"))
         ;
