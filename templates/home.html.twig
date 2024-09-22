@@ -66,7 +66,7 @@
 									</div>
 									<div class="jumbotron_actions flex flex-wrap">
 										{% include 'partials/_trailer_button.html.twig' with { trailerUrl: media.trailer } %}
-										<a href="#" class="text-lg urbanist color-tertiary bg-secondary items-center button_details flex gap-2">
+										<a href="{{ path('medias_show', {'slug': media.slug}) }}" class="text-lg urbanist color-tertiary bg-secondary items-center button_details flex gap-2">
 											<i class="fa-solid fa-plus"></i>
 											<span>Voir les détails</span>
 										</a>
