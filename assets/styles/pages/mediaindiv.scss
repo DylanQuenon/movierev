@@ -82,7 +82,7 @@
             }
             &_right{
                 @include flexGap(column,$spacing-5xl);
-                transform: translateY(13%);
+          
                 .people{
                     position:relative;
                     padding-top: 15px;

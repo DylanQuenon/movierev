@@ -87,7 +87,7 @@
 				<div class="team_roles_second_right  flex flex-col justify-end max-md:w-full  lg:w-1/2">
 					{% for team in teams %}
 						{% if team.fullName == "Pierre Niney" or team.fullName == "Fivel Stewart" %}
-							<div class="content_biography relative flex flex-col gap-5  " id="{{team.lastName}}" data-aos="fade-up" data-aos-delay="500">
+							<div class="content_biography relative flex flex-col gap-5  " id="{{team.lastName}}" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 200 }}" data-aos-duration='500'>
 								<div class="biography_content flex flex-col gap-4">
 									<span class="start display-xl object color-tertiary">"</span>
 									<p class="text-xl urbanist font-semibold italic">{{team.biography}}</p>

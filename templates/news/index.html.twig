@@ -8,7 +8,7 @@
 <div class="slide" id="newsPage">
     <div class="wrapper">
         <div class="newsPage flex justify-between wrap">
-        <div class="flex-col flex gap-2">
+        <div class="flex-col flex gap-5">
             <div>
                 <h2 class="display-xl object uppercase font-bold mb-4 color-tertiary">Actualités</h2>
                 <p class="text-lg urbanist color-primary md:w-6/12">   Ne manquez rien des dernières sorties, des rumeurs, et de tout ce qui fait vibrer le cinéma, des premières bandes-annonces aux coulisses des tournages, en passant par les critiques des films les plus attendus.</p>
@@ -40,7 +40,7 @@
 
         
         </div>
-             <div class="grid sm:grid-cols-1 place-items-center lg:grid-cols-3 gap-5 w-full">
+             <div class="grid sm:grid-cols-1 place-items-center lg:grid-cols-3 gap-5 w-full mt-5">
           {% for actu in news %}
               {% include 'partials/_card_news.html.twig' with {'actu': actu} %}
           {% endfor %}
