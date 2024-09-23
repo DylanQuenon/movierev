@@ -11,6 +11,7 @@ use App\Repository\NewsRepository;
 use App\Service\PaginationService;
 use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -56,18 +57,44 @@ class NewsController extends AbstractController
         return new JsonResponse($jsonResults);
     }
     #[Route('/news/{page<\d+>?1}', name: 'news_index')]
-    public function index(Request $request, NewsRepository $repo, PaginationService $pagination, int $page): Response
+    public function index(Request $request, NewsRepository $repo, PaginatorInterface $paginator, int $page = 1): Response
     {
+        // Récupère le statut et l'ordre depuis les paramètres GET
+        $status = $request->query->get('status');
+        $order = $request->query->get('order', 'newest'); // Valeur par défaut
     
-        $pagination->setDataSource(News::class)->setPage($page)->setLimit(8)->setRoute('news_index');
-        $news = $pagination->getData();
-
+        // Initialisation de la requête de base
+        $queryBuilder = $repo->createQueryBuilder('n');
+    
+        // Si un statut est sélectionné, on ajoute une condition à la requête
+        if ($status) {
+            $queryBuilder->andWhere('n.status = :status')
+                         ->setParameter('status', $status);
+        }
+    
+        // Ajoute un tri en fonction de l'ordre choisi
+        if ($order === 'oldest') {
+            $queryBuilder->orderBy('n.createdAt', 'ASC');
+        } elseif ($order === 'most_views') {
+            $queryBuilder->orderBy('n.viewsCount', 'DESC');
+        } else {
+            $queryBuilder->orderBy('n.createdAt', 'DESC');
+        }
+    
+        // Pagination avec KnpPaginator
+        $news = $paginator->paginate(
+            $queryBuilder, // La requête
+            $request->query->getInt('page', $page), // Numéro de la page
+            9 // Nombre de résultats par page
+        );
+    
         return $this->render('news/index.html.twig', [
-            'pagination' => $pagination,
             'news' => $news,
-            
+            'status' => $status, // Pour indiquer quel statut est sélectionné
+            'order' => $order, // Passe l'ordre à la vue
         ]);
     }
+    
 
     #[Route("/news/add", name:"news_create")]
     #[IsGranted(

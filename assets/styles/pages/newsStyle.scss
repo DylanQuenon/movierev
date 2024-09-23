@@ -6,3 +6,13 @@
         @include flexGap(column,$spacing-2xl)
     }
 }
+
+.filters{
+    select{
+        font-family: $font-family-urbanist;
+        
+    }
+    span{
+        color: $color-tertiary;
+    }
+}

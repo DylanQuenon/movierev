@@ -122,6 +122,9 @@
 .filters{
     select{
         font-family: $font-family-urbanist;
-
+        
+    }
+    span{
+        color: $color-tertiary;
     }
 }

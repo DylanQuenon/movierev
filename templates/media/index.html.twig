@@ -16,9 +16,15 @@
     {% include "partials/_search.html.twig" %}
 
     <form method="GET" action="{{ path('medias') }}" class="flex gap-2 items-center">
-        <span class="text-md color-tertiary">Filtrer par</span>
+    <div class="flex items-center gap-2">
+    <span class="material-symbols-outlined">
+instant_mix
+</span>
+ <span class="text-md color-tertiary">Filtrer par</span>
+    </div>
+       
 
-        <select name="genre" class="px-4 py-2 border rounded-md" onchange="this.form.submit()">
+        <select name="genre" class="pr-8 py-2 border rounded-md" onchange="this.form.submit()">
             <option value="">Tous les genres</option>
             {% for genre in genres %}
                 <option value="{{ genre.name }}" {% if genre.name == currentGenre %}selected{% endif %}>

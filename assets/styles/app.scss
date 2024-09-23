@@ -59,19 +59,22 @@
 }
 
 #searchNews{
+  #search-form{
+    i{
+      position: absolute;
+      top: 50%;
+      left: 1%;
+      transform: translateY(-50%);
+      color: $color-tertiary !important;
+      z-index: 5;
+    }
+  }
   #search-form input{
 
     padding-left: 40px;
     margin-right: 10px
   }
-  i{
-    position: absolute;
-    top: 50%;
-    left: 5%;
-    transform: translateY(-50%);
-    color: $color-secondary !important;
-    z-index: 5;
-  }
+
 
   #search-input-news{
     border-radius: 80px;
@@ -131,19 +134,9 @@
   .search-bar{
     z-index: 20;
   }
-    #search-form{
-      i{
-        position: absolute;
-        top: 50%;
-        left: 1%;
-        transform: translateY(-50%);
-        color: $color-tertiary !important;
-        z-index: 5;
-      }
-    }
+   
   
 
-  
 
 
 }
@@ -264,3 +257,31 @@
 }
 
 
+
+#searchNews{
+  #search-form{
+    i{
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      transform: translateY(-50%);
+      color: $color-tertiary !important;
+      z-index: 5;
+    }
+  }
+
+}
+
+#searchMedias{
+  #search-form{
+    i{
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      transform: translateY(-50%);
+      color: $color-tertiary !important;
+      z-index: 5;
+    }
+  }
+
+}

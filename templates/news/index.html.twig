@@ -13,7 +13,28 @@
                 <h2 class="display-xl object uppercase font-bold mb-4 color-tertiary">Actualités</h2>
                 <p class="text-lg urbanist color-primary md:w-6/12">   Ne manquez rien des dernières sorties, des rumeurs, et de tout ce qui fait vibrer le cinéma, des premières bandes-annonces aux coulisses des tournages, en passant par les critiques des films les plus attendus.</p>
             </div>
+            <div class="flex items-center justify-between filters">
             {% include "partials/_search_news.html.twig" %}
+            <form method="GET" action="{{ path('news_index') }}" class="flex gap-2 items-center">
+    <span class="text-md color-tertiary">Filtrer par</span>
+    
+    <select name="status" class="pr-8 py-2 border rounded-md" onchange="this.form.submit()">
+        <option value="">Tous les statuts</option>
+        <option value="officiel" {% if status == 'officiel' %}selected{% endif %}>Officiel</option>
+        <option value="recommandations" {% if status == 'recommandations' %}selected{% endif %}>Recommandations</option>
+        <option value="box office" {% if status == 'box office' %}selected{% endif %}>Box Office</option>
+        <option value="rumeur" {% if status == 'rumeur' %}selected{% endif %}>Rumeur</option>
+    </select>
+    
+    <select name="order" class="pr-8 py-2 border rounded-md" onchange="this.form.submit()">
+        <option value="newest" {% if order == 'newest' %}selected{% endif %}>Plus récents</option>
+        <option value="oldest" {% if order == 'oldest' %}selected{% endif %}>Plus anciens</option>
+        <option value="most_views" {% if order == 'most_views' %}selected{% endif %}>Plus vus</option>
+    </select>
+</form>
+
+            
+            </div>
         
         </div>
 
@@ -26,7 +47,9 @@
         </div>
 
         </div>
-    {{ pagination.display() }}
+   <div class="pagination">
+    {{ knp_pagination_render(news) }}
+</div>
 
     
     
