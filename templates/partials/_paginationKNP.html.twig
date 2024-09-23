@@ -1,0 +1,84 @@
+<div class="w-full flex justify-center py-4 pagination" >
+    <nav aria-label="Page navigation example">
+        <ul class="flex -space-x-px text-base gap-5">
+
+            {# Lien première page #}
+            {% if first is defined and current != first %}
+                <li>
+                    <a href="{{ path(route, query|merge({(pageParameterName): first})) }}" class="hover:bg-purple-500 hover:text-white text-lg urbanist font-semibold flex items-center justify-center px-4 h-10 rounded-full" aria-label="Première page">
+                        <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    <span class="text-lg urbanist font-semibold flex items-center justify-center px-4 h-10 leading-tight text-gray-300 bg-white border border-gray-300 cursor-not-allowed rounded-full" aria-label="Première page">
+                        <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+                    </span>
+                </li>
+            {% endif %}
+
+            {# Lien précédent #}
+            {% if previous is defined %}
+                <li>
+                    <a href="{{ path(route, query|merge({(pageParameterName): previous})) }}" class="hover:bg-purple-500 hover:text-white text-lg urbanist font-semibold flex items-center justify-center px-4 h-10 rounded-full" aria-label="Précédente">
+                        <span aria-hidden="true"><i class="fa-solid fa-angle-left"></i></span>
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    <span class="text-lg urbanist font-semibold flex items-center justify-center px-4 h-10 leading-tight text-gray-300 bg-white border border-gray-300 cursor-not-allowed rounded-full" aria-label="Précédente">
+                        <span aria-hidden="true"><i class="fa-solid fa-angle-left"></i></span>
+                    </span>
+                </li>
+            {% endif %}
+
+            {# Boucle pour afficher les numéros de page #}
+            {% set halfWindowSize = 3 %}
+            {% set startPage = (current - halfWindowSize) > 0 ? (current - halfWindowSize) : 1 %}
+            {% set endPage = (current + halfWindowSize) < pageCount ? (current + halfWindowSize) : pageCount %}
+
+            {% for i in startPage..endPage %}
+                <li>
+                    <a href="{{ path(route, query|merge({(pageParameterName): i})) }}" 
+                       {% if current == i %} 
+                           aria-current="page" class="text-lg urbanist font-semibold flex items-center justify-center px-4 h-10 text-white bg-purple-600 border border-gray-300 rounded-md"
+                       {% else %}
+                           class="text-lg urbanist font-semibold flex items-center justify-center w-10 px-4 h-10 rounded-full hover:bg-purple-500 hover:text-white"
+                       {% endif %}>
+                        {{ i }}
+                    </a>
+                </li>
+            {% endfor %}
+
+            {# Lien suivant #}
+            {% if next is defined %}
+                <li>
+                    <a href="{{ path(route, query|merge({(pageParameterName): next})) }}" class="rounded-full hover:bg-purple-500 hover:text-white text-lg urbanist font-semibold flex items-center justify-center px-4 h-10" aria-label="Suivante">
+                        <span aria-hidden="true"><i class="fa-solid fa-angle-right"></i></span>
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    <span class="text-lg urbanist font-semibold flex items-center justify-center px-4 h-10 leading-tight text-gray-30 cursor-not-allowed" aria-label="Suivante">
+                        <span aria-hidden="true"><i class="fa-solid fa-angle-right"></i></span>
+                    </span>
+                </li>
+            {% endif %}
+
+            {# Lien dernière page #}
+            {% if last is defined and current != last %}
+                <li>
+                    <a href="{{ path(route, query|merge({(pageParameterName): last})) }}" class="hover:bg-purple-500 hover:text-white text-lg urbanist font-semibold flex items-center justify-center px-4 h-10 rounded-full" aria-label="Dernière page">
+                        <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    <span class="text-lg urbanist font-semibold flex items-center justify-center px-4 h-10 leading-tight cursor-not-allowed" aria-label="Dernière page">
+                        <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+                    </span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>

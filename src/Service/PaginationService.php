@@ -106,16 +106,21 @@ class PaginationService
         return ceil($total / $this->limit);
     }
 
-    public function display(): void
+    public function display(array $params = []): void
     {
         if (empty($this->route)) {
             throw new \Exception("La route de pagination n'est pas définie !");
         }
-
-        $this->twig->display($this->templatePath, [
+    
+        // Fusionner les paramètres supplémentaires avec ceux de la pagination
+        $params = array_merge([
             'page' => $this->currentPage,
             'pages' => $this->getPages(),
             'route' => $this->route
-        ]);
+        ], $params);
+    
+        // Afficher le template avec les paramètres fusionnés
+        $this->twig->display($this->templatePath, $params);
     }
+    
 }

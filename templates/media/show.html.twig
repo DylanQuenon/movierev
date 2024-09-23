@@ -57,7 +57,20 @@
                         <div class="people max-sm:pt-0 relative real" data-aos="fade-left" data-aos-delay="1000" data-aos-duration="1000" data-aos-anchor-placement="top-center">
                         <p class="text-lg bord bold color-tertiary urbanist font-semibold uppercase">Réalisateur</p>
                         <p class="text-md color-primary urbanist">{{media.producer}}</p>
+                        
                         </div>
+                              <p class="text-lg bord bold color-tertiary urbanist font-semibold uppercase">Castings</p>
+                        {% for cast in media.castings %}
+                            <div class="flex items-center gap-2 my-2">
+                                <img src="/uploads/{{cast.actor.picture}}" alt="Image de {{cast.actor.fullName}}" class=" shadow-none w-[40px] h-[40px] object-cover rounded-full">
+                                <div class="name text-md urbanist font-semibold">{{cast.actor.fullName}} <span class="color-tertiary">-</span> {{cast.role}}</div>
+                            </div>
+                        {% endfor %}
+                        
+     
+                    
+                  
+                      
                     </div>
                 
                 </div>

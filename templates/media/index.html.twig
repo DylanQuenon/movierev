@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}Films & Séries{% endblock %}
 {% block stylesheets %}{{encore_entry_link_tags('movieStyle')}}{% endblock %}
 
@@ -8,34 +7,47 @@
 <div class="slide" id="mediaPage">
     <div class="wrapper">
         <div class="mediaPage_heading flex justify-between wrap">
-        <div>
-            <h2 class="display-xl object uppercase font-bold mb-4 color-tertiary">Films <span class="color-primary">&</span> Séries</h2>
-            <p class="text-lg urbanist color-primary md:w-6/12">Découvrez les films et séries incontournables. Explorez les dernières sorties, plongez dans les classiques et laissez-vous guider par notre sélection pour enrichir vos soirées cinéma.</p>
-        
-        </div>
-        {% include "partials/_search.html.twig" %}
+            <div>
+                <h2 class="display-xl object uppercase font-bold mb-4 color-tertiary">Films <span class="color-primary">&</span> Séries</h2>
+                <p class="text-lg urbanist color-primary md:w-6/12">Découvrez les films et séries incontournables. Explorez les dernières sorties, plongez dans les classiques et laissez-vous guider par notre sélection pour enrichir vos soirées cinéma.</p>
+            </div>
 
-        
+ <div class="flex flex-wrap items-center justify-between filters">
+    {% include "partials/_search.html.twig" %}
+
+    <form method="GET" action="{{ path('medias') }}" class="flex gap-2 items-center">
+        <span class="text-md color-tertiary">Filtrer par</span>
+
+        <select name="genre" class="px-4 py-2 border rounded-md" onchange="this.form.submit()">
+            <option value="">Tous les genres</option>
+            {% for genre in genres %}
+                <option value="{{ genre.name }}" {% if genre.name == currentGenre %}selected{% endif %}>
+                    {{ genre.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select name="order" class="pr-8 py-2 border rounded-md" onchange="this.form.submit()">
+            <option value="newest" {% if order == 'newest' %}selected{% endif %}>Plus récents</option>
+            <option value="oldest" {% if order == 'oldest' %}selected{% endif %}>Plus anciens</option>
+        </select>
+    </form>
+</div>
+
         </div>
+
         <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 w-full">
             {% for media in medias %}
                 {% include "partials/_card_media.html.twig" with {'media': media} %}
             {% endfor %}
         </div>
-
-    
     </div>
 
-    {{ pagination.display() }}
+<div class="pagination">
+    {{ knp_pagination_render(medias) }}
+</div>
 
     {% include 'partials/_trailer_modal.html.twig' %}
     
 </div>
-
-    {# <form action="{{ path('medias') }}" method="get" class="mb-4">
-        <input type="text" name="search" placeholder="Rechercher un titre" value="{{ search }}" class="px-4 py-2 border rounded-md">
-        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md ml-2">Rechercher</button>
-    </form> #}
-
-
 {% endblock %}
