@@ -1,0 +1,59 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des contacts{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto my-8">
+        <h1 class="text-2xl font-bold mb-4">Gestion des contacts</h1>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="py-2 px-4 border-b">Id</th>
+                        <th class="py-2 px-4 border-b">Nom</th>
+                        <th class="py-2 px-4 border-b">Prénom</th>
+                        <th class="py-2 px-4 border-b">Email</th>
+                        <th class="py-2 px-4 border-b">Sujet</th>
+                        <th class="py-2 px-4 border-b">Contenu</th>
+                        <th class="py-2 px-4 border-b">Date d'envoi</th>
+                        <th class="py-2 px-4 border-b">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contact in pagination.data() %}
+                        <tr class="border-t">
+                            <td class="py-2 px-4">{{ contact.id }}</td>
+                            <td class="py-2 px-4">{{ contact.lastName }}</td>
+                            <td class="py-2 px-4">{{ contact.firstName }}</td>
+                            <td class="py-2 px-4">{{ contact.mail }}</td>
+                            <td class="py-2 px-4">{{ contact.object }}</td>
+                            <td class="py-2 px-4">{{ contact.message }}</td>
+                            <td class="py-2 px-4">{{ contact.sentAt|date("d-m-Y H:i:s") }}</td>
+                            <td class="py-2 px-4 flex space-x-2">
+                                <a href="{{ path('admin_contacts_show', {'id': contact.id}) }}" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
+                                    Voir le message <i class="fas fa-eye"></i>
+                                </a>
+                                     <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('admin_contact_delete', { 'id': contact.id }) }}', 'Supprimer', 'Annuler')" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">Supprimer</button>
+                           
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {# Pagination #}
+        <div class="mt-4">
+            {{ pagination.display() }}
+        </div>
+    </div>
+
+    {% include '/partials/_delete_modal.html.twig' with {
+    modal_id: 'deleteModal',
+    form_id: 'deleteForm',
+    title: 'Confirmation de suppression',
+    message: 'Êtes-vous sûr de vouloir supprimer ce message ? Cette action est irréversible.',
+    action_url: '#',  
+    confirm_text: 'Supprimer',
+    cancel_text: 'Annuler'
+} %}
+{% endblock %}

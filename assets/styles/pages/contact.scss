@@ -1,0 +1,47 @@
+@import "../variables/variables.scss";
+
+#contactPage {
+    background-color: $color-secondary;
+    .color-movie{
+        color: #D0ABEE;
+    }
+
+    .heading {
+        border-radius: 0 0 100px 100px;
+    }
+
+    .content_form {
+        background-color: white;
+        border-radius: $radius-3xl;
+        transform: translateY(-20%);
+        @media all and (max-width:650px) {
+            transform: translateY(0);
+            margin-top: 20px;
+            
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+            font-family: $font-family-urbanist;
+            button{
+                transition: all 0.3s;
+                border: solid 1px $color-tertiary;
+                border-radius: 5px !important;
+                &:hover{
+                    background-color: rgba(160, 81, 222,0.3);
+                    color: $color-tertiary;
+                    border-radius: 20px;
+                  span{
+                    transform: rotate(-30deg);
+                    transition: all 0.3s;
+                  }
+                }
+            }
+           
+        }
+
+   
+
+  
+    }
+}

@@ -1,0 +1,58 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Détails du message de {{ contact.lastName }}{% endblock %}
+
+{% block body %}
+    <div class="max-w-4xl mx-auto my-12 p-8 bg-gray-50 shadow-lg rounded-lg">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold mb-6 text-gray-800">Détails du message</h1>
+            <p class="text-lg text-gray-500 mb-8">Retrouvez les informations du contact ci-dessous</p>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div>
+                <h2 class="text-xl font-semibold text-gray-700 mb-2">Nom de famille</h2>
+                <p class="text-gray-900 border p-4 rounded-lg bg-white">{{ contact.lastName }}</p>
+            </div>
+            <div>
+                <h2 class="text-xl font-semibold text-gray-700 mb-2">Prénom</h2>
+                <p class="text-gray-900 border p-4 rounded-lg bg-white">{{ contact.firstName }}</p>
+            </div>
+            <div>
+                <h2 class="text-xl font-semibold text-gray-700 mb-2">Adresse email</h2>
+                <p class="text-gray-900 border p-4 rounded-lg bg-white">{{ contact.mail }}</p>
+            </div>
+            <div>
+                <h2 class="text-xl font-semibold text-gray-700 mb-2">Objet du message</h2>
+                <p class="text-gray-900 border p-4 rounded-lg bg-white">{{ contact.object }}</p>
+            </div>
+        </div>
+        
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold text-gray-700 mb-2">Message</h2>
+            <p class="text-gray-900 border p-6 rounded-lg bg-white whitespace-pre-line">{{ contact.message }}</p>
+        </div>
+
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold text-gray-700 mb-2">Date d'envoi</h2>
+            <p class="text-gray-900 border p-4 rounded-lg bg-white">{{ contact.sentAt|date("d-m-Y H:i:s") }}</p>
+        </div>
+
+        <div class="mt-12 flex justify-center space-x-6">
+            <a href="{{ path('admin_contact_index') }}" class="bg-gray-500 text-white px-6 py-2 rounded-full font-semibold shadow-lg hover:bg-gray-600 transition duration-200">Retour</a>
+            <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('admin_contact_delete', { 'id': contact.id }) }}', 'Supprimer', 'Annuler')" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">Supprimer</button>
+        </div>
+
+     
+    </div>
+
+        {% include '/partials/_delete_modal.html.twig' with {
+    modal_id: 'deleteModal',
+    form_id: 'deleteForm',
+    title: 'Confirmation de suppression',
+    message: 'Êtes-vous sûr de vouloir supprimer ce message ? Cette action est irréversible.',
+    action_url: '#',  
+    confirm_text: 'Supprimer',
+    cancel_text: 'Annuler'
+} %}
+{% endblock %}
