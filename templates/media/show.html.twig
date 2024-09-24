@@ -1,93 +1,79 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}{{media.title}}{% endblock %}
 
 {% block stylesheets %}
     {{encore_entry_link_tags('mediaIndiv')}}
-    <style>
-        .synopsis-short {
-            display: inline;
-        }
-        .synopsis-full {
-            display: none;
-        }
-    </style>
 {% endblock %}
 
 {% block body %}
-<div class="slide overflow-hidden bg-secondary" id="mediaIndiv">
-    <div class="banneerCover relative"><img src="/uploads/{{media.cover}}" alt="Image du film {{media.title}}">   <div class="shadowWhite"></div></div>
- 
-    <div class="wrapper">
-        <div class="media_presentation flex flex-wrap gap-12  w-full">
-            <img src="/uploads/{{media.poster}}" class=" max-sm:w-full max-sm:h-3/5 md:w-3/12 object-cover" alt="Image du film {{media.title}}" data-aos="fade-right" data-aos-duration="1000" data-aos-anchor-placement="top-center">
-            <div class="media_presentation_content_global max-sm:w-full  w-8/12">
-                <h3 class="display-2xl object uppercase" data-aos="fade-left" data-aos-duration="1000" data-aos-anchor-placement="top-center">{{media.title}}</h3>
-                <div class="media_presentation_content flex-wrap flex max-sm:gap-5">
-                    <div class="media_presentation_content_left max-sm:w-12/12  md:w-8/12 justify-between">
-                        <div class="flex gap-5">
-                            {% for genre in media.getGenres() %}
-                                <p class="text-sm urbanist items-center  w-max genres color-tertiary flex gap-1 px-8 font-semibold py-2 rounded-full" data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000" data-aos-anchor-placement="top-center">{{genre.name}}</p>
-                                
-                            {% endfor %}
-                        </div>
-                        <div class="flex gap-5 flex-col">
-                           <div class="flex gap-5">
-                                <div class="info2 rating flex items-center font-semibold urbanist gap-2 text-md color-tertiary" data-aos="fade-left" data-aos-delay="400" data-aos-duration="1000" data-aos-anchor-placement="top-center"><i class="fa-solid fa-star"></i> 4.5/5</div>
-                                <div class="info2 reviews flex gap-2 items-center font-semibold urbanist text-md color-primary" data-aos="fade-left" data-aos-delay="600" data-aos-duration="1000" data-aos-anchor-placement="top-center"><span class="material-symbols-outlined">rate_review</span> 25 reviews</div>
-                                <div class="info2 duration flex gap-2 items-center text-md urbanist font-semibold color-primary bg-tertiary color-secondary" data-aos="fade-left" data-aos-delay="800" data-aos-duration="1000" data-aos-anchor-placement="top-center"><i class="fa-solid fa-hourglass"></i> {{media.duration}}</div>
-                           </div>
+    <div class="slide overflow-hidden bg-secondary" id="mediaIndiv">
+        {#Cover du film en bannière#}
+        <div class="banneerCover relative"><img src="/uploads/{{media.cover}}" alt="Image du film {{media.title}}">   <div class="shadowWhite"></div></div>
+    
+        <div class="wrapper">
+            <div class="media_presentation flex flex-wrap gap-12  w-full">
+                {#Poster du film#}
+                <img src="/uploads/{{media.poster}}" class=" max-sm:w-full max-sm:h-3/5 md:w-3/12 object-cover" alt="Image du film {{media.title}}" data-aos="fade-right" data-aos-duration="1000" data-aos-anchor-placement="top-center">
+                {#info du film#}
+                <div class="media_presentation_content_global max-sm:w-full  w-8/12">
+                    <h3 class="display-2xl object uppercase" data-aos="fade-left" data-aos-duration="1000" data-aos-anchor-placement="top-center">{{media.title}}</h3>
+                    <div class="media_presentation_content flex-wrap flex max-sm:gap-5">
+                        {#infos majeures du film#}
+                        <div class="media_presentation_content_left max-sm:w-12/12  md:w-8/12 justify-between">
+                            {#Récupération des genres#}
+                            <div class="flex gap-5">
+                                {% for genre in media.getGenres() %}
+                                    <p class="text-sm urbanist items-center  w-max genres color-tertiary flex gap-1 px-8 font-semibold py-2 rounded-full" data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000" data-aos-anchor-placement="top-center">{{genre.name}}</p>
+                                {% endfor %}
+                            </div>
+                            {#Note moyenne des reviews à changer + infos films#}
+                            <div class="flex gap-5 flex-col">
+                            <div class="flex gap-5">
+                                    <div class="info2 rating flex items-center font-semibold urbanist gap-2 text-md color-tertiary" data-aos="fade-left" data-aos-delay="400" data-aos-duration="1000" data-aos-anchor-placement="top-center"><i class="fa-solid fa-star"></i> 4.5/5</div>
+                                    <div class="info2 reviews flex gap-2 items-center font-semibold urbanist text-md color-primary" data-aos="fade-left" data-aos-delay="600" data-aos-duration="1000" data-aos-anchor-placement="top-center"><span class="material-symbols-outlined">rate_review</span> 25 reviews</div>
+                                    <div class="info2 duration flex gap-2 items-center text-md urbanist font-semibold color-primary bg-tertiary color-secondary" data-aos="fade-left" data-aos-delay="800" data-aos-duration="1000" data-aos-anchor-placement="top-center"><i class="fa-solid fa-hourglass"></i> {{media.duration}}</div>
+                            </div>
 
-                            <div class="synopsis-container w-[85%]" data-aos="fade-left" data-aos-delay="400" data-aos-duration="1000" data-aos-anchor-placement="top-center">
-                                <p class="text-lg urbanist synopsis-short">{{ media.synopsis|raw|nl2br|u.truncate(200, '...') }}</p>
-                                <p class="text-lg urbanist synopsis-full">{{ media.synopsis|raw|nl2br }}</p>
-                                <a href="#" class="text-sm color-tertiary urbanist font-semibold toggle-synopsis">Voir plus</a>
+                                <div class="synopsis-container w-[85%]" data-aos="fade-left" data-aos-delay="400" data-aos-duration="1000" data-aos-anchor-placement="top-center">
+                                    <p class="text-lg urbanist synopsis-short">{{ media.synopsis|raw|nl2br|u.truncate(200, '...') }}</p>
+                                    <p class="text-lg urbanist synopsis-full">{{ media.synopsis|raw|nl2br }}</p>
+                                    <a href="#" class="text-sm color-tertiary urbanist font-semibold toggle-synopsis">Voir plus</a>
+                                </div>
+                            </div>
+                            {#actions#}
+                            <div class="media_presentation_content_left_actions  items-center flex flex-wrap gap-6" data-aos="fade-left" data-aos-delay="600" data-aos-duration="1000">
+                                {% include "partials/_trailer_button.html.twig" with {'trailerUrl': media.trailer} %}
+                                <a href="#" class="text-lg urbanist flex gap-1" data-aos="fade-left" data-aos-delay="0" data-aos-duration=""> <span class="material-symbols-outlined color-tertiary">bookmark</span>Enregistrer dans une liste</a> 
                             </div>
                         </div>
-                        <div class="media_presentation_content_left_actions  items-center flex flex-wrap gap-6" data-aos="fade-left" data-aos-delay="600" data-aos-duration="1000">
-                            {% include "partials/_trailer_button.html.twig" with {'trailerUrl': media.trailer} %}
-                            <a href="#" class="text-lg urbanist flex gap-1" data-aos="fade-left" data-aos-delay="800" data-aos-duration="1000">   <span class="material-symbols-outlined color-tertiary">
-                            bookmark
-                        </span>Enregistrer dans une liste</a>
+                        {#infos réalisateurs et casting#}
+                        <div class="media_presentation_content_right max-sm:flex-row flex flex-wrap flex-col gap-5 max-sm:w-full md:w-4/12">
+                            {#réalisateur du film#}
+                            <div class="people max-sm:pt-0 relative real" data-aos="fade-left" data-aos-delay="1000" data-aos-duration="1000" data-aos-anchor-placement="top-center">
+                                <p class="text-lg bord bold color-tertiary urbanist font-semibold uppercase">Réalisateur</p>
+                                <p class="text-md color-primary urbanist">{{media.producer}}</p>
+                            </div>
+                            {#casting du film#}
+                            <div class="people max-sm:pt-0 relative real" data-aos="fade-left" data-aos-delay="1000" data-aos-duration="1000" data-aos-anchor-placement="top-center">
+                                <p class="text-lg bord bold color-tertiary urbanist font-semibold uppercase">Castings</p>
+                                {% for cast in media.castings %}
+                                    <div class="flex items-center gap-2 my-2">
+                                        <img src="/uploads/{{cast.actor.picture}}" alt="Image de {{cast.actor.fullName}}" class=" shadow-none w-[40px] h-[40px] object-cover rounded-full">
+                                        <div class="name text-md urbanist font-semibold"> <span class="color-tertiary">{{cast.actor.fullName}}</span> <span class="color-tertiary">-</span> {{cast.role}}</div>
+                                    </div>
+                                {% endfor %}
                             
-                        </div>
-                    </div>
-                    <div class="media_presentation_content_right max-sm:flex-row flex flex-wrap flex-col gap-5 max-sm:w-full md:w-4/12">
-                        <div class="people max-sm:pt-0 relative real" data-aos="fade-left" data-aos-delay="1000" data-aos-duration="1000" data-aos-anchor-placement="top-center">
-                        <p class="text-lg bord bold color-tertiary urbanist font-semibold uppercase">Réalisateur</p>
-                        <p class="text-md color-primary urbanist">{{media.producer}}</p>
-                        
-                        </div>
-                        <div class="people max-sm:pt-0 relative real" data-aos="fade-left" data-aos-delay="1000" data-aos-duration="1000" data-aos-anchor-placement="top-center">
-                        <p class="text-lg bord bold color-tertiary urbanist font-semibold uppercase">Castings</p>
-                        {% for cast in media.castings %}
-                            <div class="flex items-center gap-2 my-2">
-                                <img src="/uploads/{{cast.actor.picture}}" alt="Image de {{cast.actor.fullName}}" class=" shadow-none w-[40px] h-[40px] object-cover rounded-full">
-                                <div class="name text-md urbanist font-semibold"> <span class="color-tertiary">{{cast.actor.fullName}}</span> <span class="color-tertiary">-</span> {{cast.role}}</div>
                             </div>
-                        {% endfor %}
-                        
                         </div>
-                        
-     
                     
-                  
-                      
                     </div>
                 
                 </div>
-            
             </div>
-
-        
         </div>
     </div>
-</div>
-
-{% include "partials/_trailer_modal.html.twig"  %}
-
-
+    {% include "partials/_trailer_modal.html.twig"  %}
 {% endblock %}
 
 {% block javascripts %}

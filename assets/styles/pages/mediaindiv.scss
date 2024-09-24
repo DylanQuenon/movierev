@@ -11,15 +11,14 @@
     
     &::after{
         width: 119%;
-    height: 30vh;
-    background-color: $color-secondary;
-    filter: blur(15px);
-    position: absolute;
-    left: -40px;
-    bottom: -160px;
-    content: ''
-   
-  }
+        height: 30vh;
+        background-color: $color-secondary;
+        filter: blur(15px);
+        position: absolute;
+        left: -40px;
+        bottom: -160px;
+        content: ''
+    }
   }
 
 .wrapper{
@@ -47,7 +46,8 @@
         }
         img{
             border-radius: $radius-4xl;
-            box-shadow: 0 4px 25px rgba(165, 30, 223,0.3)
+            box-shadow: 0 4px 25px rgba(165, 30, 223,0.3);
+            height: fit-content
         }
         &_content{
             &_global{
@@ -61,6 +61,15 @@
                         border-radius: $radius-full;
                         border: solid 1px $color-tertiary;
                         color: $color-tertiary;
+                        &:hover{
+                            background-color: #d99ef5;
+                            color: $color-primary;
+                            span{
+                             
+                                color: $color-primary;
+                            }
+                        }
+
                     }
                     &>*{
                         transition: all 0.3s;
@@ -97,4 +106,10 @@
             }
         }
     }
+}
+.synopsis-short {
+    display: inline;
+}
+.synopsis-full {
+    display: none;
 }
