@@ -59,16 +59,7 @@
 }
 
 #searchNews{
-  #search-form{
-    i{
-      position: absolute;
-      top: 50%;
-      left: 1%;
-      transform: translateY(-50%);
-      color: $color-tertiary !important;
-      z-index: 5;
-    }
-  }
+
   #search-form input{
 
     padding-left: 40px;
@@ -221,7 +212,7 @@
       i{
         position: absolute;
         top: 50%;
-        left: 1%;
+        left: 5%;
         transform: translateY(-50%);
         color: $color-tertiary !important;
         z-index: 5;
@@ -254,36 +245,6 @@
     @apply ml-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50;
   
   }
-}
-
-
-
-#searchNews{
-  #search-form{
-    i{
-      position: absolute;
-      top: 50%;
-      left: 5%;
-      transform: translateY(-50%);
-      color: $color-tertiary !important;
-      z-index: 5;
-    }
-  }
-
-}
-
-#searchMedias{
-  #search-form{
-    i{
-      position: absolute;
-      top: 50%;
-      left: 5%;
-      transform: translateY(-50%);
-      color: $color-tertiary !important;
-      z-index: 5;
-    }
-  }
-
 }
 
 #page404{
