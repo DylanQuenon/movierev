@@ -1,9 +1,11 @@
  {% block stylesheets %}{{encore_entry_link_tags('cardNewsStyle')}}{% endblock %}
  
   <a href="{{path('news_show', {'slug': actu.slug})}}" class="card_actus p-5 flex flex-col gap-5 justify-between col-span-1 ">
+    {#Cover actu#}
     <div class="card_actus_cover w-full">
         <img src="/uploads/{{actu.cover}}" alt="Image de l'actualité" class="w-full h-[200px] object-cover">
     </div>
+    {#Contenu de la carte#}
     <div class="flex flex-col gap-2">
         <div class="card_actus_content flex flex-col gap-5">
             <div class="card_actus_content_stats w-full justify-between flex ">
@@ -39,6 +41,7 @@
         </div>
     
     </div>
+    {#info sur l'auteur de la carte#}
     <div class="card_actus_content_author flex items-center gap-2">
         <img src="/uploads/{{actu.author.avatar}}" alt="Avatar de {{actu.author.fullName}}" class="w-[40px] h-[40px] object-cover rounded-full">
         <div class="flex flex-col gap-2">

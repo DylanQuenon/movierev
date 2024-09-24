@@ -34,8 +34,8 @@ class News
 
     
     #[ORM\Column(length: 255)]
-    // #[Assert\Image(mimeTypes:['image/png','image/jpeg', 'image/jpg', 'image/gif', 'image/webp'], mimeTypesMessage:"Vous devez upload un fichier jpg, jpeg, webp, png ou gif")]
-    // #[Assert\File(maxSize:"2048k", maxSizeMessage: "La taille du fichier est trop grande")]
+    #[Assert\Image(mimeTypes:['image/png','image/jpeg', 'image/jpg', 'image/gif', 'image/webp'], mimeTypesMessage:"Vous devez upload un fichier jpg, jpeg, webp, png ou gif")]
+    #[Assert\File(maxSize:"2048k", maxSizeMessage: "La taille du fichier est trop grande")]
     private ?string $cover = null;
 
     #[ORM\ManyToOne(inversedBy: 'news')]
@@ -51,6 +51,11 @@ class News
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
+    /**
+     * Initialise la date de création
+     *
+     * @return void
+     */
     #[ORM\PrePersist]
     public function prePersist(): void
     {
@@ -61,7 +66,7 @@ class News
     }
 
         /**
-     * Permet de créer un slug automatiquement avec le nom et prénom de l'utilisateur
+     * Permet de créer un slug automatiquement avec le titre de l'article
      *
      * @return void
      */

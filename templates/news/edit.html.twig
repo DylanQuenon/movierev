@@ -35,31 +35,31 @@
 			</div>
 		</div>
 	</div>
-{% include '/partials/_delete_modal.html.twig' with {
-    modal_id: 'deleteModal',
-    form_id: 'deleteForm',
-    title: 'Confirmation de suppression',
-    message: 'Êtes-vous sûr de vouloir supprimer cette actualité ? Cette action est irréversible.',
-    action_url: '#',  
-    confirm_text: 'Supprimer',
-    cancel_text: 'Annuler'
-} %}
+	{% include '/partials/_delete_modal.html.twig' with {
+		modal_id: 'deleteModal',
+		form_id: 'deleteForm',
+		title: 'Confirmation de suppression',
+		message: 'Êtes-vous sûr de vouloir supprimer cette actualité ? Cette action est irréversible.',
+		action_url: '#',  
+		confirm_text: 'Supprimer',
+		cancel_text: 'Annuler'
+	} %}
 {% endblock %}
 
 {% block javascripts %}
-<script src="https://cdn.tiny.cloud/1/woaocyzfgvhd1m78wd2jna73doxq2a6b3cudjgrl66uluh6f/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+	<script src="https://cdn.tiny.cloud/1/woaocyzfgvhd1m78wd2jna73doxq2a6b3cudjgrl66uluh6f/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
-<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
-<script>
-  tinymce.init({
-    selector: 'textarea',
-    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-    language: "fr_FR",
-  content_style:
-    "@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap'); body { font-family: Urbanist; }",
-    width: '100%',
-    height: 500
-  });
-</script>
+	<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+	<script>
+	tinymce.init({
+		selector: 'textarea',
+		plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+		toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+		language: "fr_FR",
+	content_style:
+		"@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap'); body { font-family: Urbanist; }",
+		width: '100%',
+		height: 500
+	});
+	</script>
 {% endblock %}

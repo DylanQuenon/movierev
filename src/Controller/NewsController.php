@@ -25,14 +25,14 @@ class NewsController extends AbstractController
 {
 
 
-    #[Route('/news/search/ajax', name: 'news_search_ajax', methods: ['GET'])]
     /**
-     * Effectue la recherche
+     * Effectue la recherche ajax pour prendre les news
      *
      * @param Request $request
      * @param NewsRepository $newsRepo
      * @return JsonResponse
      */
+    #[Route('/news/search/ajax', name: 'news_search_ajax', methods: ['GET'])]
     public function searchAjax(Request $request, NewsRepository $newsRepo): JsonResponse
     {
         $query = $request->query->get('query', '');
@@ -56,6 +56,16 @@ class NewsController extends AbstractController
 
         return new JsonResponse($jsonResults);
     }
+
+    /**
+     * Récupère toutes les news
+     *
+     * @param Request $request
+     * @param NewsRepository $repo
+     * @param PaginatorInterface $paginator
+     * @param integer $page
+     * @return Response
+     */
     #[Route('/news/{page<\d+>?1}', name: 'news_index')]
     public function index(Request $request, NewsRepository $repo, PaginatorInterface $paginator, int $page = 1): Response
     {
@@ -96,6 +106,14 @@ class NewsController extends AbstractController
     }
     
 
+    /**
+     * Ajouter une actualité
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param FileUploaderService $fileUploader
+     * @return Response
+     */
     #[Route("/news/add", name:"news_create")]
     #[IsGranted(
         attribute: new Expression('(is_granted("ROLE_REDACTEUR")) or is_granted("ROLE_ADMIN")'),
@@ -115,7 +133,6 @@ class NewsController extends AbstractController
                 $news->setCover($imageName);
             }
             $news->setAuthor($this->getUser());
-            // je persiste mon objet team
             $manager->persist($news);
             // j'envoie les persistances dans la bdd
             $manager->flush();
@@ -125,9 +142,9 @@ class NewsController extends AbstractController
                 "L'actualité <strong>".$news->getTitle()."</strong> a bien été enregistrée"
             );
 
-            // return $this->redirectToRoute('news_show',[
-            //     'slug' => $news->getSlug()
-            // ]);
+            return $this->redirectToRoute('news_show',[
+                'slug' => $news->getSlug()
+            ]);
         }
 
         return $this->render("news/add.html.twig",[
@@ -135,20 +152,30 @@ class NewsController extends AbstractController
         ]);
     }
 
+    /**
+     * Récupère l'actualité individuelle
+     *
+     * @param string $slug
+     * @param News $news
+     * @param NewsRepository $newsRepository
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route("/news/{slug}", name:"news_show")]
     public function show(string $slug, News $news, NewsRepository $newsRepository, Request $request, EntityManagerInterface $manager): Response
     {
-        $news->setViewsCount($news->getViewsCount() + 1);
+        $news->setViewsCount($news->getViewsCount() + 1); // augmente le nombre de vues de 1
         $manager->flush();
 
-           // Récupère les trois dernières actualités, excluant celle affichée
-    $latestNews = $newsRepository->createQueryBuilder('n')
-    ->where('n.id != :currentNewsId')
-    ->setParameter('currentNewsId', $news->getId())
-    ->orderBy('n.createdAt', 'DESC')
-    ->setMaxResults(3)
-    ->getQuery()
-    ->getResult();
+        // Récupère les trois dernières actualités, excluant celle affichée
+        $latestNews = $newsRepository->createQueryBuilder('n')
+        ->where('n.id != :currentNewsId')
+        ->setParameter('currentNewsId', $news->getId())
+        ->orderBy('n.createdAt', 'DESC')
+        ->setMaxResults(3)
+        ->getQuery()
+        ->getResult();
 
    
         return $this->render("news/show.html.twig", [
@@ -157,6 +184,15 @@ class NewsController extends AbstractController
         ]);
     }
 
+    /**
+     * Incrémente le compteur de partages pour une actualité donnée.
+     *
+     * @param string $slug
+     * @param News $news
+     * @param EntityManagerInterface $em
+     * @param Request $request
+     * @return JsonResponse
+     */
     #[Route("/news/{slug}/incrementationsharecounts", name:"news_incrementation_sharing")]
     public function incrementShareCounts(string $slug, News $news, EntityManagerInterface $em, Request $request): JsonResponse
     {
@@ -168,6 +204,15 @@ class NewsController extends AbstractController
         return new JsonResponse(['success' => true, 'newShareCount' => $news->getShareCount()]);
     }
 
+    
+    /**
+     * Modifier une actualité
+     *
+     * @param News $news
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route("/news/{slug}/edit", name: "news_edit")]
     #[IsGranted(
         attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN") or is_granted("ROLE_REDACTEUR")'),
@@ -200,48 +245,52 @@ class NewsController extends AbstractController
         ]);
     }
 
+
+    /**
+     * Modifie l'image de l'actualité
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param News $news
+     * @param FileUploaderService $fileUploader
+     * @return Response
+     */
     #[Route("/news/{slug}/imgmodify", name:"news_img")]
     public function imgModify(Request $request, EntityManagerInterface $manager, News $news, FileUploaderService $fileUploader): Response
     {
         $imgModify = new ImgModify();
         $form = $this->createForm(ImgModifyMainType::class, $imgModify);
         $form->handleRequest($request);
-        
-        
-
+    
         if($form->isSubmitted() && $form->isValid())
         {
-            
             if(!$news->getCover() || !empty($news->getCover()))
             {
                 unlink($this->getParameter('uploads_directory').'/'.$news->getCover());
             }
+            // gestion de l'image
+            $file = $form['newPicture']->getData();
+            if($file){
+                $imageName = $fileUploader->upload($file);
+                $news->setCover($imageName);
+            }
+            $manager->persist($news);
+            $manager->flush();
 
-                // gestion de l'image
-                $file = $form['newPicture']->getData();
-                if($file){
-                    $imageName = $fileUploader->upload($file);
-                    $news->setCover($imageName);
-                }
-                $manager->persist($news);
-                $manager->flush();
+            $this->addFlash(
+            'success',
+            'La couverture a bien été modifiée'
+            );
 
-                $this->addFlash(
-                'success',
-                'La couverture a bien été modifiée'
-                );
-
-                return $this->redirectToRoute('news_show',[
-                'slug' => $news->getSlug()
+            return $this->redirectToRoute('news_show',[
+            'slug' => $news->getSlug()
                 
             ]);
         }
 
         return $this->render("news/imgModify.html.twig",[
             'myForm' => $form->createView(),
-            
-        'news' => $news 
-            
+            'news' => $news    
         ]);
     }
 
@@ -274,8 +323,4 @@ class NewsController extends AbstractController
         
         return $this->redirectToRoute('news_index');
     }
- 
-    
-
-
 }
