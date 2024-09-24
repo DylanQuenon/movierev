@@ -1,38 +1,37 @@
-   <div class="media_card flex items-center">  <!-- Le lien englobe toute la carte -->
-     
-            <div class="photos">
-            {% if media.poster %}
-                <img src="/uploads/{{ media.cover }}" alt="Poster du film {{ media.title }}" class="">
-            {% else %}
-                <img src="/images/default.jpg" alt="Pas de poster disponible" class="">
-            {% endif %}
-            
+<div class="media_card flex items-center"> 
+    {#Cover de l'image#}
+    <div class="photos">
+        {% if media.cover %}
+            <img src="/uploads/{{ media.cover }}" alt="Poster du film {{ media.title }}" class="">
+        {% else %}
+            <img src="/images/default.jpg" alt="Pas de poster disponible" class="">
+        {% endif %}
+    
+    </div>
+    {#Infos#}
+    <div class="media_card_infos">
+        <div class="media_card_infos_content">
+            {#Ajouter dans une liste data tippy#}
+            <div data-tippy-content="Enregistrer dans une liste" class="saving_list w-full flex justify-end">
+                <span class="material-symbols-outlined color-tertiary">
+                    bookmark
+                </span>
             </div>
-
-            <div class="media_card_infos">
-                <div class="media_card_infos_content">
-
-                    <div data-tippy-content="Enregistrer dans une liste" class="saving_list w-full flex justify-end">
-                        <span class="material-symbols-outlined color-tertiary">
-                            bookmark
-                        </span>
-                    </div>
-
-                    <div class="media_card_infos_heading">
-                        <div class="card_infos_heading_main">
-                            <h5 class="text-xl object uppercase">{{ media.title }}</h5>
-                            <p class="text-md urbanist color-tertiary font-semibold">{{ media.releaseDate|date('Y') }}</p>
-                        </div>
-                    </div>
-
-                    <p class="text-lg urbanist">{{ media.synopsis|slice(0, 100) ~ '...' }}</p>
-                </div>
-
-                <div class="media_card_actions flex justify-end w-full">
-                    {% include 'partials/_trailer_button.html.twig' with {'trailerUrl': media.trailer} %}
-                    {% include "partials/_button.html.twig" with {'text': 'Voir plus', 'href': path('medias_show', {'slug': media.slug})} %}
-                  
+            {#text de la carte#}
+            <div class="media_card_infos_heading">
+                <div class="card_infos_heading_main">
+                    <h5 class="text-xl object uppercase">{{ media.title }}</h5>
+                    <p class="text-md urbanist color-tertiary font-semibold">{{ media.releaseDate|date('Y') }}</p>
                 </div>
             </div>
+
+            <p class="text-lg urbanist">{{ media.synopsis|slice(0, 80) ~ '...' }}</p>
         </div>
+        {#actions de la carte#}
+        <div class="media_card_actions flex justify-end pb-2 w-full">
+            {% include 'partials/_trailer_button.html.twig' with {'trailerUrl': media.trailer} %}
+            {% include "partials/_button.html.twig" with {'text': 'Voir plus', 'href': path('medias_show', {'slug': media.slug})} %}
+        </div>
+    </div>
+</div>
   
