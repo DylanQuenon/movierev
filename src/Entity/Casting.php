@@ -17,6 +17,7 @@ class Casting
     private ?Media $media = null;
 
     #[ORM\ManyToOne(inversedBy: 'castings')]
+    #[ORM\JoinColumn(nullable:true, onDelete:"SET NULL")]
     private ?Actor $actor = null;
 
     #[ORM\Column(length: 255)]

@@ -18,6 +18,12 @@ use Symfony\Component\Security\Core\Exception\TooManyLoginAttemptsAuthentication
 
 class AccountController extends AbstractController
 {
+    /**
+     * Actions de connexion
+     *
+     * @param AuthenticationUtils $utils
+     * @return Response
+     */
     #[Route('/login', name: 'account_login')]
     public function index(AuthenticationUtils $utils): Response
     {
@@ -39,12 +45,27 @@ class AccountController extends AbstractController
         ]);
     }
 
+    /**
+     * Déconnexion
+     *
+     * @return void
+     */
     #[Route("/logout", name: "account_logout")]
     public function logout(): void
     {
     }
 
 
+    /**
+     * Inscription
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param UserPasswordHasherInterface $hasher
+     * @param FileUploaderService $fileUploader
+     * @param MailerInterface $mailer
+     * @return Response
+     */
    #[Route("/register", name:"account_register")]
    public function register(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher, FileUploaderService $fileUploader, MailerInterface $mailer): Response
    {

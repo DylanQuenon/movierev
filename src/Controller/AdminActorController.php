@@ -19,6 +19,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminActorController extends AbstractController
 {
+    /**
+     * Récupère les acteurs
+     *
+     * @param ActorRepository $repo
+     * @param PaginationService $pagination
+     * @param integer $page
+     * @return Response
+     */
     #[Route('/admin/actors/{page<\d+>?1}', name: 'admin_actors_index')]
     public function index(ActorRepository $repo, PaginationService $pagination, int $page): Response
     {
@@ -30,6 +38,14 @@ class AdminActorController extends AbstractController
         ]);
     }
 
+    /**
+     * Afficher un nouvel acteur
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param FileUploaderService $fileUploader
+     * @return Response
+     */
     #[Route("/admin/actors/new", name:"admin_actors_new")]
     public function create(Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploader): Response
     {
@@ -64,11 +80,17 @@ class AdminActorController extends AbstractController
         ]);
     }
 
+    /**
+     * Modifier un acteur
+     *
+     * @param Actor $actor
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route("/admin/actors/{slug}/edit", name: "admin_actors_edit")]
     public function edit(Actor $actor, Request $request, EntityManagerInterface $manager): Response
     {
-
-       
         $picture = $actor->getPicture();
         if(!empty($picture)){
             $actor->setPicture(
@@ -82,8 +104,7 @@ class AdminActorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $actor
                 ->setPicture($picture);
-            
-
+        
             $manager->persist($actor);
             $manager->flush();
     
@@ -102,6 +123,15 @@ class AdminActorController extends AbstractController
         ]);
     }
 
+    /**
+     * Modifier l'acteur
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param Actor $actor
+     * @param FileUploaderService $fileUploader
+     * @return Response
+     */
     #[Route("/admin/actors/{slug}/imgmodify", name:"admin_actors_img")]
     public function imgModify(Request $request, EntityManagerInterface $manager, Actor $actor, FileUploaderService $fileUploader): Response
     {
@@ -109,16 +139,12 @@ class AdminActorController extends AbstractController
         $form = $this->createForm(ImgModifyMainType::class, $imgModify);
         $form->handleRequest($request);
         
-        
-
         if($form->isSubmitted() && $form->isValid())
         {
-            
             if(!$actor->getPicture() || !empty($actor->getPicture()))
             {
                 unlink($this->getParameter('uploads_directory').'/'.$actor->getPicture());
             }
-
                 // gestion de l'image
                 $file = $form['newPicture']->getData();
                 if($file){
@@ -147,14 +173,19 @@ class AdminActorController extends AbstractController
         ]);
     }
 
+    /**
+     * Effacer l'acteur
+     *
+     * @param Actor $actor
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route("/admin/actors/{slug}/delete", name: "admin_actors_delete")]
     public function delete(Actor $actor, EntityManagerInterface $manager): Response
     {
-
-     
         if(!empty($actor->getPicture()))
         {
-            unlink($this->getParameter('uploads_directory').'/'.$media->getCover());
+            unlink($this->getParameter('uploads_directory').'/'.$actor->getPicture());
         }
         $this->addFlash(
             "success",

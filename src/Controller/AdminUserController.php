@@ -32,7 +32,6 @@ class AdminUserController extends AbstractController
         $pagination->setDataSource(User::class)->setPage($page)->setLimit(9)->setRoute('admin_users_index');
         $users = $pagination->getData();
         
-    
          return $this->render('admin/user/index.html.twig', [
            'pagination' => $pagination,
            'users' => $users,
@@ -75,8 +74,6 @@ class AdminUserController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             $user->setAvatar($avatar);
-
-         
             $manager->persist($user);
             $manager->flush();
 

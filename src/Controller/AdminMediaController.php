@@ -158,7 +158,14 @@ class AdminMediaController extends AbstractController
             // "oldNewsPicturePath" => $oldNewsPicturePath,
         ]);
     }
-     
+    
+    /**
+     * Récupère l'ancienne imagege d'un média
+    *
+    * @param Media $media
+    * @param string $type
+    * @return string|null
+    */
     private function getOldImagePath(Media $media, string $type): ?string
     {
         switch ($type) {
@@ -205,6 +212,14 @@ class AdminMediaController extends AbstractController
 
 
    
+    /**
+     * Modifier la couverture
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param Media $media
+     * @return Response
+     */
     #[Route("/admin/medias/{slug}/imgModify", name:"mediaImgModify")]
     public function imgModify(Request $request, EntityManagerInterface $manager, Media $media): Response
     {

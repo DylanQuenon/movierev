@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ContactRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -16,24 +17,35 @@ class Contact
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le prénom est obligatoire")]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom est obligatoire")]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'adresse E-mail est obligatoire")]
+    #[Assert\Email(message: "Le format de l'adresse E-mail doit être valide")]
     private ?string $mail = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'objet est obligatoire")]
     private ?string $object = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "Le message est obligatoire")]
     private ?string $message = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $sentAt = null;
 
   
+    /**
+     * Date d'envoi
+     *
+     * @return void
+     */
    #[ORM\PrePersist]
    public function prePersist(): void
    {

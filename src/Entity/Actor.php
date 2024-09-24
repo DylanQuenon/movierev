@@ -8,9 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ActorRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[UniqueEntity(fields:['slug'], message:"Cet acteur existe déjà")]
 class Actor
 {
     #[ORM\Id]
@@ -19,9 +22,11 @@ class Actor
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom est obligatoire")]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le prénom est obligatoire")]
     private ?string $firstName = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -31,9 +36,13 @@ class Actor
     private ?string $slug = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Image(mimeTypes:['image/png','image/jpeg', 'image/jpg', 'image/gif', 'image/webp'], mimeTypesMessage:"Vous devez upload un fichier jpg, jpeg, webp, png ou gif")]
+    #[Assert\File(maxSize:"2048k", maxSizeMessage: "La taille du fichier est trop grande")]
     private ?string $picture = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "La description est obligatoire")]
+    #[Assert\Length(min: 50, minMessage:"Votre description doit faire plus de 50 caractères")]
     private ?string $biography = null;
 
     /**

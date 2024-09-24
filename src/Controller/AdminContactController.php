@@ -11,6 +11,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminContactController extends AbstractController
 {
+    /**
+     * Affiche le message
+     *
+     * @param Contact $contact
+     * @return Response
+     */
     #[Route('/admin/contact/{id}', name: 'admin_contacts_show')]
     public function show(Contact $contact): Response
     {
@@ -19,6 +25,13 @@ class AdminContactController extends AbstractController
         ]);
     }
 
+    /**
+     * Affiche les messages
+     *
+     * @param PaginationService $pagination
+     * @param integer $page
+     * @return Response
+     */
     #[Route('/admin/contact/{page<\d+>?1}', name: 'admin_contact_index')]
     public function index(PaginationService $pagination, int $page): Response
     {
@@ -29,6 +42,13 @@ class AdminContactController extends AbstractController
         ]);
     }
     
+    /**
+     * Effacer un message
+     *
+     * @param Contact $contact
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/admin/contact/{id}/delete', name: 'admin_contact_delete')]
     public function delete(Contact $contact, EntityManagerInterface $manager): Response
     {

@@ -7,69 +7,71 @@
 {% endblock %}
 
 {% block body %}
-
-
 	{% set infos = [
-    {
-        title: 'Opportunité de collaboration',
-        text: 'Nous sommes toujours ouverts aux nouvelles opportunités. Envoyez-nous un message pour discuter de vos idées et projets.',
-    },
-    {
-        title: 'Partenariats',
-        text: 'Envisagez-vous un partenariat? Contactez-nous pour explorer comment nous pouvons collaborer ensemble pour atteindre des objectifs communs.',
-    },
-    {
-        title: 'Support technique',
-        text: 'Pour toute question technique ou problème, notre équipe de support est prête à vous aider. N\'hésitez pas à nous contacter pour obtenir de l\'aide.',
-    },
-
-] %}
-<div class="slide flex flex-col gap-10" id="contactPage">
-    <div class="heading w-full py-24 bg-tertiary">
-        <div class="wrapper flex flex-col gap-5">
-            <h2 class="display-2xl object uppercase color-secondary max-md:w-full w-[85%]">Célébrons le cinéma ensemble, <span class="color-movie">un film à la fois.</span> </h2>
-            <p class="text-lg urbanist color-secondary max-md:w-full w-[50%]">Nous sommes là pour vous aider ! Que vous ayez des questions sur notre site, des suggestions à partager ou un problème à résoudre, n'hésitez pas à nous contacter. Votre expérience compte pour nous et nous nous ferons un plaisir de vous répondre.</p>
-        </div>
-    </div>
-   <div class="wrapper flex flex-wrap">
-    <div class="w-4/12 max-sm:w-full flex flex-col gap-10">
-        <div class="flex flex-col gap-5 contact_infos">
-            {% for info in infos %}
-            <div class="flex flex-col gap-3">
-                <p class="display-sm color-tertiary urbanist font-semibold">{{ info.title }}</p>
-                <p class="text-lg urbanist">{{ info.text }}</p>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="followUS flex items-center justify-between">
-            <p class="text-lg object uppercase">FOLLOW US</p>
-            <div class="flex items-center social-media gap-8">
-                <a href="#" class="color-tertiary display-xs"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" class="color-tertiary display-xs"><span class="[&>svg]:h-5 [&>svg]:w-5">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
-                        <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
-                    </svg></span></a>
-                <a href="#" class="color-tertiary display-xs"><i class="fa-brands fa-facebook"></i></a>
-                <a href="#" class="color-tertiary display-xs"><i class="fa-brands fa-tiktok"></i></a>
+        {
+            title: 'Opportunité de collaboration',
+            text: 'Nous sommes toujours ouverts aux nouvelles opportunités. Envoyez-nous un message pour discuter de vos idées et projets.',
+        },
+        {
+            title: 'Partenariats',
+            text: 'Envisagez-vous un partenariat? Contactez-nous pour explorer comment nous pouvons collaborer ensemble pour atteindre des objectifs communs.',
+        },
+        {
+            title: 'Support technique',
+            text: 'Pour toute question technique ou problème, notre équipe de support est prête à vous aider. N\'hésitez pas à nous contacter pour obtenir de l\'aide.',
+        },
+    ] %}
+    <div class="slide flex flex-col gap-10" id="contactPage">
+        {#Heading#}
+        <div class="heading w-full py-24 bg-tertiary">
+            <div class="wrapper flex flex-col gap-5">
+                <h2 class="display-2xl object uppercase color-secondary max-md:w-full w-[85%]">Célébrons le cinéma ensemble, <span class="color-movie">un film à la fois.</span> </h2>
+                <p class="text-lg urbanist color-secondary max-md:w-full w-[50%]">Nous sommes là pour vous aider ! Que vous ayez des questions sur notre site, des suggestions à partager ou un problème à résoudre, n'hésitez pas à nous contacter. Votre expérience compte pour nous et nous nous ferons un plaisir de vous répondre.</p>
             </div>
         </div>
-    </div>
+        {#Body contact #}
+        <div class="wrapper flex flex-wrap">
+                {#Info contact#}
+                <div class="w-4/12 max-sm:w-full flex flex-col gap-10">
+                    <div class="flex flex-col gap-5 contact_infos">
+                        {#Info titre et text#}
+                        {% for info in infos %}
+                            <div class="flex flex-col gap-3">
+                                <p class="display-sm color-tertiary urbanist font-semibold">{{ info.title }}</p>
+                                <p class="text-lg urbanist">{{ info.text }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {#follow us#}
+                    <div class="followUS flex items-center justify-between">
+                        <p class="text-lg object uppercase">FOLLOW US</p>
+                        <div class="flex items-center social-media gap-8">
+                            <a href="#" class="color-tertiary display-xs"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" class="color-tertiary display-xs"><span class="[&>svg]:h-5 [&>svg]:w-5">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
+                                    <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
+                                </svg></span></a>
+                            <a href="#" class="color-tertiary display-xs"><i class="fa-brands fa-facebook"></i></a>
+                            <a href="#" class="color-tertiary display-xs"><i class="fa-brands fa-tiktok"></i></a>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- Espace de 3 colonnes -->
-    <div class="w-3/12 max-sm:hidden"></div>
+                <!-- Espace de 3 colonnes -->
+                <div class="w-3/12 max-sm:hidden"></div>
 
-    <div class="w-5/12 max-sm:w-full ">
-        <div class="content_form flex flex-col gap-5 py-6 px-8">
-            <h2 class="text-xl font-semibold urbanist  color-tertiary">Contactez-nous</h2>
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            <button type="submit" class="w-full py-2 bg-tertiary items-center color-secondary flex gap-2 rounded-sm text-center justify-center">Envoyer <span class="material-symbols-outlined">
-send
-</span></button>
-            {{ form_end(form) }}
+                {#formulaire #}
+                <div class="w-5/12 max-sm:w-full ">
+                    <div class="content_form flex flex-col gap-5 py-6 px-8">
+                        <h2 class="text-xl font-semibold urbanist  color-tertiary">Contactez-nous</h2>
+                        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+                        <button type="submit" class="w-full py-2 bg-tertiary items-center color-secondary flex gap-2 rounded-sm text-center justify-center">Envoyer <span class="material-symbols-outlined">send</span></button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
-
-</div>
 {% endblock %}

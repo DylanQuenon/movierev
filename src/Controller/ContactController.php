@@ -18,9 +18,14 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ContactController extends AbstractController
 {
-
-    
-
+    /**
+     * Page contact
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param MailerInterface $mailer
+     * @return Response
+     */
     #[Route('/contact', name: 'contact')]
     public function index(Request $request, EntityManagerInterface $manager, MailerInterface $mailer): Response
     {
@@ -32,7 +37,6 @@ class ContactController extends AbstractController
             $manager->persist($contact);
             $manager->flush();
 
-            
             $email = (new Email())
                 ->from('contact@laligzz.dylanquenon.com')  // E-mail de l'expéditeur
                 ->to('dylan.quenon.04@gmail.com')  // Utilisation de l'e-mail du destinataire récupéré depuis .env
@@ -47,8 +51,6 @@ class ContactController extends AbstractController
                 </html>
             ");
         
-              
-
             // Envoi de l'e-mail
             $mailer->send($email);
 
