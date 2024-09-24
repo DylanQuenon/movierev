@@ -30,7 +30,6 @@ class Media
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le type ne peut pas être vide")]
- 
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]
@@ -80,8 +79,8 @@ class Media
         $this->castings = new ArrayCollection();
     }
 
-         /**
-     * Permet de créer un slug automatiquement avec le nom et prénom de l'utilisateur
+     /**
+     * Permet de créer un slug automatiquement avec le titre du film
      *
      * @return void
      */

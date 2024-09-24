@@ -4,44 +4,44 @@
 {% block stylesheets %}{{encore_entry_link_tags('movieStyle')}}{% endblock %}
 
 {% block body %}
+{#Page avec les films & séries#}
 <div class="slide" id="mediaPage">
     <div class="wrapper">
-        <div class="mediaPage_heading flex justify-between wrap">
-            <div>
-                <h2 class="display-xl object uppercase font-bold mb-4 color-tertiary">Films <span class="color-primary">&</span> Séries</h2>
-                <p class="text-lg urbanist color-primary md:w-6/12">Découvrez les films et séries incontournables. Explorez les dernières sorties, plongez dans les classiques et laissez-vous guider par notre sélection pour enrichir vos soirées cinéma.</p>
+        {#Heading#}
+        <div class="flex flex-col gap-3">
+            {#Titre de la pages#}
+            <div class="mediaPage_heading flex justify-between wrap">
+                <div>
+                    <h2 class="display-xl object uppercase font-bold mb-4 color-tertiary">Films <span class="color-primary">&</span> Séries</h2>
+                    <p class="text-lg urbanist color-primary md:w-6/12">Découvrez les films et séries incontournables. Explorez les dernières sorties, plongez dans les classiques et laissez-vous guider par notre sélection pour enrichir vos soirées cinéma.</p>
+                </div>
             </div>
+            {#Filtres des séries & films#}
+            <div class="flex flex-wrap items-center justify-between filters">
+                {% include "partials/_search.html.twig" %}
+                <form method="GET" action="{{ path('medias') }}" class="flex gap-2 items-center">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined"> instant_mix</span>
+                        <span class="text-md color-tertiary">Filtrer par</span>
+                    </div>
+                
+                    <select name="genre" class="pr-8 py-2 border rounded-md" onchange="this.form.submit()">
+                        <option value="">Tous les genres</option>
+                        {% for genre in genres %}
+                            <option value="{{ genre.name }}" {% if genre.name == currentGenre %}selected{% endif %}>
+                                {{ genre.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
 
- <div class="flex flex-wrap items-center justify-between filters">
-    {% include "partials/_search.html.twig" %}
-
-    <form method="GET" action="{{ path('medias') }}" class="flex gap-2 items-center">
-    <div class="flex items-center gap-2">
-    <span class="material-symbols-outlined">
-instant_mix
-</span>
- <span class="text-md color-tertiary">Filtrer par</span>
-    </div>
-       
-
-        <select name="genre" class="pr-8 py-2 border rounded-md" onchange="this.form.submit()">
-            <option value="">Tous les genres</option>
-            {% for genre in genres %}
-                <option value="{{ genre.name }}" {% if genre.name == currentGenre %}selected{% endif %}>
-                    {{ genre.name }}
-                </option>
-            {% endfor %}
-        </select>
-
-        <select name="order" class="pr-8 py-2 border rounded-md" onchange="this.form.submit()">
-            <option value="newest" {% if order == 'newest' %}selected{% endif %}>Plus récents</option>
-            <option value="oldest" {% if order == 'oldest' %}selected{% endif %}>Plus anciens</option>
-        </select>
-    </form>
-</div>
-
+                    <select name="order" class="pr-8 py-2 border rounded-md" onchange="this.form.submit()">
+                        <option value="newest" {% if order == 'newest' %}selected{% endif %}>Plus récents</option>
+                        <option value="oldest" {% if order == 'oldest' %}selected{% endif %}>Plus anciens</option>
+                    </select>
+                </form>
+            </div>
         </div>
-
+        {#Listes des films & séries#}
         <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 w-full">
             {% for media in medias %}
                 {% include "partials/_card_media.html.twig" with {'media': media} %}
@@ -49,9 +49,9 @@ instant_mix
         </div>
     </div>
 
-<div class="pagination">
-    {{ knp_pagination_render(medias) }}
-</div>
+    <div class="pagination">
+        {{ knp_pagination_render(medias) }}
+    </div>
 
     {% include 'partials/_trailer_modal.html.twig' %}
     
