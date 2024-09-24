@@ -84,14 +84,7 @@ body{
   
 
 }
-
-
-
-
-
-
 .swiper {
-
    display: flex;
    overflow: hidden !important;
    max-width: 100%;
@@ -117,8 +110,8 @@ body{
    }
     
   }
-  
-  @media all and (max-width: 640px) {
+
+@media all and (max-width: 640px) {
 
     .shadow{
         background-color: rgba(20, 20, 20,0.5);
@@ -234,9 +227,6 @@ body{
                   background-color: #FFDB1E;
                 }
               
-                // &:first-child {
-                //   z-index: 5 !important;
-                // }
               }
               
             

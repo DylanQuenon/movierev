@@ -285,3 +285,26 @@
   }
 
 }
+
+#page404{
+  .text404{
+    font-size: 200px;
+    font-family: $font-family-object;
+    @include background('/public/images/404.jpg');
+    background-position: -20px -30px;
+    background-clip: text;
+    -webkit-background-clip: text; /* Support pour WebKit */
+    color: transparent;
+    
+  }
+  .text403{
+    font-size: 200px;
+    font-family: $font-family-object;
+    @include background('/public/images/403.jpg');
+    background-position: -20px -30px;
+    background-clip: text;
+    -webkit-background-clip: text; /* Support pour WebKit */
+    color: transparent;
+    
+  }
+}

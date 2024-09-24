@@ -83,34 +83,33 @@
 	</div>
 	<div class="shadowWhite"></div>
 
-
+	{#Tableau de cartes #}
 	{% set cards = [
-  {
-    icon: 'slideshow',
-    counting: stats.allMedias is empty ? 0 : stats.allMedias,
-    title: 'Films & Séries',
-    paragraph: 'Plongez dans la magie du cinéma à travers les reviews de notre communauté.',
-    button_text: 'Découvrez les films & séries',
-     button_link: path('medias')
-  },
-  {
-    icon: 'full_coverage',
-    counting: stats.allNews is empty ? 0 : stats.allNews,
-    title: 'Actualités',
-    paragraph: 'Restez informé des dernières sorties et des dernières rumeurs du monde du cinéma.',
-    button_text: 'Découvrez les news',
-    button_link: path('news_index')  
-  },
-  {
-    icon: 'groups',
-    counting: 100, 
-    title: 'Communauté',
-    paragraph: 'Rejoignez une communauté passionnée prête à vous guider dans vos découvertes cinématographiques',
-    button_text: 'Rejoignez-nous',
-    button_link: path('account_register')
-  }
-] %}
-
+		{
+			icon: 'slideshow',
+			counting: stats.allMedias is empty ? 0 : stats.allMedias,
+			title: 'Films & Séries',
+			paragraph: 'Plongez dans la magie du cinéma à travers les reviews de notre communauté.',
+			button_text: 'Découvrez les films & séries',
+			button_link: path('medias')
+		},
+		{
+			icon: 'full_coverage',
+			counting: stats.allNews is empty ? 0 : stats.allNews,
+			title: 'Actualités',
+			paragraph: 'Restez informé des dernières sorties et des dernières rumeurs du monde du cinéma.',
+			button_text: 'Découvrez les news',
+			button_link: path('news_index')  
+		},
+		{
+			icon: 'groups',
+			counting: 100, 
+			title: 'Communauté',
+			paragraph: 'Rejoignez une communauté passionnée prête à vous guider dans vos découvertes cinématographiques',
+			button_text: 'Rejoignez-nous',
+			button_link: path('account_register')
+		}
+	] %}
 
 	<div class="slide relative" id="presentation">
 		<div class="wrapper">
@@ -124,7 +123,6 @@
 				<div class="team_discover">
 					<div class="team-head overflow-hidden w-full flex justify-center">
 					{#Notre équipe#}
-
 					{% for team in teams %}
 						<div class="roundPic p-relative overflow-hidden" data-aos="fade-left" data-aos-duration="300" data-aos-delay="{{ loop.index0 * 300 }}">
 							<img src="/uploads/{{team.avatar}}" class="w-full h-full object-cover" alt="Photo de profil de {{team.fullName}}">
@@ -146,7 +144,6 @@
 			{#cards#}
 			<div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6 w-full">
 				{% for card in cards %}
-
 					<div class="cards_stats" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 200 }}" data-aos-duration="170"  id={{card.title}}>
 						<div class="cards_stats_high">
 							<div class="heading_card">
@@ -172,31 +169,31 @@
 								{{ card.paragraph }}
 							</p>
 						</div>
+						{#boutons actions#}
 						<div class="w-full flex justify-end">
 							{% include "/partials/_button.html.twig" with {"text": card.button_text, "href": card.button_link} %}
-						
 						</div>
 					</div>
 				{% endfor %}
 			</div>
-	{% set values = [
-    {
-        icon: '/images/icon1.png',
-        title: 'Passion',
-        description: "Au cœur de MOVIEREV, la passion pour le cinéma est ce qui nous rassemble. Chaque membre de notre communauté partage un amour profond pour le septième art, que ce soit à travers des critiques réfléchies ou des discussions animées.  <span class='urbanist font-semibold color-tertiary'>C'est cette passion qui nous pousse à explorer, partager et célébrer ensemble l'univers cinématographique.</span>"
-    },
-    {
-        icon: '/images/icon2.png',
-        title: 'Authenticité',
-        description: "MOVIEREV valorise l'authenticité dans chaque avis et échange. Nous croyons en l'importance  <span class='urbanist font-semibold color-tertiary'>des critiques sincères et des opinions honnêtes </span> , qui permettent à notre communauté de rester fidèle à elle-même et de bâtir des liens basés sur la confiance et le respect mutuel."
-    },
-    {
-        icon: '/images/icon3.png',
-        title: 'Innovation',
-        description: "L'innovation est au cœur de l'expérience MOVIEREV. Nous cherchons constamment à améliorer notre plateforme, en intégrant <span class='urbanist font-semibold color-tertiary'>les dernières actualités</span> et en écoutant les retours de notre communauté pour offrir une expérience unique et toujours plus immersive du monde du cinéma."
-    }
-] %}
-
+			{#tableau afficher nos valeurs#}
+			{% set values = [
+				{
+					icon: '/images/icon1.png',
+					title: 'Passion',
+					description: "Au cœur de MOVIEREV, la passion pour le cinéma est ce qui nous rassemble. Chaque membre de notre communauté partage un amour profond pour le septième art, que ce soit à travers des critiques réfléchies ou des discussions animées.  <span class='urbanist font-semibold color-tertiary'>C'est cette passion qui nous pousse à explorer, partager et célébrer ensemble l'univers cinématographique.</span>"
+				},
+				{
+					icon: '/images/icon2.png',
+					title: 'Authenticité',
+					description: "MOVIEREV valorise l'authenticité dans chaque avis et échange. Nous croyons en l'importance  <span class='urbanist font-semibold color-tertiary'>des critiques sincères et des opinions honnêtes </span> , qui permettent à notre communauté de rester fidèle à elle-même et de bâtir des liens basés sur la confiance et le respect mutuel."
+				},
+				{
+					icon: '/images/icon3.png',
+					title: 'Innovation',
+					description: "L'innovation est au cœur de l'expérience MOVIEREV. Nous cherchons constamment à améliorer notre plateforme, en intégrant <span class='urbanist font-semibold color-tertiary'>les dernières actualités</span> et en écoutant les retours de notre communauté pour offrir une expérience unique et toujours plus immersive du monde du cinéma."
+				}
+			] %}
 			{#Nos valeurs#}
 			<div class="our_values">
 				<h2 class="display-md object uppercase annotation w-fit">Nos valeurs</h2>
@@ -212,10 +209,8 @@
 				</div>
 			</div>
 
+			{#Sections graphique we love cinema#}
 			<div class="graphics_love flex max-sm:flex-col lg:flex-row">
-
-
-
 				<div class="bubble bubble1 display-2xl object color-secondary uppercase" data-aos="fade-up" data-aos-duration="500" >we</div>
 				<div class="bubble bubble2 display-2xl object color-secondary uppercase" data-aos="fade-down" data-aos-duration="500" data-aos-delay="300" >Love</div>
 				<div class="bubble bubble3 display-2xl object color-secondary uppercase" data-aos="fade-up" data-aos-duration="500" data-aos-delay="600" >
@@ -226,80 +221,69 @@
 
 				<div class="bubble bubble4 display-2xl object color-secondary uppercase" data-aos="fade-down" data-aos-duration="500" data-aos-delay="900" >Cinema</div>
 			</div>
-
 		</div>
 	</div>
-
+	
+{#Modal pour afficher le trailer#}
 {% include 'partials/_trailer_modal.html.twig' %}
 
 {% endblock %}
 
 {% block javascripts %}
-	{{ encore_entry_script_tags('sliderHomeJS') }}
-
-	
-
+{{ encore_entry_script_tags('sliderHomeJS') }}
   <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const counters = document.querySelectorAll('.counting');
+	document.addEventListener('DOMContentLoaded', function () {
+		const counters = document.querySelectorAll('.counting');
 
-    // Fonction pour réinitialiser le compteur
-    function resetCounter(counter) {
-        counter.innerText = '0'; 
-    }
+		// Fonction pour réinitialiser le compteur
+		function resetCounter(counter) {
+			counter.innerText = '0'; 
+		}
 
-    // Fonction pour mettre à jour le compteur
-    function updateCount(counter) {
-        const isPercentage = counter.innerText.includes('%');
-        let target = parseInt(counter.getAttribute('data-count'));
+		// Fonction pour mettre à jour le compteur
+		function updateCount(counter) {
+			const isPercentage = counter.innerText.includes('%');
+			let target = parseInt(counter.getAttribute('data-count'));
 
-        if (isNaN(target)) {
-            target = 0; // Définit une valeur par défaut si la conversion échoue
-        }
+			if (isNaN(target)) {
+				target = 0; // Définit une valeur par défaut si la conversion échoue
+			}
 
-        const increment = target / 200; //la vitesse 
-        let count = 0;
+			const increment = target / 200; //la vitesse 
+			let count = 0;
 
-        const step = () => {
-            count += increment;
-            if (count < target) {
-                counter.innerText = `${Math.ceil(count)}`;
-                requestAnimationFrame(step);
-            } else {
-                counter.innerText = `${target}`;
-            }
-        };
+			const step = () => {
+				count += increment;
+				if (count < target) {
+					counter.innerText = `${Math.ceil(count)}`;
+					requestAnimationFrame(step);
+				} else {
+					counter.innerText = `${target}`;
+				}
+			};
 
-        step();
-    }
+			step();
+		}
 
-    // Observer d'intersection pour réagir lorsque les éléments deviennent visibles
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const counter = entry.target;
-                resetCounter(counter);
-                updateCount(counter);
-            }
-        });
-    }, { threshold: 0.5 }); 
+		// Observer d'intersection pour réagir lorsque les éléments deviennent visibles
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					const counter = entry.target;
+					resetCounter(counter);
+					updateCount(counter);
+				}
+			});
+		}, { threshold: 0.5 }); 
 
-    // Observez chaque compteur
-    counters.forEach(counter => {
-        counter.setAttribute('data-count', counter.innerText.replace('%', '').replace('+', ''));
-        counter.innerText = '0'; // Initialise le compteur à zéro
-        observer.observe(counter);
-    });
-});
+		// Observez chaque compteur
+		counters.forEach(counter => {
+			counter.setAttribute('data-count', counter.innerText.replace('%', '').replace('+', ''));
+			counter.innerText = '0'; // Initialise le compteur à zéro
+			observer.observe(counter);
+		});
+	});
 
-
-
-
-
-
-
-
-</script>
-
+ </script>
 
 {% endblock %}

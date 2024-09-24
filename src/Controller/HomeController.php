@@ -11,22 +11,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
 {
+    /**
+     * Affiche la page d'accueil
+     *
+     * @param MediaRepository $repo
+     * @param StatsService $stats
+     * @param UserRepository $userRepo
+     * @return Response
+     */
     #[Route('/', name: 'home')]
     public function index(MediaRepository $repo, StatsService $stats, UserRepository $userRepo): Response
     {
         $totalMedia = $stats->getMediaCount();
         $totalNews = $stats->getNewsCount();
         $lastMovies = $repo->findBy([], ['id' => 'DESC'], 3);
-
-
+        //trouver les utilisateurs par roles
         $roles = ['ROLE_MODERATEUR', 'ROLE_REDACTEUR'];
         $users = $userRepo->findByRoles($roles);
      
-
-      
-        // dd($$userRepo->findUsersByRoles('ROLE_MODERATEUR'));
-
-
         return $this->render('home.html.twig', [
             'medias'=> $lastMovies,
             'stats' => [
