@@ -14,7 +14,7 @@
                         <p class="text-lg urbanist color-primary md:w-6/12">   Ne manquez rien des dernières sorties, des rumeurs, et de tout ce qui fait vibrer le cinéma, des premières bandes-annonces aux coulisses des tournages, en passant par les critiques des films les plus attendus.</p>
                     </div>
                     {#Filtres & recherche#}
-                    <div class="flex items-center justify-between filters">
+                    <div class="flex items-center justify-between filters flex-wrap gap-5">
                         {% include "partials/_search_news.html.twig" %}
                         <form method="GET" action="{{ path('news_index') }}" class="flex gap-2 items-center">
                             <div class="flex items-center gap-2">

@@ -1,5 +1,26 @@
 {% block stylesheets %}
 	{{ encore_entry_link_tags('headerStyle') }}
+	<style>
+  @keyframes slideOut {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+ 
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  {# .flash-message {
+    transition: opacity 0s ease-in-out;
+  } #}
+
+  .flash-message.slide-out {
+    animation: slideOut 0.5s ease-in-out;
+  }
+</style>
 {% endblock %}
 
 <header class="header">
@@ -32,16 +53,60 @@
 			</nav>
 		</div>
 
-		<div class="header_actions noLogged flex">
-			<a href="{{path('account_register')}}" class="text-lg urbanist flex font-semibold bg-tertiary color-secondary items-center">
-				<span class="material-symbols-outlined">person_add</span>
-				<span>Inscription</span>
-			</a>
-			<a href="{{path('account_login')}}" class="text-lg urbanist flex login font-semibold color-tertiary items-center">
-				<span>Connexion</span>
-				<span class="material-symbols-outlined">login</span>
-			</a>
-		</div>
+		{% if app.user %}
+          <li class="relative list-none logged">
+            <button class="flex items-center focus:outline-none" id="accountDropdownLink">
+              {% if app.user.avatar %}
+                <img src="/uploads/{{ app.user.avatar }}" class="w-12 h-12 border-purple-500  rounded-full mr-2 border-2" alt="">
+              {% else %}
+                <img src="http://placehold.it/64x64" class="w-8 h-8 rounded-full mr-2 border border-gray-300" alt="">
+              {% endif %}
+              <span class="color-primary text-lg urbanist font-semibold">{{ app.user.username }}</span>
+              <i class="fas fa-chevron-down ml-2 color-tertiary"></i>
+            </button>
+			{% set menuItems = [
+				{'label': 'Mon compte', 'icon': 'account_circle', 'path': '#'},
+				{'label': 'Mes reviews', 'icon': 'rate_review', 'path': '#'},
+				{'label': 'Ajouter une review', 'icon': 'add_circle', 'path': '#'},
+				{'label': 'Ajouter un film', 'icon': 'movie', 'path': '#'},
+			] %}
+
+			<div class="hidden sousmenu absolute left-5 flex flex-col gap-3 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 text-gray-800" id="dropdown">
+				{% for item in menuItems %}
+					<a href="{{ item.path }}" class="text-lg px-3 font-semibold flex justify-between transition-all duration-50 hover:text-purple-500">
+						<span class="material-symbols-outlined">{{ item.icon }}</span>{{ item.label }}
+					</a>
+				{% endfor %}
+				
+				{% if is_granted('ROLE_REDACTEUR') %}
+					<a href="#" class="text-lg px-3 font-semibold flex justify-between transition-all duration-50 hover:text-purple-500">
+						<span class="material-symbols-outlined">article</span>Gérer mes articles
+					</a>
+				{% endif %}
+				
+				<hr class="divider my-1">
+				
+				<a href="{{path('account_logout')}}" class="text-lg px-3 text-red-500 font-semibold flex justify-between transition-all duration-50 hover:text-purple-500">
+					<span class="material-symbols-outlined">logout</span>Se déconnecter
+				</a>
+			</div>
+          </li>
+      
+		{% else %}
+			<div class="header_actions noLogged flex">
+				<a href="{{path('account_register')}}" class="text-lg urbanist flex font-semibold bg-tertiary color-secondary items-center">
+					<span class="material-symbols-outlined">person_add</span>
+					<span>Inscription</span>
+				</a>
+				<a href="{{path('account_login')}}" class="text-lg urbanist flex login font-semibold color-tertiary items-center">
+					<span>Connexion</span>
+					<span class="material-symbols-outlined">login</span>
+				</a>
+			</div>
+			
+		{% endif %}
+		
+
 	</div>
 </header>
 
@@ -54,18 +119,8 @@
 <div id="menuMobile">
 	<nav>
 		<ul>
-		{% set mobileNavItems = {
-                'Accueil': { 'route': 'home', 'icon': 'home' },
-                'Qui sommes-nous ?': { 'route': 'about', 'icon': 'groups' },
-				'Films & Séries': { 'route': 'medias', 'icon': 'slideshow' },
-				'Actualités': { 'route': 'news_index', 'icon': 'newspaper' },
-				'Contact': { 'route': 'contact', 'icon': 'mail' },
-				'Connexion':{'route': 'account_login','icon': 'login'},
-				'Inscription':{'route': 'account_register','icon': 'person_add'}
-            } %}
-			
-
-			{% for label, data in mobileNavItems %}
+	
+			{% for label, data in navItems %}
 				<li class="{% if app.request.attributes.get('_route') == data.route %}active{% endif %}">
 					<a href="{{ path(data.route) }}" class="display-sm object uppercase flex items-center">
 						<span class="material-symbols-outlined">{{ data.icon }}</span>
@@ -73,11 +128,91 @@
 					</a>
 				</li>
 			{% endfor %}
-			<li></li>
+			{% if app.user %}
+			<li class="flex justify-center mt-4">
+					<div class="bg-tertiary w-[85%] rounded-full flex items-center p-3">
+						{% if app.user.avatar %}
+							<img src="/uploads/{{ app.user.avatar }}" class="w-10 h-10 border-purple-500 rounded-full mr-2 border-2" alt="">
+						{% else %}
+							<img src="http://placehold.it/64x64" class="w-8 h-8 rounded-full mr-2 border border-gray-300" alt="">
+						{% endif %}
+						<div class="flex flex-col">
+							<span class="text-lg urbanist font-semibold color-secondary">{{ app.user.fullName }}</span>
+							<span class="text-sm urbanist color-secondary">{{ app.user.username }}</span>
+						</div>
+					</div>
+				</li>
+
+			{% else %}
+			<li class="{% if app.request.attributes.get('_route') == 'account_register' %}active{% endif %}">
+				<a href="{{ path('account_register') }}" class="display-sm object uppercase flex items-center">
+					<span class="material-symbols-outlined">person_add</span>
+					Inscription
+				</a>
+			</li>
+			<li class="{% if app.request.attributes.get('_route') == 'account_login' %}active{% endif %}">
+				<a href="{{ path('account_login') }}" class="display-sm object uppercase flex items-center">
+					<span class="material-symbols-outlined">login</span>
+					Connexion
+				</a>
+			</li>
+				
+			{% endif %}
+			
+
+		
+	
 		</ul>
 	</nav>
+
 </div>
+{% for label, messages in app.flashes %}
+  <div class="{% if label == 'success' %}bg-green-100 border-green-500 text-green-700{% elseif label == 'error' %}bg-red-100 border-red-500 text-red-700{% else %}bg-blue-100 border-blue-500 text-blue-700{% endif %} border-l-4 p-4 rounded-lg shadow-lg absolute top-4 right-4 max-w-md flash-message" role="alert">
+    <p class="font-bold">
+      {{ {'success': 'Succès', 'error': 'Erreur', 'warning': 'Avertissement', 'info': 'Information'}[label] }}
+    </p>
+    {% for message in messages %}
+      <p>{{ message | raw }}</p>
+    {% endfor %}
+    <button class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 hover:text-gray-800 focus:outline-none" onclick="closeFlashMessage(this.parentNode)">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  
+{% endfor %}
 
 {% block javascripts %}
 	{{ encore_entry_script_tags('burgerJS') }}
+	<script>
+	  document.getElementById('accountDropdownLink').addEventListener('click', function() {
+    document.getElementById('dropdown').classList.toggle('hidden');
+  });
+		document.querySelectorAll('.flash-message').forEach(message => {
+			const displayTime = 5000; // 5 seconds
+			let timer;
+
+			function startTimer() {
+				timer = setTimeout(() => {
+				message.classList.add('slide-out');
+				setTimeout(() => message.style.opacity = '0', 0); // Allow animation to complete
+				}, displayTime);
+			}
+
+			startTimer();
+
+			message.addEventListener('mouseenter', () => {
+				clearTimeout(timer);
+			});
+
+			message.addEventListener('mouseleave', () => {
+				startTimer();
+			});
+		});
+
+		function closeFlashMessage(message) {
+		message.classList.add('slide-out');
+		setTimeout(() => message.style.display = 'none', 500); // Allow animation to complete
+		}
+
+	</script>
 {% endblock %}

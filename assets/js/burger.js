@@ -6,9 +6,14 @@ const linksMenu = document.querySelectorAll('#menuMobile nav ul li a');
 const toggleMenu = () => {
     burger.classList.toggle('open-burger');
     menuMobile.classList.toggle('open-menu');
+
+    // Ajouter ou retirer la classe no-scroll sur le body
+    document.body.classList.toggle('no-scroll', menuMobile.classList.contains('open-menu'));
 };
+
+// Écouter les clics sur le burger et les liens du menu
+burger.addEventListener('click', toggleMenu);
 linksMenu.forEach(link => {
-    burger.addEventListener('click', toggleMenu);
     link.addEventListener('click', toggleMenu);
 });
 
@@ -30,4 +35,11 @@ document.addEventListener('scroll', () => {
         burger.classList.add('show');
     }
     lastScrollValue = top;
+});
+
+// Fermer le menu burger si la fenêtre est redimensionnée
+window.addEventListener('resize', () => {
+    if (menuMobile.classList.contains('open-menu')) {
+        toggleMenu(); // Ferme le menu si il est ouvert
+    }
 });
