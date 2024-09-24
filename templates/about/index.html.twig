@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Qui sommes-nous ?{% endblock %}
+{% block title %}Qui sommes-nous ?
+{% endblock %}
 
 {% block stylesheets %}
 	{{encore_entry_link_tags('aboutStyle')}}
@@ -8,8 +9,6 @@
 
 {% block body %}
 	<div class="slide" id="about">
-	<div class="container">
-		{#notre équipe#}
 		<div class="wrapper flex justify-center items-center py-24">
 			{# Cartes des gens de l'équipes#}
 			<div class="our_team w-full">
@@ -113,71 +112,4 @@
 	</div>
 {% endblock %}
 
-{% block javascripts %}
-	<script>
-		document.addEventListener('DOMContentLoaded', function () { // Sélectionner la vidéo
-			const video = document.querySelector('video');
 
-			// Créer un observateur d'intersection
-			const observer = new IntersectionObserver((entries) => {
-				entries.forEach(entry => { // Si la section est visible au centre de l'écran
-					if (entry.isIntersecting) {
-						video.play(); // Lancer la vidéo
-					} else {
-						video.pause(); // Mettre en pause la vidéo
-					}
-				});
-				},
-				{
-				root: null, // utiliser le viewport comme racine
-				rootMargin: '0px',
-				threshold: [0.7] // Déclencher lorsque 50% de la section est visible
-			});
-			// Observer la section contenant la vidéo
-			observer.observe(document.querySelector('video'));
-		});
-
-		const text = "actualités";
-		const speed = 150; // Vitesse de la frappe
-		const eraseSpeed = 100; // Vitesse de l'effacement
-		const delayBeforeErase = 2000; // Délai avant l'effacement
-		let index = 0;
-		let isErasing = false;
-
-		function typeWriter() {
-			const element = document.getElementById('typewriter');
-
-			// Ajouter la classe cursor
-			if (! element.classList.contains('cursor')) {
-				element.classList.add('cursor');
-			}
-
-			if (! isErasing) { // Afficher le texte progressivement
-				element.innerHTML = text.substring(0, index + 1);
-				index++;
-				// Si tout le texte est affiché, passer en mode effacement
-				if (index === text.length) {
-					setTimeout(() => {
-						isErasing = true;
-					}, delayBeforeErase);
-				}
-			} else { // Effacer le texte progressivement
-				element.innerHTML = text.substring(0, index - 1);
-				index--;
-
-				// Si tout le texte est effacé, recommencer l'écriture
-				if (index === 0) {
-				isErasing = false;
-				}
-			}
-
-			// Reprogrammer l'appel de la fonction avec la bonne vitesse selon l'état
-			const timeout = isErasing ? eraseSpeed : speed;
-			setTimeout(typeWriter, timeout);
-		}
-		// Lancer l'animation
-		typeWriter();
-	</script>
-
-
-{% endblock %}

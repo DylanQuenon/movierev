@@ -15,9 +15,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MovieController extends AbstractController
 {
-  
-    
-
+    /**
+     * Afficher les films & séries
+     *
+     * @param Request $request
+     * @param MediaRepository $repo
+     * @param GenreRepository $genreRepo
+     * @param PaginatorInterface $paginator
+     * @param integer $page
+     * @return Response
+     */
     #[Route('/medias/{page<\d+>?1}', name: 'medias')]
     public function index(Request $request, MediaRepository $repo, GenreRepository $genreRepo, PaginatorInterface $paginator, int $page = 1): Response
     {
@@ -61,10 +68,13 @@ class MovieController extends AbstractController
         ]);
     }
     
-    
-    
-    
-
+    /**
+     * Recherche des média via appel ajax
+     *
+     * @param Request $request
+     * @param MediaRepository $repo
+     * @return JsonResponse
+     */
     #[Route('/medias/search/ajax', name: 'medias_search_ajax', methods: ['GET'])]
     public function searchAjax(Request $request, MediaRepository $repo): JsonResponse
     {
@@ -92,13 +102,17 @@ class MovieController extends AbstractController
         return new JsonResponse($jsonResults);
     }
 
+    /**
+     * Affichage individuel
+     *
+     * @param Media $media
+     * @return void
+     */
     #[Route('/medias/{slug}', name: 'medias_show')]
     public function show(Media $media){
         return $this->render('media/show.html.twig', [
             'media' => $media,
         ]);
 
-    }
-
-    
+    } 
 }

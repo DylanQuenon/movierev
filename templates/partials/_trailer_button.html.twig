@@ -1,27 +1,23 @@
 
+<button onclick="openTrailer('{{ trailerUrl }}')" class="text-lg urbanist color-secondary bg-tertiary flex items-center gap-2 button_trailer">
+    <i class="fa-solid fa-play"></i> <span>Regarder le trailer</span>
+</button>
 
-    <button onclick="openTrailer('{{ trailerUrl }}')" class="text-lg urbanist color-secondary bg-tertiary flex items-center gap-2 button_trailer">
-        <i class="fa-solid fa-play"></i> <span>Regarder le trailer</span>
-    </button>
+{% block javascripts %}
+    <script>
+    function openTrailer(trailerUrl) {
+        const modal = document.getElementById('trailerModal');
+        const iframe = document.getElementById('trailerIframe');
+        iframe.src = trailerUrl;
+        modal.classList.remove('hidden');
+    }
 
-   
-
-
-    {% block javascripts %}
-        <script>
-        function openTrailer(trailerUrl) {
-            const modal = document.getElementById('trailerModal');
-            const iframe = document.getElementById('trailerIframe');
-            iframe.src = trailerUrl;
-            modal.classList.remove('hidden');
-        }
-
-        function closeTrailer() {
-            const modal = document.getElementById('trailerModal');
-            const iframe = document.getElementById('trailerIframe');
-            iframe.src = '';
-            modal.classList.add('hidden');
-        }
-    </script>
-    {% endblock %}
+    function closeTrailer() {
+        const modal = document.getElementById('trailerModal');
+        const iframe = document.getElementById('trailerIframe');
+        iframe.src = '';
+        modal.classList.add('hidden');
+    }
+</script>
+{% endblock %}
 
