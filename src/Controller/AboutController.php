@@ -10,6 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AboutController extends AbstractController
 {
+    /**
+     * Page "qui sommes-nous
+     *
+     * @param UserRepository $userRepo
+     * @param NewsRepository $newsRepo
+     * @return Response
+     */
     #[Route('/about', name: 'about')]
     public function index(UserRepository $userRepo, NewsRepository $newsRepo): Response
     {

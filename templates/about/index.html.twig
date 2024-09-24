@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Qui sommes-nous ?
-{% endblock %}
+{% block title %}Qui sommes-nous ?{% endblock %}
 
 {% block stylesheets %}
 	{{encore_entry_link_tags('aboutStyle')}}
@@ -9,8 +8,10 @@
 
 {% block body %}
 	<div class="slide" id="about">
+	<div class="container">
+		{#notre équipe#}
 		<div class="wrapper flex justify-center items-center py-24">
-
+			{# Cartes des gens de l'équipes#}
 			<div class="our_team w-full">
 				<div class="our_team_heading flex flex-col gap-4 w-full">
 					<h2 class="display-md text-center object uppercase">Notre
@@ -67,6 +68,7 @@
 				</div>
 			</div>
 		</div>
+		{# Nos rédacteurs #}
 		<div class="team_roles w-full flex">
 			<video src="/video/video.mp4" autoplay muted playsinline loop></video>
 			<div class="team_roles_right flex flex-col gap-4 pt-24 max-md:w-full lg:w-1/2" data-aos="fade-up">
@@ -76,6 +78,7 @@
 				<p class="text-lg urbanist" data-aos="fade-up" data-aos-delay="200">Les rédacteurs de Movierev sont les artisans des actualités qui rythment notre site. Chaque jour, ils scrutent l'univers du cinéma pour vous apporter les dernières nouvelles, les rumeurs les plus intrigantes, et les annonces les plus attendues. Grâce à leur passion et leur réactivité, ils vous tiennent informés en temps réel, vous offrant un aperçu des coulisses du septième art. Leur travail est essentiel pour que MovieRev soit toujours à la pointe de l'actualité cinématographique.</p>
 			</div>
 		</div>
+		{# Nos modérateurs #}
 		<div class="team_roles_second">
 			<div class="wrapper flex justify-between flex-wrap ">
 				<div class="team_roles_second_left sm flex flex-col gap-4 max-md:w-full lg:w-1/2" data-aos="fade-up">
@@ -105,80 +108,76 @@
 				</div>
 			</div>
 		</div>
-
+		{#slider news#}
 		{% include "partials/_slider_news.html.twig" with {'lastNews' : lastNews} %}
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		document.addEventListener('DOMContentLoaded', function () { // Sélectionner la vidéo
+			const video = document.querySelector('video');
+
+			// Créer un observateur d'intersection
+			const observer = new IntersectionObserver((entries) => {
+				entries.forEach(entry => { // Si la section est visible au centre de l'écran
+					if (entry.isIntersecting) {
+						video.play(); // Lancer la vidéo
+					} else {
+						video.pause(); // Mettre en pause la vidéo
+					}
+				});
+				},
+				{
+				root: null, // utiliser le viewport comme racine
+				rootMargin: '0px',
+				threshold: [0.7] // Déclencher lorsque 50% de la section est visible
+			});
+			// Observer la section contenant la vidéo
+			observer.observe(document.querySelector('video'));
+		});
+
+		const text = "actualités";
+		const speed = 150; // Vitesse de la frappe
+		const eraseSpeed = 100; // Vitesse de l'effacement
+		const delayBeforeErase = 2000; // Délai avant l'effacement
+		let index = 0;
+		let isErasing = false;
+
+		function typeWriter() {
+			const element = document.getElementById('typewriter');
+
+			// Ajouter la classe cursor
+			if (! element.classList.contains('cursor')) {
+				element.classList.add('cursor');
+			}
+
+			if (! isErasing) { // Afficher le texte progressivement
+				element.innerHTML = text.substring(0, index + 1);
+				index++;
+				// Si tout le texte est affiché, passer en mode effacement
+				if (index === text.length) {
+					setTimeout(() => {
+						isErasing = true;
+					}, delayBeforeErase);
+				}
+			} else { // Effacer le texte progressivement
+				element.innerHTML = text.substring(0, index - 1);
+				index--;
+
+				// Si tout le texte est effacé, recommencer l'écriture
+				if (index === 0) {
+				isErasing = false;
+				}
+			}
+
+			// Reprogrammer l'appel de la fonction avec la bonne vitesse selon l'état
+			const timeout = isErasing ? eraseSpeed : speed;
+			setTimeout(typeWriter, timeout);
+		}
+		// Lancer l'animation
+		typeWriter();
+	</script>
 
 
-	{% endblock %}
-	{% block javascripts %}
-
-		<script>
-
-			document.addEventListener('DOMContentLoaded', function () { // Sélectionner la vidéo
-const video = document.querySelector('video');
-
-// Créer un observateur d'intersection
-const observer = new IntersectionObserver((entries) => {
-entries.forEach(entry => { // Si la section est visible au centre de l'écran
-if (entry.isIntersecting) {
-video.play(); // Lancer la vidéo
-} else {
-video.pause(); // Mettre en pause la vidéo
-}
-});
-}, {
-root: null, // utiliser le viewport comme racine
-rootMargin: '0px',
-threshold: [0.7] // Déclencher lorsque 50% de la section est visible
-});
-
-// Observer la section contenant la vidéo
-observer.observe(document.querySelector('video'));
-});
-
-const text = "actualités";
-const speed = 150; // Vitesse de la frappe
-const eraseSpeed = 100; // Vitesse de l'effacement
-const delayBeforeErase = 2000; // Délai avant l'effacement
-let index = 0;
-let isErasing = false;
-
-function typeWriter() {
-const element = document.getElementById('typewriter');
-
-// Ajouter la classe cursor
-if (! element.classList.contains('cursor')) {
-element.classList.add('cursor');
-}
-
-if (! isErasing) { // Afficher le texte progressivement
-element.innerHTML = text.substring(0, index + 1);
-index++;
-
-// Si tout le texte est affiché, passer en mode effacement
-if (index === text.length) {
-setTimeout(() => {
-isErasing = true;
-}, delayBeforeErase);
-}
-} else { // Effacer le texte progressivement
-element.innerHTML = text.substring(0, index - 1);
-index--;
-
-// Si tout le texte est effacé, recommencer l'écriture
-if (index === 0) {
-isErasing = false;
-}
-}
-
-// Reprogrammer l'appel de la fonction avec la bonne vitesse selon l'état
-const timeout = isErasing ? eraseSpeed : speed;
-setTimeout(typeWriter, timeout);
-}
-
-// Lancer l'animation
-typeWriter();
-		</script>
-
-
-	{% endblock %}
+{% endblock %}
