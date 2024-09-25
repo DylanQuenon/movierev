@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reviews{% endblock %}
+
+{% block stylesheets %}{{encore_entry_link_tags('reviewIndiv')}}{% endblock %}
+
+{% block body %}
+<div class="slide bg-secondary" style="background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/uploads/{{review.media.cover}}'); background-size: cover; background-position: center;" id="reviewIndiv">
+    <div class="wrapper max-sm:w-[90%]">
+            <a href="javascript:window.history.back()" class=" py-2 px-4 rounded-full bg-white w-fit mb-10 text-lg urbanist font-semibold color-tertiary flex gap-2">
+                <span class="material-symbols-outlined">
+                    chevron_left
+                </span>
+                Retour
+            </a>
+            <div class="flex  flex-wrap gap-5">
+                <div class="reviewIndiv_card max-md:w-full lg:w-[62%] p-5 flex  items-center gap-10">
+                    <div class="reviewIndiv_card_content flex flex-col gap-5 w-full">
+                        <div class="reviewIndiv_card_content_heading flex flex-col gap-5">
+                            <div class="reviewIndiv_card_content_heading_info2 flex flex-wrap justify-between">
+                                <a href="{{path('medias_show', {"slug":review.media.slug})}}"class="flex gap-1 items-center text-md  text-font-semibold  urbanist color-tertiary font-semibold"><span class="underline">{{review.media.title}}</span><span class="material-symbols-outlined">chevron_right</span></a>
+                                {#Copier le lien#}
+                                <button id="copyLink" class="w-fit text-md items-center bg-tertiary rounded-md color-secondary urbanist font-semibold py-2 px-4 flex gap-2">
+                                    <span class="material-symbols-outlined -rotate-45"> link</span>
+                                    <span class="textCopyLink">Copier le lien</span>
+                                </button>
+                            </div>
+                            <div class="reviewIndiv_card_content_heading_author flex justify-between">
+                                <div class="reviewIndiv_card_content_heading_author_info flex items-center gap-3">
+                                    <img src="/uploads/{{review.author.avatar}}" alt="Image de l'utilisateur {{review.author.username}}"class="w-[50px] h-[50px] rounded-full">
+                                    <a href="#" class="flex flex-col">
+                                        <p class="text-lg urbanist font-semibold">{{review.author.fullName}}</p>
+                                        <p class="text-md urbanist">@{{review.author.username}}</p>
+                                    </a>
+                                </div>
+                                <div class="reviewIndiv_card_content_heading_author_rating flex flex-col items-center gap-2">
+                                    {% include "partials/rating.html.twig" with {'rating':review.rating} %}
+                                        {% set diff = (date()|date('U') - review.createdAt|date('U')) %}
+                                        {% if diff < 60 %}
+                                            <p class="date text-md text-gray-500">Il y'a {{ diff }} secondes</p>
+                                        {% elseif diff < 3600 %}
+                                            <p class="date text-md text-gray-500">Il y'a {{ (diff / 60)|round }} minutes</p>
+                                        {% elseif diff < 86400 %}
+                                            <p class="date text-md text-gray-500">Il y'a {{ (diff / 3600)|round }} heures</p>
+                                        {% elseif diff < 604800 %}
+                                            <p class="date text-md text-gray-500">Il y'a {{ (diff / 86400)|round }} jours</p>
+                                        {% elseif diff < 2592000 %}
+                                            <p class="date text-md text-gray-500">Il y'a {{ (diff / 604800)|round }} semaines</p>
+                                        {% elseif diff < 31536000 %}
+                                            <p class="date text-md text-gray-500">Il y'a {{ (diff / 2592000)|round }} mois</p>
+                                        {% else %}
+                                                <p class="date text-md text-gray-500">Le {{ review.createdAt|date('d/m/Y') }}</p>
+                                        {% endif %}
+
+
+                                </div>
+                            
+                            </div>
+                        </div>
+                    
+                        <div class="reviewIndiv_card_content_body w-full">
+                            <p class="text-lg urbanist">
+                                {{review.content|raw|nl2br}}
+                            </p>
+                        </div>
+                        <hr class="border-purple-500 border-1 rounded-full my-2">
+                        <div class="reviewIndiv_stats flex gap-5">
+                            <div class="flex gap-2 text-xl urbanist color-tertiary">
+                                <span class="material-symbols-outlined">
+                                favorite
+                                </span> 156
+                            </div>
+                            <div class="flex gap-2 text-xl urbanist color-tertiary">
+                                <span class="material-symbols-outlined">
+                                chat
+                                </span> 156
+                            
+                            
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="w-4/12 h-[600px] rounded-lg bg-white"></div>
+            
+            </div>
+
+
+        
+    </div>
+   
+</div>
+{% endblock %}

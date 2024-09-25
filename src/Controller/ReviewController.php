@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ReviewController extends AbstractController
 {
-    #[Route('/reviews/{page<\d+>?1}', name: 'reviews_index')]
+    #[Route('/reviews/page/{page<\d+>?1}', name: 'reviews_index')]
     public function index( ReviewRepository $repo, Request $request, PaginatorInterface $paginator, int $page = 1): Response
     {
         $allReviews= $repo->findAll();
@@ -29,6 +29,16 @@ class ReviewController extends AbstractController
     
         return $this->render('review/index.html.twig', [
             'reviews' => $reviews,
+        ]);
+    }
+
+    #[Route("/reviews/{slug}", name:"reviews_show")]
+    public function show(string $slug, Review $reviews, Request $request, EntityManagerInterface $manager): Response
+    {
+    
+        return $this->render("review/show.html.twig", [
+            'review' => $reviews,
+        
         ]);
     }
     

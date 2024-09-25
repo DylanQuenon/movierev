@@ -1,0 +1,13 @@
+@import "../variables/variables.scss";
+#reviewIndiv{
+    background-position: center center;
+    background-size: cover;
+    backdrop-filter: brightness(0.5);
+ .wrapper{
+    padding: $spacing-9xl 0;
+ }
+.reviewIndiv_card{
+    background-color: white;
+    border-radius: $radius-3xl
+}
+}

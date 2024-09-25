@@ -55,7 +55,7 @@ class Review
         if(empty($this->slug))
         {
             $slugify = new Slugify();
-            $this->slug = $slugify->slugify($this->title);
+            $this->slug = $slugify->slugify($this->title.' '.uniqid());
         }
     }
 

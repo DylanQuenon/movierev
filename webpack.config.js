@@ -29,6 +29,7 @@ Encore
     .addEntry('homeStyle', './assets/styles/pages/home.scss')
     .addEntry('movieStyle', './assets/styles/pages/movies.scss')
     .addEntry('reviewsStyle', './assets/styles/pages/reviews.scss')
+    .addEntry('reviewIndiv', './assets/styles/pages/reviewIndiv.scss')
     .addEntry('contactStyle', './assets/styles/pages/contact.scss')
     .addEntry('aboutStyle', './assets/styles/pages/about.scss')
     .addEntry('newIndivStyle', './assets/styles/pages/newindiv.scss')
