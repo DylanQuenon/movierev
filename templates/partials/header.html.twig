@@ -37,6 +37,7 @@
                         'Qui sommes-nous ?': { 'route': 'about', 'icon': 'groups' },
                         'Films & Séries': { 'route': 'medias', 'icon': 'slideshow' },
 						'Actualités': { 'route': 'news_index', 'icon': 'newspaper' },
+						'Reviews': { 'route': 'reviews_index', 'icon': 'reviews' },
 			
 						'Contact': { 'route': 'contact', 'icon': 'mail' },
 						
@@ -167,7 +168,7 @@
 
 </div>
 {% for label, messages in app.flashes %}
-  <div class="{% if label == 'success' %}bg-green-100 border-green-500 text-green-700{% elseif label == 'error' %}bg-red-100 border-red-500 text-red-700{% else %}bg-blue-100 border-blue-500 text-blue-700{% endif %} border-l-4 p-4 rounded-lg shadow-lg absolute top-4 right-4 max-w-md flash-message" role="alert">
+  <div class="{% if label == 'success' %}bg-green-100 border-green-500 text-green-700{% elseif label == 'error' %}bg-red-100 border-red-500 text-red-700{% else %}bg-blue-100 border-blue-500 text-blue-700{% endif %} border-l-4 p-4 rounded-lg shadow-lg absolute top-28 right-4 max-w-md flash-message" role="alert">
     <p class="font-bold">
       {{ {'success': 'Succès', 'error': 'Erreur', 'warning': 'Avertissement', 'info': 'Information'}[label] }}
     </p>

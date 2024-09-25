@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification d'une review {{ review.title }}{% endblock %}
+
+{% block body %}
+    <div class="slide flex py-24 justify-center items-center" id="addReview">
+        <div class="max-w-lg w-full bg-white shadow-md rounded-lg p-4">
+            <!-- En-tête avec l'avatar et le nom de l'utilisateur -->
+            <div class="flex items-center mb-4">
+                <img src="/uploads/{{ app.user.avatar }}" alt="Avatar" class="w-10 h-10 rounded-full mr-2">
+                <div>
+                    <h2 class="text-lg font-semibold">{{ app.user.username }}</h2>
+                    <p class="text-gray-500 text-sm">Ajoutez votre avis</p>
+                </div>
+            </div>
+
+            <!-- Formulaire pour modifier une review -->
+            {{ form_start(myForm) }}
+
+            <div class="form-group text-lg urbanist">
+                <label for="content">Titre</label>
+                {{ form_widget(myForm.title, {'attr': {'placeholder': 'Écrivez votre avis ici...', 'class': 'w-full p-2 border rounded-md', 'rows': 4}}) }}
+                {{ form_errors(myForm.title) }}
+            </div>
+
+            <div class="form-group text-lg hero my-4">
+                <label for="rating">Note</label>
+                <div class="rating color-tertiary" id="rating">
+                    {% for i in 1..5 %}
+                        <i class="far fa-star {% if i <= review.rating %}fas{% else %}far{% endif %}" data-value="{{ i }}"></i>
+                    {% endfor %}
+                </div>
+                {{ form_widget(myForm.rating, {'attr': {'required': 'required', 'class': 'rating-input', 'value': review.rating}}) }}
+                {{ form_errors(myForm.rating) }}
+            </div>
+
+            <div class="form-group text-lg urbanist">
+                <label for="content">Votre avis</label>
+                {{ form_widget(myForm.content, {'attr': {'placeholder': 'Écrivez votre avis ici...', 'class': 'w-full p-2 border rounded-md', 'rows': 4}}) }}
+                {{ form_errors(myForm.content) }}
+            </div>
+            <div class="flex justify-between items-center my-4">
+                <button type="submit" class="text-lg urbanist py-2 px-4 rounded-md bg-tertiary color-secondary">Modifier</button>
+            {{ form_end(myForm) }}
+                <a onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('review_delete', { 'id': review.id }) }}', 'Supprimer', 'Annuler')" class=" cursor-pointer text-lg urbanist rounded-md bg-red-500 text-white py-2 px-4  hover:bg-red-600">Supprimer</a>
+            </div>
+        </div>
+    </div>
+    {% include '/partials/_delete_modal.html.twig' with {
+    modal_id: 'deleteModal',
+    form_id: 'deleteForm',
+    title: 'Confirmation de suppression',
+    message: 'Êtes-vous sûr de vouloir supprimer votre review ? Cette action est irréversible.',
+    action_url: '#',  
+    confirm_text: 'Supprimer',
+    cancel_text: 'Annuler'
+} %}
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const stars = document.querySelectorAll('.rating i');
+        const ratingInput = document.querySelector('.rating-input');
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const ratingValue = star.getAttribute('data-value');
+                ratingInput.value = ratingValue;
+
+                // Met à jour l'affichage des étoiles
+                stars.forEach(s => {
+                    if (s.getAttribute('data-value') <= ratingValue) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}

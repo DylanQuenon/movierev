@@ -71,6 +71,9 @@
                 
                 </div>
             </div>
+
+            <a href="{{ path('reviews_create', { 'mediaSlug': media.slug }) }}" class="btn btn-primary">Ajouter une Review</a>
+
         </div>
     </div>
     {% include "partials/_trailer_modal.html.twig"  %}

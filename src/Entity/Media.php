@@ -74,10 +74,17 @@ class Media
     #[ORM\OneToMany(targetEntity: Casting::class, mappedBy: 'media',orphanRemoval: true)]
     private Collection $castings;
 
+    /**
+     * @var Collection<int, Review>
+     */
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'Media', orphanRemoval: true)]
+    private Collection $reviews;
+
     public function __construct()
     {
         $this->genres = new ArrayCollection();
         $this->castings = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
      /**
@@ -269,6 +276,36 @@ class Media
             // set the owning side to null (unless already changed)
             if ($casting->getMedia() === $this) {
                 $casting->setMedia(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setMedia($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getMedia() === $this) {
+                $review->setMedia(null);
             }
         }
 

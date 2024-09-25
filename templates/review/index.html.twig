@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ReviewController!{% endblock %}
+
+{% block body %}
+
+<div class="slide flex items-center justify-center">
+    {% for review in reviews %}
+        <p class="text-xl urbanist color-tertiary">{{review.title}}</p>
+        
+    {% endfor %}
+        
+</div>
+{% endblock %}
