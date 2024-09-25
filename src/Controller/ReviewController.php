@@ -33,11 +33,14 @@ class ReviewController extends AbstractController
     }
 
     #[Route("/reviews/{slug}", name:"reviews_show")]
-    public function show(string $slug, Review $reviews, Request $request, EntityManagerInterface $manager): Response
+    public function show(string $slug, ReviewRepository $repo, Review $reviews, Request $request, EntityManagerInterface $manager): Response
     {
+
+        $latestReviews = $repo->findBy([], ['createdAt' => 'DESC'], 10);
     
         return $this->render("review/show.html.twig", [
             'review' => $reviews,
+            "latestReviews" => $latestReviews,
         
         ]);
     }

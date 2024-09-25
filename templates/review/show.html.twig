@@ -37,17 +37,17 @@
                                     {% include "partials/rating.html.twig" with {'rating':review.rating} %}
                                         {% set diff = (date()|date('U') - review.createdAt|date('U')) %}
                                         {% if diff < 60 %}
-                                            <p class="date text-md text-gray-500">Il y'a {{ diff }} secondes</p>
+                                            <p class="date text-md text-gray-500">Il y a {{ diff }} secondes</p>
                                         {% elseif diff < 3600 %}
-                                            <p class="date text-md text-gray-500">Il y'a {{ (diff / 60)|round }} minutes</p>
+                                            <p class="date text-md text-gray-500">Il y a {{ (diff / 60)|round }} minutes</p>
                                         {% elseif diff < 86400 %}
-                                            <p class="date text-md text-gray-500">Il y'a {{ (diff / 3600)|round }} heures</p>
+                                            <p class="date text-md text-gray-500">Il y a {{ (diff / 3600)|round }} heures</p>
                                         {% elseif diff < 604800 %}
-                                            <p class="date text-md text-gray-500">Il y'a {{ (diff / 86400)|round }} jours</p>
+                                            <p class="date text-md text-gray-500">Il y a {{ (diff / 86400)|round }} jours</p>
                                         {% elseif diff < 2592000 %}
-                                            <p class="date text-md text-gray-500">Il y'a {{ (diff / 604800)|round }} semaines</p>
+                                            <p class="date text-md text-gray-500">Il y a {{ (diff / 604800)|round }} semaines</p>
                                         {% elseif diff < 31536000 %}
-                                            <p class="date text-md text-gray-500">Il y'a {{ (diff / 2592000)|round }} mois</p>
+                                            <p class="date text-md text-gray-500">Il y a {{ (diff / 2592000)|round }} mois</p>
                                         {% else %}
                                                 <p class="date text-md text-gray-500">Le {{ review.createdAt|date('d/m/Y') }}</p>
                                         {% endif %}
@@ -89,6 +89,56 @@
 
         
     </div>
-   
 </div>
+    <div class="bg-secondary">
+        <div class="wrapper bg-secondary pt-24">
+            <div class="slide_reviews flex flex-col gap-10">
+                <div class="slider_reviews_heading flex justify-between w-full flex-wrap gap-5">
+                    <h2 class="display-xl object uppercase w-3/5">Découvrez les dernières <span class="color-tertiary">Reviews</span></h2>
+                    <div class="h-fit">
+                        {% include "partials/_button.html.twig" with {'text': "Voir toutes les reviews", "href": path('reviews_index')} %}
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class=" bg-secondary pt-10 flex flex-col gap-4">
+        <div class="swiper flex overflow-hidden relative">
+            <div class="swiper-wrapper flex gap-6">
+                {% for review in latestReviews %}
+                    <!-- Swiper Slide -->
+                    <div class="swiper-slide w-full">
+                        {% include "partials/_card_reviews.html.twig" with {'review': review, 'maxLength': 220} %}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+        <div class="wrapper pb-24 mt-5">
+            <div class="swiper-pagination flex gap-5">
+                <div class="flex justify-center controls items-center">
+                    <span class="material-symbols-outlined swiper-button-prev">
+                        chevron_left
+                    </span>
+                </div>
+
+                 <div class="flex justify-center controls items-center">
+                    <span class="material-symbols-outlined swiper-button-next">
+                        chevron_right
+                    </span>
+                </div>
+
+            </div>
+        
+        </div>
+        
+        
+    </div>
+{% endblock %}
+{% block javascripts %}
+{{encore_entry_script_tags('sliderReview')}}
 {% endblock %}
