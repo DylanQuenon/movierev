@@ -9,8 +9,8 @@
     border-radius: 100vw;
     justify-content: flex-start;
     align-items: center;
-    // padding: .625rem .9375rem .625rem 1.875rem;
-    padding: $spacing-md $spacing-xl $spacing-md $spacing-4xl;
+    padding: .625rem .9375rem .625rem 1.875rem;
+    // padding: $spacing-md $spacing-xl $spacing-md $spacing-4xl;
     text-decoration: none;
     transition: padding .5s cubic-bezier(.165,.84,.44,1),background-color .5s cubic-bezier(.165,.84,.44,1),font-size .5s cubic-bezier(.165,.84,.44,1);
     display: flex;
@@ -19,8 +19,8 @@
             color: $color-secondary;
             background-color: #A051DE;
             padding-left: 2.9rem;
-
             font-size: 6rem;
+    
           
     }
     .w-inline-block {
@@ -45,16 +45,16 @@
     left: .9375rem;
     overflow: hidden;
   }
-  @media screen and (min-width: 992px) {
+
     .button:hover .button_dot {
       left: 0.5rem;
     }
-  }
-  @media screen and (min-width: 992px) {
+  
+
     .button:hover .button_arrow {
       transform: translateX(0%);
     }
-  }
+  
   .button_arrow {
     aspect-ratio: 1;
     color: $color-primary;

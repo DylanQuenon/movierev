@@ -25,12 +25,12 @@
             </div>
         
         </div>
-        <div class="cardReviews_infos_author flex-wrap gap-5 flex justify-between">
+        <div class="cardReviews_infos_author gap-5 flex justify-between">
             <a href="#" class="flex text-md urbanist font-semibold gap-2 items-center">
                 <img src="/uploads/{{review.author.avatar}}" alt="Avatar de {{review.author.fullName}}" class="rounded-full border-2 border-purple-500 w-[40px] h-[40px] object-cover">
                 {{review.author.username}}
             </a>
-            {% include "partials/_button.html.twig" with {"text":"Voir la review compète", "href":path('reviews_show',{"slug":review.slug}) }%}
+            {% include "partials/_button.html.twig" with {"text":"Voir la review complète", "href":path('reviews_show',{"slug":review.slug}) }%}
         </div>
     </div>
 
