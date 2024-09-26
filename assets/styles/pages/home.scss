@@ -2,6 +2,7 @@
 
 body{
     overflow-x: hidden;
+    background-color: $color-secondary;
 }
 #home{
     min-height: 100vh;
@@ -371,7 +372,7 @@ body{
     }
 }
 .sliderRev{
-    background-color: white !important;
+
     .wrapper{
         padding-top: 40px;
     }
@@ -384,4 +385,12 @@ body{
 }
 .newsSlider{
     padding-top: 40px 0;
+}
+#faq{
+    padding-top: 40px;
+    padding-bottom: 96px;
+    .rectangle{
+        color: white;
+        box-shadow: 0 4px 25px rgba(161, 81, 222, 0.15);
+    }
 }

@@ -5,8 +5,8 @@
         <div class="wrapper pt-24">
             <div class="slide_reviews flex flex-col gap-10">
                 <div class="slider_reviews_heading flex justify-between w-full flex-wrap gap-5">
-                    <h2 class="display-xl object uppercase lg:w-3/5 max-md:w-full">Découvrez les dernières <span class="color-tertiary">Reviews</span></h2>
-                    <div class="h-fit">
+                    <h2 class="display-xl object uppercase lg:w-3/5 max-md:w-full" data-aos="fade-right" data-aos-duration="1000">Découvrez les dernières <span class="color-tertiary">Reviews</span></h2>
+                    <div class="h-fit" data-aos='fade-left' data-aos-duration='1000'>
                         {% include "partials/_button.html.twig" with {'text': "Voir toutes les reviews", "href": path('reviews_index')} %}
                     </div>
                     
@@ -20,7 +20,7 @@
             <div class="swiper-wrapper flex gap-6">
                 {% for review in latestReviews %}
                     <!-- Swiper Slide -->
-                    <div class="swiper-slide w-full">
+                    <div class="swiper-slide w-full"data-aos="zoom-in" data-aos-delay="{{ loop.index * 200 }}" data-aos-duration="1000">
                         {% include "partials/_card_reviews.html.twig" with {'review': review, 'maxLength': 220} %}
 
                     </div>
@@ -29,16 +29,16 @@
 
             </div>
         </div>
-        <div class="wrapper pb-24 mt-5">
+        <div class="wrapper">
             <div class="swiper-nav flex gap-5">
                 <div class="flex justify-center controls items-center">
-                    <span class="material-symbols-outlined swiper-button-prev">
+                    <span class="material-symbols-outlined swiper-button-prevr">
                         chevron_left
                     </span>
                 </div>
 
                 <div class="flex justify-center controls items-center">
-                    <span class="material-symbols-outlined swiper-button-next">
+                    <span class="material-symbols-outlined swiper-button-nextr">
                         chevron_right
                     </span>
                 </div>

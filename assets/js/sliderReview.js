@@ -21,8 +21,8 @@ const swiper = new Swiper('.swiperRev', {
         }
     },
     navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        nextEl: '.swiper-button-nextr',
+        prevEl: '.swiper-button-prevr',
     }
 
 });

@@ -228,8 +228,68 @@
 	{% include "partials/_sliderReviews.html.twig" %}
 	
 	{% include "partials/_slider_news.html.twig" %}
+
+	{% set accordions = [
+    {
+        'id': 1,
+        'icon': 'psychology_alt',
+        'question': 'Qui peut poster des reviews?',
+        'answer': 'Absolument tout le monde, il vous suffit juste de vous rendre sur la page du film et de cliquer sur "Ajouter une review".'
+    },
+    {
+        'id': 2,
+        'icon': 'movie',
+        'question': 'Comment ajouter un film?',
+        'answer': 'Pour ajouter un film, rendez-vous sur la page d\'ajout de film et remplissez le formulaire.'
+    },
+    {
+        'id': 3,
+        'icon': 'list',
+        'question': 'Comment créer une liste?',
+        'answer': 'Rendez-vous dans l\'onglet "mes listes" de votre profil et appuyez sur créer une liste'
+    },
+    {
+        'id': 4,
+        'icon': 'light',
+        'question': 'Comment se tenir informé?',
+        'answer': 'Rendez-vous dans vos notifications pour ne rien manquer.'
+    },
+] %}
+
+
+	<div class="wrapper faq py-24 flex flex-wrap justify-between" id="faq">
+		<div class="faq_left max-md:w-full lg:w-6/12 flex flex-col gap-6">
+			<h2 class="display-md object uppercase">Foire<span class="color-tertiary"> aux </span>questions</h2>
+			{% for accordion in accordions %}
+			<div class="rectangle py-2 px-5 bg-secondary">
+				<button onclick="toggleAccordion({{ accordion.id }})" class="w-full flex justify-between items-center py-5 text-slate-800">
+					<span class="text-xl flex gap-2 urbanist font-semibold color-tertiary">
+						<span class="material-symbols-outlined">{{ accordion.icon }}</span> {{ accordion.question }}
+					</span>
+					<span id="icon-{{ accordion.id }}" class="w-[40px] h-[40px] rounded-full bg-tertiary flex justify-center items-center text-white transition-transform duration-300">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" class="w-6 h-6">
+							<path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+						</svg>
+					</span>
+				</button>
+				<div id="content-{{ accordion.id }}" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+					<div class="pb-5 text-lg urbanist text-slate-500">
+						{{ accordion.answer }}
+					</div>
+				</div>
+			
+			</div>
+			{% endfor %}
+
+
+		</div>
+		<div class="max-md:w-full lg:w-6/12">
+			<img src="/images/accordpic.png" alt="image d'un film dans la section accordéon">
+		</div>
+	</div>
 	{#Modal pour afficher le trailer#}
 	{% include 'partials/_trailer_modal.html.twig' %}
+
 
 
 {% endblock %}
@@ -288,6 +348,36 @@
 			observer.observe(counter);
 		});
 	});
+
+
+  function toggleAccordion(index) {
+    const content = document.getElementById(`content-${index}`);
+    const icon = document.getElementById(`icon-${index}`);
+ 
+    // SVG for Minus icon
+    const minusSVG = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" class="text-white w-6 h-6">
+        <path d="M3.75 7.25a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Z" />
+      </svg>
+    `;
+ 
+    // SVG for Plus icon
+    const plusSVG = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" class="text-white w-6 h-6">
+        <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+      </svg>
+    `;
+ 
+    // Toggle the content's max-height for smooth opening and closing
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+      content.style.maxHeight = '0';
+      icon.innerHTML = plusSVG;
+    } else {
+      content.style.maxHeight = content.scrollHeight + 'px';
+      icon.innerHTML = minusSVG;
+    }
+  }
+
 
  </script>
 
