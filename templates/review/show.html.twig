@@ -92,5 +92,24 @@
 </div>
 
   {% include "partials/_sliderReviews.html.twig" %}
+
+  
+{% endblock %}
+{% block javascripts %}
+<script>
+const copyLinkButton = document.getElementById("copyLink")
+ copyLinkButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            navigator.clipboard.writeText(window.location.href).then(function() {
+                copyLinkButton.innerHTML = '<span class="material-symbols-outlined -rotate-45">link</span><span class="textCopyLink">Lien copié</span>';
+                setTimeout(function() {
+                    copyLinkButton.innerHTML = '<span class="material-symbols-outlined -rotate-45">link</span><span class="textCopyLink">Copier le lien</span>';
+                }, 3000);
+            }, function(err) {
+                console.error('Erreur lors de la copie du lien : ', err);
+            });
+        });
+
+</script>
 {% endblock %}
 

@@ -260,29 +260,32 @@
 	<div class="wrapper faq flex flex-wrap justify-between" id="faq">
 		<div class="faq_left max-md:w-full lg:w-6/12 flex flex-col gap-6 h-full">
 			<h2 class="display-md object uppercase"data-aos="fade-right" data-aos-duration="500" >Foire<span class="color-tertiary"> aux </span>questions</h2>
-			{% for accordion in accordions %}
-			<div data-aos="zoom-in" data-aos-duration="500" class="h-fit">
-			<div class="rectangle py-2 px-5 bg-secondary">
-				<button onclick="toggleAccordion({{ accordion.id }})" class="w-full flex justify-between items-center py-5 text-slate-800">
-					<span class="text-xl flex gap-2 urbanist font-semibold color-tertiary">
-						<span class="material-symbols-outlined">{{ accordion.icon }}</span> {{ accordion.question }}
-					</span>
-					<span id="icon-{{ accordion.id }}" class="w-[40px] h-[40px] rounded-full bg-tertiary flex justify-center items-center text-white transition-transform duration-300">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" class="w-6 h-6">
-							<path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
-						</svg>
-					</span>
-				</button>
-				<div id="content-{{ accordion.id }}" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
-					<div class="pb-5 text-lg urbanist text-slate-500">
-						{{ accordion.answer }}
+			<div data-aos="zoom-in" class="flex flex-col gap-5" data-aos-duration="500" >
+				{% for accordion in accordions %}
+				<div class="h-fit">
+				<div class="rectangle py-2 px-5 bg-secondary">
+					<button onclick="toggleAccordion({{ accordion.id }})" class="w-full flex justify-between items-center py-5 text-slate-800">
+						<span class="text-xl flex gap-2 urbanist font-semibold color-tertiary">
+							<span class="material-symbols-outlined">{{ accordion.icon }}</span> {{ accordion.question }}
+						</span>
+						<span id="icon-{{ accordion.id }}" class="w-[40px] h-[40px] rounded-full bg-tertiary flex justify-center items-center text-white transition-transform duration-300">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" class="w-6 h-6">
+								<path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+							</svg>
+						</span>
+					</button>
+					<div id="content-{{ accordion.id }}" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+						<div class="pb-5 text-lg urbanist text-slate-500">
+							{{ accordion.answer }}
+						</div>
 					</div>
+				
 				</div>
+				
+				</div>
+				{% endfor %}
 			
 			</div>
-			
-			</div>
-			{% endfor %}
 
 
 		</div>
