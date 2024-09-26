@@ -48,27 +48,7 @@
 {% block javascripts %}
     {{encore_entry_script_tags('sliderNews')}}
 	<script>
-		document.addEventListener('DOMContentLoaded', function () { // Sélectionner la vidéo
-			const video = document.querySelector('video');
-
-			// Créer un observateur d'intersection
-			const observer = new IntersectionObserver((entries) => {
-				entries.forEach(entry => { // Si la section est visible au centre de l'écran
-					if (entry.isIntersecting) {
-						video.play(); // Lancer la vidéo
-					} else {
-						video.pause(); // Mettre en pause la vidéo
-					}
-				});
-				},
-				{
-				root: null, // utiliser le viewport comme racine
-				rootMargin: '0px',
-				threshold: [0.7] // Déclencher lorsque 50% de la section est visible
-			});
-			// Observer la section contenant la vidéo
-			observer.observe(document.querySelector('video'));
-		});
+	
 
 		const text = "actualités";
 		const speed = 150; // Vitesse de la frappe
