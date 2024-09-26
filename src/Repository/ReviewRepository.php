@@ -40,4 +40,15 @@ class ReviewRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findReviewsByMediaTitle(string $title)
+    {
+        return $this->createQueryBuilder('r')
+            ->innerJoin('r.Media', 'm') // Assurez-vous que 'media' est le bon nom de la propriété dans Review
+            ->addSelect('m')
+            ->where('m.title LIKE :title')
+            ->setParameter('title', '%' . $title . '%') // Utilisation d'un LIKE pour une recherche partielle
+            ->getQuery()
+            ->getResult();
+    }
 }

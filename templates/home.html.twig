@@ -261,7 +261,7 @@
 		<div class="faq_left max-md:w-full lg:w-6/12 flex flex-col gap-6 h-full">
 			<h2 class="display-md object uppercase"data-aos="fade-right" data-aos-duration="500" >Foire<span class="color-tertiary"> aux </span>questions</h2>
 			{% for accordion in accordions %}
-			<div data-aos="zoom-in" data-aos-duration="500"     data-aos-anchor-placement="top-bottom" class="h-fit">
+			<div data-aos="zoom-in" data-aos-duration="500" class="h-fit">
 			<div class="rectangle py-2 px-5 bg-secondary">
 				<button onclick="toggleAccordion({{ accordion.id }})" class="w-full flex justify-between items-center py-5 text-slate-800">
 					<span class="text-xl flex gap-2 urbanist font-semibold color-tertiary">
@@ -287,7 +287,7 @@
 
 		</div>
 		
-			<img src="/images/accordpic.png" alt="image d'un film dans la section accordéon" class="max-md:w-full lg:w-5/12">
+			<img src="/images/accordpic.png" alt="image d'un film dans la section accordéon" class="max-md:w-full h-fit lg:w-5/12">
 		
 	</div>
 	{#Modal pour afficher le trailer#}

@@ -11,10 +11,35 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ReviewController extends AbstractController
 {
+
+    #[Route('/reviews/search/ajax', name: 'reviews_search_ajax', methods: ['GET'])]
+    public function searchAjax(Request $request, ReviewRepository $repo): JsonResponse
+    {
+        $query = $request->query->get('query', '');
+
+        if (empty($query)) {
+            return new JsonResponse([]); // Renvoie un tableau vide si aucun terme
+        }
+
+        $results = $repo->findReviewsByMediaTitle($query);
+
+        // Mappez les résultats pour créer le format JSON
+        $jsonResults = array_map(function ($review) {
+            return [
+                'title' => $review->getTitle(),
+                'author' => $review->getAuthor()->getFullName(),
+                'mediatitle' => $review->getMedia()->getTitle(),
+                'slug' => $review->getSlug(),
+            ];
+        }, $results);
+    
+        return new JsonResponse($jsonResults);
+    }
     #[Route('/reviews/page/{page<\d+>?1}', name: 'reviews_index')]
     public function index( ReviewRepository $repo, Request $request, PaginatorInterface $paginator, int $page = 1): Response
     {
