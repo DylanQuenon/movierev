@@ -22,6 +22,7 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('headerStyle', './assets/styles/partials/header.scss')
+    .addEntry('sliderRevStyle', './assets/styles/partials/_sliderReviews.scss')
     .addEntry('cardNewsStyle', './assets/styles/partials/cardNews.scss')
     .addEntry('sliderNewsStyle', './assets/styles/partials/sliderNews.scss')
     .addEntry('cardReviewsStyle', './assets/styles/partials/cardReviews.scss')

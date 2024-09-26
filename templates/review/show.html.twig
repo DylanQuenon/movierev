@@ -7,7 +7,7 @@
 {% block body %}
 <div class="slide bg-secondary" style="background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/uploads/{{review.media.cover}}'); background-size: cover; background-position: center;" id="reviewIndiv">
     <div class="wrapper max-sm:w-[90%]">
-            <a href="javascript:window.history.back()" class=" py-2 px-4 rounded-full bg-white w-fit mb-10 text-lg urbanist font-semibold color-tertiary flex gap-2">
+            <a href="javascript:window.history.back()" class=" transition-all hover:bg-purple-500 hover:text-white py-2 px-4 rounded-full bg-white w-fit mb-10 text-lg urbanist font-semibold color-tertiary flex gap-2">
                 <span class="material-symbols-outlined">
                     chevron_left
                 </span>
@@ -18,7 +18,7 @@
                     <div class="reviewIndiv_card_content flex flex-col gap-5 w-full">
                         <div class="reviewIndiv_card_content_heading flex flex-col gap-5">
                             <div class="reviewIndiv_card_content_heading_info2 flex flex-wrap justify-between">
-                                <a href="{{path('medias_show', {"slug":review.media.slug})}}"class="flex gap-1 items-center text-md  text-font-semibold  urbanist color-tertiary font-semibold"><span class="underline">{{review.media.title}}</span><span class="material-symbols-outlined">chevron_right</span></a>
+                                <a href="{{path('medias_show', {"slug":review.media.slug})}}"class="flex gap-1 items-center text-md  text-font-semibold  urbanist color-tertiary font-semibold transition hover:text-black"><span class="underline">{{review.media.title}}</span><span class="material-symbols-outlined">chevron_right</span></a>
                                 {#Copier le lien#}
                                 <button id="copyLink" class="w-fit text-md items-center bg-tertiary rounded-md color-secondary urbanist font-semibold py-2 px-4 flex gap-2">
                                     <span class="material-symbols-outlined -rotate-45"> link</span>
@@ -28,7 +28,7 @@
                             <div class="reviewIndiv_card_content_heading_author flex justify-between">
                                 <div class="reviewIndiv_card_content_heading_author_info flex items-center gap-3">
                                     <img src="/uploads/{{review.author.avatar}}" alt="Image de l'utilisateur {{review.author.username}}"class="w-[50px] h-[50px] rounded-full">
-                                    <a href="#" class="flex flex-col">
+                                    <a href="#" class="flex flex-col transition-all hover:text-purple-500">
                                         <p class="text-lg urbanist font-semibold">{{review.author.fullName}}</p>
                                         <p class="text-md urbanist">@{{review.author.username}}</p>
                                     </a>
@@ -90,55 +90,7 @@
         
     </div>
 </div>
-    <div class="bg-secondary">
-        <div class="wrapper bg-secondary pt-24">
-            <div class="slide_reviews flex flex-col gap-10">
-                <div class="slider_reviews_heading flex justify-between w-full flex-wrap gap-5">
-                    <h2 class="display-xl object uppercase w-3/5">Découvrez les dernières <span class="color-tertiary">Reviews</span></h2>
-                    <div class="h-fit">
-                        {% include "partials/_button.html.twig" with {'text': "Voir toutes les reviews", "href": path('reviews_index')} %}
-                    </div>
-                    
-                </div>
 
-            </div>
-        </div>
-    </div>
-    <div class=" bg-secondary pt-10 flex flex-col gap-4">
-        <div class="swiper flex overflow-hidden relative">
-            <div class="swiper-wrapper flex gap-6">
-                {% for review in latestReviews %}
-                    <!-- Swiper Slide -->
-                    <div class="swiper-slide w-full">
-                        {% include "partials/_card_reviews.html.twig" with {'review': review, 'maxLength': 220} %}
-
-                    </div>
-
-                {% endfor %}
-
-            </div>
-        </div>
-        <div class="wrapper pb-24 mt-5">
-            <div class="swiper-pagination flex gap-5">
-                <div class="flex justify-center controls items-center">
-                    <span class="material-symbols-outlined swiper-button-prev">
-                        chevron_left
-                    </span>
-                </div>
-
-                 <div class="flex justify-center controls items-center">
-                    <span class="material-symbols-outlined swiper-button-next">
-                        chevron_right
-                    </span>
-                </div>
-
-            </div>
-        
-        </div>
-        
-        
-    </div>
+  {% include "partials/_sliderReviews.html.twig" %}
 {% endblock %}
-{% block javascripts %}
-{{encore_entry_script_tags('sliderReview')}}
-{% endblock %}
+

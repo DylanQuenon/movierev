@@ -1,7 +1,7 @@
 import Swiper, { Navigation, EffectFade, Autoplay } from 'swiper/bundle';
 import 'swiper/css/bundle';
 
-const swiper = new Swiper('.swiper', {
+const swiper = new Swiper('.swiperNews', {
     direction: 'horizontal',
     loop: true,
 
@@ -37,7 +37,7 @@ export function setAutoplay(enabled) {
 }
 
 // Ajouter des gestionnaires d'événements pour les diapositives
-document.querySelectorAll('.swiper-slide').forEach(slide => {
+document.querySelectorAll('.swiperNews .swiper-slide').forEach(slide => {
     slide.addEventListener('mouseenter', () => {
         setAutoplay(false); // Désactiver l'autoplay au survol
     });

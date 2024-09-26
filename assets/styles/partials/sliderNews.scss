@@ -12,7 +12,7 @@
       border-color: $color-tertiary;
     }
   }
-  .swiper{
+  .swiperNews{
     width: 85%;
     padding-top: 40px;
     margin: 0 auto;
@@ -22,6 +22,7 @@
 
     .swiper-wrapper{
         display: flex;
+        padding: 10px 0;
      
     }
 
@@ -42,7 +43,7 @@
     }
    
   }
-  .swiper-pagination{
+  .swiper-arrow{
     position: absolute;
     top: 40%;
     display: flex;
