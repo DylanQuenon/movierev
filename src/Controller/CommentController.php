@@ -78,6 +78,7 @@ class CommentController extends AbstractController
     public function reply(Comment $comment, Request $request, EntityManagerInterface $manager): Response {
         $user = $this->getUser();
         $review = $comment->getReview();
+        $news = $comment->getNews();
     
         $reply = new Comment();
         $form = $this->createForm(ReplyType::class, $reply, [
@@ -94,11 +95,19 @@ class CommentController extends AbstractController
             $manager->flush();
     
             $this->addFlash('success', 'Reply posted');
-            return $this->redirectToRoute('reviews_show', ['slug' => $review->getSlug()]);
+            if ($review) {
+                return $this->redirectToRoute('reviews_show', ['slug' => $review->getSlug()]);
+            } else {
+                return $this->redirectToRoute('news_show', ['slug' => $news->getSlug()]);
+            }
         } else {
             $this->addFlash('danger', 'There was an error posting your reply.');
         }
     
-        return $this->redirectToRoute('reviews_show', ['slug' => $review->getSlug()]);
+        if ($review) {
+            return $this->redirectToRoute('reviews_show', ['slug' => $review->getSlug()]);
+        } else {
+            return $this->redirectToRoute('news_show', ['slug' => $news->getSlug()]);
+        }
     }
 }

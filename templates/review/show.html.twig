@@ -112,67 +112,7 @@
                     {% if comment.parent is null %}
                         <div class="w-full h-full">
                             <div class="py-5 border-b border-tertiary-light">
-                               <div class="commentsCard flex flex-col gap-2">
-                                {#dessus du commentaire#}
-                                <div class="flex flex-col gap-3">
-                                        <div class="commentsCard_heading flex justify-between">
-                                            <div class="flex gap-2">
-                                                <img src="/uploads/{{comment.author.avatar}}" alt="Image de l'utilisateur {{review.author.username}}" class="border-2 border-purple-500 w-[50px] h-[50px] rounded-full">
-                                                <a href="#" class="flex flex-col transition-all hover:text-purple-500">
-                                                    <p class="text-md urbanist leading-none font-semibold">{{comment.author.fullName}}</p>
-                                                    <p class="text-sm urbanist leading-none">@{{comment.author.username}}</p>
-                                                </a>
-                                            </div>
-                                            {% if comment.id == topComment.id %}
-                                                <span class="flex gap-2 bg-[rgba(255,219,30,0.15)] text-[#FFDB1E] items-center text-sm  h-fit urbanist font-semibold px-2 py-1 rounded-full"><i class="fa-solid fa-star"></i> Top Commentaire</span>
-                                            {% endif %}
-                                            
-                                        </div>
-                                        <div class="commentsCard_content">
-                                            <p class="text-lg urbanist">{{comment.content}}</p>
-                                        </div>
-                                </div>
-                                <div class="commentsCard_actions flex gap-3">
-                                    <div class="commentsCard_actions likes pr-3 border-purple-500 border-r-2 flex gap-2 items-center text-lg font color-tertiary">
-                                        <i data-tippy-content="Liker/disliker le commentaire" class="fa-thumbs-up thumb-icon cursor-pointer {{ app.user ? (comment.isLikedByUser(app.user) ? 'fa-solid' : 'fa-regular') : 'fa-regular' }}" data-comment-id="{{ comment.id }}"></i>
-                                             <span class="comments likes-count" data-comment-id="{{ comment.id }}">{{ comment.likes|length }}</span>
-                                    </div>
-                                    <div class="commentsCard_actions comments text-gray-500 pr-3 border-purple-500 border-r-2 flex gap-2 items-center text-lg font">
-                                        <i class="fa-regular fa-comment"></i>
-                                        {% if comment.comments is not empty %}
-                                            <button class="text-md urbanist text-tertiary-dark toggle-replies" data-comment-id="{{ comment.id }}">
-                                                {% if comment.comments|length == 1 %}
-                                                        Voir la réponse
-                                                    {% else %}
-                                                        Voir {{ comment.comments|length }} réponses
-                                                    {% endif %}
-                                            </button>
-                    
-                                        {% endif %}
-                                    </div>
-                                    <div class="commentsCard_actions answer   transition-all pr-3flex gap-2 items-center text-lg font">
-                                        <button class="color-tertiary text-md urbanist hover:underline-offset-4 reply-button" data-comment-id="{{ comment.id }}">
-                                            Répondre
-                                        </button>
-                                    </div>
-                                </div>
-                                    {% if comment.comments is not empty %}
-                                            <div class="replies hidden fadeIn" id="replies-{{ comment.id }}">
-                                                {% for reply in comment.comments %}
-                                                    <div class="list-group-item md:w-11/12 bg-purple-50 border-l-2 border-purple-500 flex flex-col gap-2 w-full bg-background-hover ml-auto p-3">
-                                                    <div class="flex gap-2 items-center">
-                                                        <img src="/uploads/{{reply.author.avatar}}" alt="Image de l'utilisateur {{reply.author.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
-                                                        <a href="#" class="hover:text-purple-500 text-md urbanist">{{reply.author.fullName}}</a>
-                                                    </div>
-                                                        
-
-                                                        <p class="text-md urbanist ">{{reply.content}}</p>
-                                                    </div>
-                                                {% endfor %}
-                                            </div>
-                                        {% endif %}
-                               
-                               </div>
+                             {% include "partials/_comment.html.twig" with {'comment':comment} %}
                                 <div class="w-full mt-2">
                                     <div class="w-full">
                                         <div class="reply-form-container hidden" id="reply-form-{{ comment.id }}">

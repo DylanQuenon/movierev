@@ -9,7 +9,7 @@
     <div class="cardReviews_infos flex flex-col justify-between gap-5 h-full">
         <div class="cardReviews_infos_high flex flex-col gap-2">
             <div class="title_rating flex justify-between items-center">
-                <p class="text-lg urbanist font-semibold color-tertiary">{{review.media.title}}</p>
+                <a href="{{path('medias_show',{'slug': review.media.slug})}}" class="text-lg urbanist font-semibold color-tertiary">{{review.media.title}}</a>
                 {% include "partials/rating.html.twig" with {'rating': review.rating} %}
             </div>
             <div class="cardReviews_infos_review flex flex-col gap-2">

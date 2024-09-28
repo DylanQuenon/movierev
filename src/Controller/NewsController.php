@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\News;
 use App\Form\NewsType;
+use App\Entity\Comment;
+use App\Form\ReplyType;
 use App\Entity\ImgModify;
+use App\Form\CommentType;
 use App\Form\NewsEditType;
 use App\Form\ImgModifyMainType;
 use App\Repository\NewsRepository;
@@ -168,6 +171,47 @@ class NewsController extends AbstractController
         $news->setViewsCount($news->getViewsCount() + 1); // augmente le nombre de vues de 1
         $manager->flush();
 
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Vérifie si l'utilisateur essaie de commenter sa propre review
+            if ($this->getUser() === $news->getAuthor()) {
+                $this->addFlash('warning', 'Vous ne pouvez pas commenter votre propre review.');
+                return $this->redirectToRoute('news_show', ['slug' => $news->getSlug()]);
+            }
+
+            $comment->setNews($news)  // Associe la review au commentaire
+                    ->setAuthor($this->getUser());  // Associe l'auteur
+
+                 
+
+            // Persiste le commentaire
+            $manager->persist($comment);
+            $manager->flush();
+            $form = $this->createForm(CommentType::class);
+
+            $this->addFlash('success', 'Votre commentaire a été pris en compte.');
+        }
+        $comments= $news->getComments();
+        $topComment = null;
+        if (count($comments) > 0) {
+            $topComment = array_reduce($comments->toArray(), function ($carry, $item) {
+                return ($carry === null || $item->getLikes()->count() > $carry->getLikes()->count()) ? $item : $carry;
+            });
+        }
+        $replyForms = [];
+        foreach ($comments as $comment) {
+            if ($comment->getParent() === null) {
+                $replyForm = $this->createForm(ReplyType::class, new Comment(), [
+                    'parent' => $comment,
+                ]);
+                $replyForms[$comment->getId()] = $replyForm->createView();
+            }
+        }
+
         // Récupère les trois dernières actualités, excluant celle affichée
         $latestNews = $newsRepository->createQueryBuilder('n')
         ->where('n.id != :currentNewsId')
@@ -177,10 +221,15 @@ class NewsController extends AbstractController
         ->getQuery()
         ->getResult();
 
+        
+
    
         return $this->render("news/show.html.twig", [
             'news' => $news,
             'latestNews' => $latestNews,
+            'myForm' => $form->createView(),
+            'replyForms' => $replyForms,
+            'topComment' => $topComment,
         ]);
     }
 

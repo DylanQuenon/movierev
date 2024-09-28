@@ -65,6 +65,28 @@ class News
         $this->comments = new ArrayCollection();
     }
 
+    public function getAvgRatings(): int
+    {
+        // Convertir les commentaires en tableau
+        $commentairesArray = $this->comments->toArray();
+        
+        // Filtrer les commentaires pour ne garder que ceux avec un rating non nul
+        $commentairesAvecRating = array_filter($commentairesArray, function($comment) {
+            return $comment->getRating() !== null; // Vérifie si le rating n'est pas nul
+        });
+        
+        // Calculer la somme des notations pour les commentaires avec rating non nul
+        $sum = array_reduce($commentairesAvecRating, function($total, $comment) {
+            return $total + $comment->getRating(); // Somme des ratings
+        }, 0);
+        
+        // Compter le nombre de commentaires avec rating non nul
+        $countAvecRating = count($commentairesAvecRating);
+    
+        // Calculer et retourner la moyenne arrondie, ou 0 si aucun rating
+        return $countAvecRating > 0 ? round($sum / $countAvecRating) : 0;
+    }
+    
     /**
      * Initialise la date de création
      *
