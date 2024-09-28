@@ -2,20 +2,57 @@
 
 namespace App\Controller;
 
+use App\Entity\Likes;
 use App\Entity\Media;
 use App\Entity\Review;
+use App\Entity\Comment;
+use App\Form\ReplyType;
+use App\Form\CommentType;
 use App\Form\ReviewsType;
+use App\Repository\LikesRepository;
 use App\Repository\ReviewRepository;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ReviewController extends AbstractController
 {
+    #[Route('/reviews/{id}/like', name: 'reviews_like', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function like(Request $request, Review $review, EntityManagerInterface $manager): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $like = $manager->getRepository(Likes::class)->findOneBy(['author' => $user, 'review' => $review]);
+    
+
+        if ($like) {
+            // Si l'utilisateur a déjà aimé, on le retire (dislike)
+            $manager->remove($like);
+            $action = 'disliked';
+        } else {
+            // Sinon, on ajoute un nouveau like
+            $like = new Likes();
+            $like->setAuthor($user);
+            $like->setReview($review);
+            $manager->persist($like);
+            $action = 'liked';
+        }
+
+        $manager->flush();
+
+        return new JsonResponse(['action' => $action, 'likesCount' => $review->getLikes()->count()]);
+    }
+
 
     #[Route('/reviews/search/ajax', name: 'reviews_search_ajax', methods: ['GET'])]
     public function searchAjax(Request $request, ReviewRepository $repo): JsonResponse
@@ -57,18 +94,69 @@ class ReviewController extends AbstractController
         ]);
     }
 
-    #[Route("/reviews/{slug}", name:"reviews_show")]
-    public function show(string $slug, ReviewRepository $repo, Review $reviews, Request $request, EntityManagerInterface $manager): Response
-    {
+    // src/Controller/ReviewController.php
 
+    #[Route("/reviews/{slug}", name:"reviews_show")]
+    public function show(string $slug, ReviewRepository $repo, Review $reviews, Request $request, CommentRepository $commentRepo, EntityManagerInterface $manager,LikesRepository $repoLikes): Response
+    {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        
         $latestReviews = $repo->findBy([], ['createdAt' => 'DESC'], 10);
+ 
     
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Vérifie si l'utilisateur essaie de commenter sa propre review
+            if ($this->getUser() === $reviews->getAuthor()) {
+                $this->addFlash('warning', 'Vous ne pouvez pas commenter votre propre review.');
+                return $this->redirectToRoute('reviews_show', ['slug' => $reviews->getSlug()]);
+            }
+
+            $comment->setReview($reviews)  // Associe la review au commentaire
+                    ->setAuthor($this->getUser());  // Associe l'auteur
+
+                 
+
+            // Persiste le commentaire
+            $manager->persist($comment);
+            $manager->flush();
+            $form = $this->createForm(CommentType::class);
+
+            $this->addFlash('success', 'Votre commentaire a été pris en compte.');
+        }
+
+        $comments= $reviews->getComments();
+        $topComment = null;
+        if (count($comments) > 0) {
+            $topComment = array_reduce($comments->toArray(), function ($carry, $item) {
+                return ($carry === null || $item->getLikes()->count() > $carry->getLikes()->count()) ? $item : $carry;
+            });
+        }
+        $replyForms = [];
+        foreach ($comments as $comment) {
+            if ($comment->getParent() === null) {
+                $replyForm = $this->createForm(ReplyType::class, new Comment(), [
+                    'parent' => $comment,
+                ]);
+                $replyForms[$comment->getId()] = $replyForm->createView();
+            }
+        }
+        $likedByUsers = $repoLikes->findBy(['review' => $reviews]);
+
         return $this->render("review/show.html.twig", [
             'review' => $reviews,
-            "latestReviews" => $latestReviews,
-        
+            'latestReviews' => $latestReviews,
+            'myForm' => $form->createView(),
+            'replyForms' => $replyForms,
+            'topComment' => $topComment,
+            'likedByUsers' => $likedByUsers,
+            
+            
         ]);
     }
+                
     
     /**
      * Ajout d'une review

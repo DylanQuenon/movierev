@@ -1,115 +1,371 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reviews{% endblock %}
+{% block title %}Reviews
+{% endblock %}
 
-{% block stylesheets %}{{encore_entry_link_tags('reviewIndiv')}}{% endblock %}
+{% block stylesheets %}
+	{{encore_entry_link_tags('reviewIndiv')}}
+{% endblock %}
 
 {% block body %}
-<div class="slide bg-secondary" style="background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/uploads/{{review.media.cover}}'); background-size: cover; background-position: center;" id="reviewIndiv">
-    <div class="wrapper max-sm:w-[90%]">
-            <a href="javascript:window.history.back()" class=" transition-all hover:bg-purple-500 hover:text-white py-2 px-4 rounded-full bg-white w-fit mb-10 text-lg urbanist font-semibold color-tertiary flex gap-2">
-                <span class="material-symbols-outlined">
-                    chevron_left
-                </span>
-                Retour
-            </a>
-            <div class="flex  flex-wrap gap-5">
-                <div class="reviewIndiv_card max-md:w-full lg:w-[62%] p-5 flex  items-center gap-10">
-                    <div class="reviewIndiv_card_content flex flex-col gap-5 w-full">
-                        <div class="reviewIndiv_card_content_heading flex flex-col gap-5">
-                            <div class="reviewIndiv_card_content_heading_info2 flex flex-wrap justify-between">
-                                <a href="{{path('medias_show', {"slug":review.media.slug})}}"class="flex gap-1 items-center text-md  text-font-semibold  urbanist color-tertiary font-semibold transition hover:text-black"><span class="underline">{{review.media.title}}</span><span class="material-symbols-outlined">chevron_right</span></a>
-                                {#Copier le lien#}
-                                <button id="copyLink" class="w-fit text-md items-center bg-tertiary rounded-md color-secondary urbanist font-semibold py-2 px-4 flex gap-2">
-                                    <span class="material-symbols-outlined -rotate-45"> link</span>
-                                    <span class="textCopyLink">Copier le lien</span>
-                                </button>
-                            </div>
-                            <div class="reviewIndiv_card_content_heading_author flex justify-between">
-                                <div class="reviewIndiv_card_content_heading_author_info flex items-center gap-3">
-                                    <img src="/uploads/{{review.author.avatar}}" alt="Image de l'utilisateur {{review.author.username}}"class="w-[50px] h-[50px] rounded-full">
-                                    <a href="#" class="flex flex-col transition-all hover:text-purple-500">
-                                        <p class="text-lg urbanist font-semibold">{{review.author.fullName}}</p>
-                                        <p class="text-md urbanist">@{{review.author.username}}</p>
-                                    </a>
-                                </div>
-                                <div class="reviewIndiv_card_content_heading_author_rating flex flex-col items-center gap-2">
-                                    {% include "partials/rating.html.twig" with {'rating':review.rating} %}
-                                        {% set diff = (date()|date('U') - review.createdAt|date('U')) %}
-                                        {% if diff < 60 %}
-                                            <p class="date text-md text-gray-500">Il y a {{ diff }} secondes</p>
-                                        {% elseif diff < 3600 %}
-                                            <p class="date text-md text-gray-500">Il y a {{ (diff / 60)|round }} minutes</p>
-                                        {% elseif diff < 86400 %}
-                                            <p class="date text-md text-gray-500">Il y a {{ (diff / 3600)|round }} heures</p>
-                                        {% elseif diff < 604800 %}
-                                            <p class="date text-md text-gray-500">Il y a {{ (diff / 86400)|round }} jours</p>
-                                        {% elseif diff < 2592000 %}
-                                            <p class="date text-md text-gray-500">Il y a {{ (diff / 604800)|round }} semaines</p>
-                                        {% elseif diff < 31536000 %}
-                                            <p class="date text-md text-gray-500">Il y a {{ (diff / 2592000)|round }} mois</p>
-                                        {% else %}
-                                                <p class="date text-md text-gray-500">Le {{ review.createdAt|date('d/m/Y') }}</p>
-                                        {% endif %}
+	<div class="slide bg-secondary" style="background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/uploads/{{review.media.cover}}'); background-size: cover; background-position: center;" id="reviewIndiv">
+		<div class="wrapper max-sm:w-[90%]">
+            {#Bouton retour#}
+			<a href="javascript:window.history.back()" class=" transition-all hover:bg-purple-500 hover:text-white py-2 px-4 rounded-full bg-white w-fit mb-10 text-lg urbanist font-semibold color-tertiary flex gap-2">
+				<span class="material-symbols-outlined">
+					chevron_left
+				</span>
+				Retour
+			</a>
+            {#contenu carte gauche et coms à droite#}
+			<div class="flex flex-wrap gap-5">
+				<div class="reviewIndiv_card h-fit max-md:w-full lg:w-[62%] p-5 flex  items-center gap-10">
+					<div class="reviewIndiv_card_content flex flex-col gap-5 w-full">
+                        {#review card#}
+						<div class="reviewIndiv_card_content_heading flex flex-col gap-5">
+                            {#heading#}
+							<div class="reviewIndiv_card_content_heading_info2 flex flex-wrap justify-between">
+								<a href="{{path('medias_show', {"slug":review.media.slug})}}" class="flex gap-1 items-center text-md  text-font-semibold  urbanist color-tertiary font-semibold transition hover:text-black">
+									<span class="underline">{{review.media.title}}</span>
+									<span class="material-symbols-outlined">chevron_right</span>
+								</a>
+								{#Copier le lien#}
+								<button id="copyLink" class="w-fit text-md items-center bg-tertiary rounded-md color-secondary urbanist font-semibold py-2 px-4 flex gap-2">
+									<span class="material-symbols-outlined -rotate-45">
+										link</span>
+									<span class="textCopyLink">Copier le lien</span>
+								</button>
+							</div>
+                            {#author de la review#}
+							<div class="reviewIndiv_card_content_heading_author flex justify-between">
+								<div class="reviewIndiv_card_content_heading_author_info flex items-center gap-3">
+									<img src="/uploads/{{review.author.avatar}}" alt="Image de l'utilisateur {{review.author.username}}" class="w-[50px] h-[50px] rounded-full">
+									<a href="#" class="flex flex-col transition-all hover:text-purple-500">
+										<p class="text-lg urbanist font-semibold">{{review.author.fullName}}</p>
+										<p class="text-md urbanist">@{{review.author.username}}</p>
+									</a>
+								</div>
+                                {#Date et note de la review#}
+								<div class="reviewIndiv_card_content_heading_author_rating flex flex-col items-center gap-2">
+									{% include "partials/rating.html.twig" with {'rating':review.rating} %}
+									{% set diff = (date()|date('U') - review.createdAt|date('U')) %}
+									{% if diff < 60 %}
+										<p class="date text-md text-gray-500">Il y a
+											{{ diff }}
+											secondes</p>
+									{% elseif diff < 3600 %}
+										<p class="date text-md text-gray-500">Il y a
+											{{ (diff / 60)|round }}
+											minutes</p>
+									{% elseif diff < 86400 %}
+										<p class="date text-md text-gray-500">Il y a
+											{{ (diff / 3600)|round }}
+											heures</p>
+									{% elseif diff < 604800 %}
+										<p class="date text-md text-gray-500">Il y a
+											{{ (diff / 86400)|round }}
+											jours</p>
+									{% elseif diff < 2592000 %}
+										<p class="date text-md text-gray-500">Il y a
+											{{ (diff / 604800)|round }}
+											semaines</p>
+									{% elseif diff < 31536000 %}
+										<p class="date text-md text-gray-500">Il y a
+											{{ (diff / 2592000)|round }}
+											mois</p>
+									{% else %}
+										<p class="date text-md text-gray-500">Le
+											{{ review.createdAt|date('d/m/Y') }}</p>
+									{% endif %}
+								</div>
 
-
-                                </div>
-                            
+							</div>
+						</div>
+                        {#la review#}
+						<div class="reviewIndiv_card_content_body w-full">
+							<p class="text-lg urbanist">
+								{{review.content|raw|nl2br}}
+							</p>
+						</div>
+						<hr class="border-purple-500 border-1 rounded-full my-2">
+                        {#Likes et commentaires#}
+						<div class="reviewIndiv_stats flex gap-5">
+							<div class="flex gap-2 text-xl urbanist color-tertiary">
+                                <i data-tippy-content="Liker/Disliker cette review" class="fa-heart heart-icon cursor-pointer {{ app.user ? (review.isLikedByUser(app.user) ? 'fa-solid' : 'fa-regular') : 'fa-regular' }}" data-review-id="{{ review.id }}"></i>
+                                <span data-tippy-content="Voir qui a liké " class="likes-count cursor pointer">{{ review.likes|length }}</span>
+						    </div>
+                            <div class="flex gap-2 text-xl urbanist color-tertiary">
+                                <span class="material-symbols-outlined">
+                                    chat
+                                </span>
+                                {{review.comments|length}}
                             </div>
-                        </div>
+					    </div>
+				</div>
+
+			</div>
+            {#commentaires#}
+			<div class="relative max-m:w-full lg:w-4/12 h-[600px] bg-white overflow-y-scroll flex over flex-col gap-2 p-5 rounded-[20px]" id="sectionComments">
+				<h3 class="display-md object uppercase">Commentaires ({{review.comments|length}})</h3>
+
+                {% for comment in review.comments %}
+                    {% if comment.parent is null %}
+                        <div class="w-full h-full">
+                            <div class="py-5 border-b border-tertiary-light">
+                               <div class="commentsCard flex flex-col gap-2">
+                                {#dessus du commentaire#}
+                                <div class="flex flex-col gap-3">
+                                        <div class="commentsCard_heading flex justify-between">
+                                            <div class="flex gap-2">
+                                                <img src="/uploads/{{comment.author.avatar}}" alt="Image de l'utilisateur {{review.author.username}}" class="border-2 border-purple-500 w-[50px] h-[50px] rounded-full">
+                                                <a href="#" class="flex flex-col transition-all hover:text-purple-500">
+                                                    <p class="text-md urbanist leading-none font-semibold">{{comment.author.fullName}}</p>
+                                                    <p class="text-sm urbanist leading-none">@{{comment.author.username}}</p>
+                                                </a>
+                                            </div>
+                                            {% if comment.id == topComment.id %}
+                                                <span class="flex gap-2 bg-[rgba(255,219,30,0.15)] text-[#FFDB1E] items-center text-sm  h-fit urbanist font-semibold px-2 py-1 rounded-full"><i class="fa-solid fa-star"></i> Top Commentaire</span>
+                                            {% endif %}
+                                            
+                                        </div>
+                                        <div class="commentsCard_content">
+                                            <p class="text-lg urbanist">{{comment.content}}</p>
+                                        </div>
+                                </div>
+                                <div class="commentsCard_actions flex gap-3">
+                                    <div class="commentsCard_actions likes pr-3 border-purple-500 border-r-2 flex gap-2 items-center text-lg font color-tertiary">
+                                        <i data-tippy-content="Liker/disliker le commentaire" class="fa-thumbs-up thumb-icon cursor-pointer {{ app.user ? (comment.isLikedByUser(app.user) ? 'fa-solid' : 'fa-regular') : 'fa-regular' }}" data-comment-id="{{ comment.id }}"></i>
+                                             <span class="comments likes-count" data-comment-id="{{ comment.id }}">{{ comment.likes|length }}</span>
+                                    </div>
+                                    <div class="commentsCard_actions comments text-gray-500 pr-3 border-purple-500 border-r-2 flex gap-2 items-center text-lg font">
+                                        <i class="fa-regular fa-comment"></i>
+                                        {% if comment.comments is not empty %}
+                                            <button class="text-md urbanist text-tertiary-dark toggle-replies" data-comment-id="{{ comment.id }}">
+                                                {% if comment.comments|length == 1 %}
+                                                        Voir la réponse
+                                                    {% else %}
+                                                        Voir {{ comment.comments|length }} réponses
+                                                    {% endif %}
+                                            </button>
                     
-                        <div class="reviewIndiv_card_content_body w-full">
-                            <p class="text-lg urbanist">
-                                {{review.content|raw|nl2br}}
-                            </p>
-                        </div>
-                        <hr class="border-purple-500 border-1 rounded-full my-2">
-                        <div class="reviewIndiv_stats flex gap-5">
-                            <div class="flex gap-2 text-xl urbanist color-tertiary">
-                                <span class="material-symbols-outlined">
-                                favorite
-                                </span> 156
-                            </div>
-                            <div class="flex gap-2 text-xl urbanist color-tertiary">
-                                <span class="material-symbols-outlined">
-                                chat
-                                </span> 156
-                            
-                            
-                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="commentsCard_actions answer   transition-all pr-3flex gap-2 items-center text-lg font">
+                                        <button class="color-tertiary text-md urbanist hover:underline-offset-4 reply-button" data-comment-id="{{ comment.id }}">
+                                            Répondre
+                                        </button>
+                                    </div>
+                                </div>
+                                    {% if comment.comments is not empty %}
+                                            <div class="replies hidden fadeIn" id="replies-{{ comment.id }}">
+                                                {% for reply in comment.comments %}
+                                                    <div class="list-group-item md:w-11/12 bg-purple-50 border-l-2 border-purple-500 flex flex-col gap-2 w-full bg-background-hover ml-auto p-3">
+                                                    <div class="flex gap-2 items-center">
+                                                        <img src="/uploads/{{reply.author.avatar}}" alt="Image de l'utilisateur {{reply.author.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
+                                                        <a href="#" class="hover:text-purple-500 text-md urbanist">{{reply.author.fullName}}</a>
+                                                    </div>
+                                                        
 
+                                                        <p class="text-md urbanist ">{{reply.content}}</p>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                               
+                               </div>
+                                <div class="w-full mt-2">
+                                    <div class="w-full">
+                                        <div class="reply-form-container hidden" id="reply-form-{{ comment.id }}">
+                                        
+                                            <form action="{{ path('comment_reply', {'id': comment.id}) }}" method="post">
+                                                {{ form_start(replyForms[comment.id]) }}
+                                                <div class="flex items-center gap-2">
+                                                       <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
+                                                    {{ form_widget(replyForms[comment.id].content) }}
+                                                    {{ form_errors(replyForms[comment.id].content) }}
+                                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                                    <button class="group w-[50px] h-[50px] bg-highlight rounded-md">
+                                                        <i class="fa-solid fa-location-arrow text-background rotate-45 group-hover:rotate-0 transition duration-300 mr-1"></i>
+                                                    </button>
+                                                </div>
+                                                {{ form_end(replyForms[comment.id]) }}
+                                            </form>
+                                        </div>
+                                    </div>
+                              
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
+                {% endfor %}
 
+                <div class="form_comments flex gap-5">
+                        <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[40px] h-[40px] rounded-full">
+                        <div class="w-full flex gap-5">
+                        {{form_start(myForm) }}
+                                {{ form_widget(myForm.content) }}
+                                {{ form_errors(myForm.content) }}
+                                <button class="group text-lg color-secondary items-center urbanist p-2 bg-tertiary flex gap-2 bg-highlight rounded-md">
+                                    <i class="fa-solid fa-location-arrow text-background rotate-45 group-hover:rotate-0 transition duration-300 mr-1"></i>
+                                </button>
+                         
+                        {{ form_end(myForm) }}
+                        
+                        </div>
+                
                 </div>
-                <div class="w-4/12 h-[600px] rounded-lg bg-white"></div>
-            
-            </div>
+
+			</div>
+
+		</div>
 
 
-        
+	</div>
+</div>
+
+{# Modal pour afficher les utilisateurs qui ont aimé #}
+<!-- Modal pour afficher les utilisateurs qui ont aimé -->
+<div id="likesModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
+    <div class="bg-white rounded-lg shadow-lg w-96 p-5">
+        <div class="flex justify-between items-center">
+            <h2 class="text-lg font-bold">Utilisateurs qui ont aimé</h2>
+            <button onclick="document.getElementById('likesModal').classList.add('hidden')" class="text-gray-500 hover:text-gray-700">
+                &times;
+            </button>
+        </div>
+        <ul class="mt-4">
+            {% for like in likedByUsers %}
+                <li class="flex items-center mb-2">
+                    <img src="/uploads/{{ like.author.avatar }}" alt="Image de l'utilisateur {{ like.author.username }}" class="w-8 h-8 rounded-full mr-2">
+                    <a href="#" class="text-blue-600 hover:underline">{{ like.author.username }}</a>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 
-  {% include "partials/_sliderReviews.html.twig" %}
 
-  
-{% endblock %}
-{% block javascripts %}
+{% include "partials/_sliderReviews.html.twig" %}{% endblock %}{% block javascripts %}
 <script>
-const copyLinkButton = document.getElementById("copyLink")
- copyLinkButton.addEventListener('click', function(event) {
+	const copyLinkButton = document.getElementById("copyLink")
+        copyLinkButton.addEventListener('click', function (event) {
             event.preventDefault();
-            navigator.clipboard.writeText(window.location.href).then(function() {
+            navigator.clipboard.writeText(window.location.href).then(function () {
                 copyLinkButton.innerHTML = '<span class="material-symbols-outlined -rotate-45">link</span><span class="textCopyLink">Lien copié</span>';
-                setTimeout(function() {
+                setTimeout(function () {
                     copyLinkButton.innerHTML = '<span class="material-symbols-outlined -rotate-45">link</span><span class="textCopyLink">Copier le lien</span>';
                 }, 3000);
-            }, function(err) {
+            }, function (err) {
                 console.error('Erreur lors de la copie du lien : ', err);
             });
+    });
+
+    document.querySelector('.likes-count').addEventListener('click', function() {
+    document.getElementById('likesModal').classList.remove('hidden');
+});
+
+
+document.querySelectorAll('.heart-icon').forEach(icon => {
+    icon.addEventListener('click', function() {
+        const reviewId = this.dataset.reviewId; // Récupérer l'ID de la revue
+
+        // Vérifier si l'utilisateur est connecté
+        if (!{{ app.user ? 'true' : 'false' }}) {
+            // Rediriger vers la page de connexion
+            window.location.href = '{{ path('account_login') }}'; // Remplacez 'app_login' par le nom correct de votre route de connexion
+            return; // Arrêter l'exécution ici
+        }
+
+        const isLiked = this.classList.contains('fa-solid'); // Vérifier si déjà liké
+
+        // Basculer la classe liked / not-liked
+        this.classList.toggle('fa-solid', !isLiked);
+        this.classList.toggle('fa-regular', isLiked);
+
+        fetch(`/reviews/${reviewId}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Mettre à jour le nombre de likes affiché
+            document.querySelector('.likes-count').textContent = data.likesCount;
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+document.querySelectorAll('.thumb-icon').forEach(icon => {
+    icon.addEventListener('click', function() {
+        const commentId = this.dataset.commentId; // Récupérer l'ID du commentaire
+
+        // Vérifier si l'utilisateur est connecté
+        if (!{{ app.user ? 'true' : 'false' }}) {
+            // Rediriger vers la page de connexion
+            window.location.href = '{{ path('account_login') }}'; // Remplacez 'app_login' par le nom correct de votre route de connexion
+            return; // Arrêter l'exécution ici
+        }
+
+        const isLiked = this.classList.contains('fa-solid'); // Vérifier si déjà liké
+
+        // Basculer la classe liked / not-liked
+        this.classList.toggle('fa-solid', !isLiked);
+        this.classList.toggle('fa-regular', isLiked);
+
+        fetch(`/comments/${commentId}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Mettre à jour le nombre de likes affiché
+            document.querySelector(`.comments.likes-count[data-comment-id="${commentId}"]`).textContent = data.likesCount;
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+
+
+    const replyButtons = document.querySelectorAll('.reply-button');
+
+    replyButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const commentId = this.getAttribute('data-comment-id');
+            const replyFormContainer = document.getElementById('reply-form-' + commentId);
+            
+            if (replyFormContainer.classList.contains('hidden')) {
+                replyFormContainer.classList.remove('hidden');
+            } else {
+                replyFormContainer.classList.add('hidden');
+            }
         });
+    });
 
-</script>
-{% endblock %}
 
+
+
+    document.querySelectorAll('.toggle-replies').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var commentId = this.getAttribute('data-comment-id');
+            var replies = document.getElementById('replies-' + commentId);
+            var repliesCount = replies.querySelectorAll('.list-group-item').length;
+
+            if (replies.classList.contains('hidden')) {
+                replies.classList.remove('hidden');
+                this.textContent = repliesCount === 1 ? 'Cacher la réponse' : 'Cacher les réponses';
+            } else {
+                replies.classList.add('hidden');
+                this.textContent = repliesCount === 1 ? 'Voir la réponse' : 'Voir ' + repliesCount + ' réponses';
+            }
+        });
+    });
+    
+
+       
+
+
+
+</script>{% endblock %}
