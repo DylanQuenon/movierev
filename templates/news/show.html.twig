@@ -41,19 +41,19 @@
                         {#Statistiques de l'article#}
                         <div class="card_news_content_info2_stats flex gap-5">
                            {#Nombre de vues dans l'article#}
-                           <p class="text-xl object color-tertiary uppercase flex gap-2">
+                           <p class="text-xl object color-tertiary uppercase flex gap-2"data-tippy-content="Nombres de vues">
                               <span class="material-symbols-outlined">
                                  visibility
                               </span>
                               {{news.viewsCount}}
                            </p>
                            {#Nombre de commentaires dans l'article#}
-                           <p class="text-xl object color-tertiary uppercase flex gap-2">
+                           <p class="text-xl object color-tertiary uppercase flex gap-2"data-tippy-content="Nombre de commentaires">
                               <span class="material-symbols-outlined">chat</span>
                               {{news.comments|length}}
                            </p>
                            {#Nombre de partages dans l'article#}
-                           <p class="text-xl object color-tertiary uppercase flex gap-2">
+                           <p class="text-xl object color-tertiary uppercase flex gap-2"data-tippy-content="Nombre de partage">
                               <span class="material-symbols-outlined">share</span>
                               <span>{{news.shareCount}}</span>
                            </p>
@@ -124,21 +124,28 @@
                              {% include "partials/_comment.html.twig" with {'comment':comment} %}
                                 <div class="w-full mt-2">
                                     <div class="w-full">
-                                        <div class="reply-form-container hidden" id="reply-form-{{ comment.id }}">
-                                            <form action="{{ path('comment_reply', {'id': comment.id}) }}" method="post">
-                                                {{ form_start(replyForms[comment.id]) }}
-                                                <div class="flex items-center gap-2">
-                                                       <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
-                                                    {{ form_widget(replyForms[comment.id].content) }}
-                                                    {{ form_errors(replyForms[comment.id].content) }}
-                                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                                                    <button class="group w-[50px] h-[50px] bg-highlight rounded-md">
-                                                        <i class="fa-solid fa-location-arrow text-background rotate-45 group-hover:rotate-0 transition duration-300 mr-1"></i>
-                                                    </button>
-                                                </div>
-                                                {{ form_end(replyForms[comment.id]) }}
-                                            </form>
-                                        </div>
+
+                                       {% if app.user %}
+                                          <div class="reply-form-container hidden" id="reply-form-{{ comment.id }}">
+                                             <form action="{{ path('comment_reply', {'id': comment.id}) }}" method="post">
+                                                   {{ form_start(replyForms[comment.id]) }}
+                                                   <div class="flex items-center gap-2">
+                                                         <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
+                                                      {{ form_widget(replyForms[comment.id].content) }}
+                                                      {{ form_errors(replyForms[comment.id].content) }}
+                                                      <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                                      <button class="group w-[50px] h-[50px] bg-highlight rounded-md">
+                                                         <i class="fa-solid fa-location-arrow text-background rotate-45 group-hover:rotate-0 transition duration-300 mr-1"></i>
+                                                      </button>
+                                                   </div>
+                                                   {{ form_end(replyForms[comment.id]) }}
+                                             </form>
+                                          </div>
+                                          {% else %}
+                                             <p class="text-lg urbanist font-semibold">Vous devez être connecté pour pouvoir répondre</p>
+                                       
+                                       {% endif %}
+                                       
                                     </div>
                               
                                 </div>
@@ -146,31 +153,44 @@
                         </div>
                     {% endif %}
                 {% endfor %}
-                 <div class="form_comments flex gap-5">
-                        <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[40px] h-[40px] rounded-full">
-                        <div class="w-full flex gap-5">
-                        {{form_start(myForm) }}
-                             <div class="form-group text-lg urbanist my-4">
-                                 <label for="rating">Note</label>
-                                 <div class="ratingNews color-tertiary" id="rating">
-                                    {% for i in 1..5 %}
-                                          <i class="far fa-star" data-value="{{ i }}"></i>
-                                    {% endfor %}
-                                 </div>
-                                 {{ form_widget(myForm.rating, {'attr': {'required': 'required'}}) }}
-                                 {{ form_errors(myForm.rating) }}
-                              </div>
-                                                {{ form_widget(myForm.content) }}
-                                {{ form_errors(myForm.content) }}
-                                <button class="group text-lg color-secondary items-center urbanist p-2 bg-tertiary flex gap-2 bg-highlight rounded-md">
-                                    <i class="fa-solid fa-location-arrow text-background rotate-45 group-hover:rotate-0 transition duration-300 mr-1"></i>
-                                </button>
 
-                        {{ form_end(myForm) }}
-                        
+                {% if app.user %}
+                  <div class="form_comments flex flex-col gap-2">
+                        <div class="flex gap-2 items-center">
+                           <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[40px] h-[40px] rounded-full">
+                           	<a href="#" class="flex flex-col transition-all hover:text-purple-500">
+										<p class="text-lg urbanist font-semibold">{{app.user.fullName}}</p>
+										<p class="text-md urbanist">@{{app.user.username}}</p>
+									</a>
                         </div>
+                           <div class="w-full flex gap-5">
+                           {{form_start(myForm) }}
+                              <div class="form-group text-lg urbanist my-4">
+                                    <label for="rating">Note</label>
+                                    <div class="ratingNews color-tertiary" id="rating">
+                                       {% for i in 1..5 %}
+                                             <i class="far fa-star" data-value="{{ i }}"></i>
+                                       {% endfor %}
+                                    </div>
+                                    {{ form_widget(myForm.rating, {'attr': {'required': 'required'}}) }}
+                                    {{ form_errors(myForm.rating) }}
+                                 </div>
+                                                   {{ form_widget(myForm.content) }}
+                                 {{ form_errors(myForm.content) }}
+                                 <button class="group text-lg flex gap-2 color-secondary items-center urbanist p-2 bg-tertiary flex gap-2 bg-highlight rounded-md">
+                                      Publier <i class="fa-solid fa-location-arrow text-background rotate-45 group-hover:rotate-0 transition duration-300 mr-1"></i> 
+                                 </button>
+
+                           {{ form_end(myForm) }}
+                           
+                           </div>
+                  
+                  </div>
+                  {% else %}
+                     <p class="text-lg text-center urbanist">Vous devez être connecté pour pouvoir commenter</p>
+
+                {% endif %}
                 
-                </div>
             </div>
             {#A lire aussi#}
             <div class="lg:w-4/12 toread flex flex-col gap-5">
@@ -180,31 +200,18 @@
                </div>
                <div class="flex flex-col gap-5">
                   {% for new in latestNews %}
-                  <a href="{{path('news_show', {'slug': new.slug})}}" class="toread_card flex justify-between gap-5">
+                  <a href="{{path('news_show', {'slug': new.slug})}}" class="toread_card flex justify-between gap-5 items-center">
                      <div class="toread_card_img w-2/5 ">
                         <img src="/uploads/{{new.cover}}" alt="Couverture de l'actualité {{new.title}}" class="w-[180px] h-[180px] object-cover rounded-3xl">
                      </div>
-                     <div class="toread_card_info w-3/5 flex flex-col justify-between">
-                        <div class="flex flex-col gap-2">
+                     <div class="toread_card_info w-3/5 flex flex-col gap-3">
+                        <div class="flex flex-col gap-3">
                            <div class="toread_card_info_stats flex justify-between">
-                              <div class="flex">
-                                 <svg class="w-6 h-6 text-purple-500 fill-current" viewbox="0 0 24 24">
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                 </svg>
-                                 <svg class="w-6 h-6 text-purple-500 fill-current" viewbox="0 0 24 24">
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                 </svg>
-                                 <svg class="w-6 h-6 text-purple-500 fill-current" viewbox="0 0 24 24">
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                 </svg>
-                                 <svg class="w-6 h-6 text-purple-500 fill-current" viewbox="0 0 24 24">
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                 </svg>
-                                 <svg class="w-6 h-6 text-gray-300 fill-current" viewbox="0 0 24 24">
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                 </svg>
-                              </div>
-                           <p class="object uppercase text-xl color-primary flex gap-2"><span class="material-symbols-outlined">visibility</span>{{new.viewsCount}}</p>
+                              {% if new.comments is not empty %}
+                                 {% include "partials/rating.html.twig" with {'rating':new.getAvgRatings()} %}
+                              {% endif %}
+                              
+                           <p class="object uppercase text-xl color-primary flex  items-center color-tertiary gap-2"><span class="material-symbols-outlined">visibility</span>{{new.viewsCount}}</p>
                            </div>
                            <div class="toread_card_info_status">
 
@@ -222,7 +229,8 @@
                            </div>
                         </div>
                         <div class="toread_card_info_title">
-                           <p class="text-xl urbanist color-primary ">{{new.title}}</p>
+                <p class="text-xl urbanist color-primary">{{ new.title}}</p>
+
                         </div>
                         <div class="toread_card_info_author flex gap-2">
                            <div class="toread_card_info_author_img">
@@ -277,6 +285,29 @@
 {% endblock %}
 {% block javascripts %}
 <script>
+
+       document.addEventListener('DOMContentLoaded', () => {
+        const stars = document.querySelectorAll('.ratingNews i');
+        const ratingInput = document.querySelector('.rating-input');
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const ratingValue = star.getAttribute('data-value');
+                ratingInput.value = ratingValue;
+
+                // Met à jour l'affichage des étoiles
+                stars.forEach(s => {
+                    if (s.getAttribute('data-value') <= ratingValue) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+        });
+    });
     document.addEventListener('DOMContentLoaded', function() {
         const copyLinkButton = document.getElementById('copyLink');
         const textCopyLink = document.querySelector('#copyLink span.textCopyLink');
@@ -372,28 +403,7 @@
         .catch(error => console.error('Error:', error));
     });
 
-        document.addEventListener('DOMContentLoaded', () => {
-        const stars = document.querySelectorAll('.ratingNews i');
-        const ratingInput = document.querySelector('.rating-input');
-
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                const ratingValue = star.getAttribute('data-value');
-                ratingInput.value = ratingValue;
-
-                // Met à jour l'affichage des étoiles
-                stars.forEach(s => {
-                    if (s.getAttribute('data-value') <= ratingValue) {
-                        s.classList.remove('far');
-                        s.classList.add('fas');
-                    } else {
-                        s.classList.remove('fas');
-                        s.classList.add('far');
-                    }
-                });
-            });
-        });
-    });
+    
 });
 
 

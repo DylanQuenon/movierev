@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Media;
 use App\Entity\Review;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Review>
@@ -51,4 +52,23 @@ class ReviewRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findMostLikedReviews(Media $media)
+    {
+        // Récupérer les reviews associées au média
+        $reviews = $this->createQueryBuilder('r')
+            ->where('r.Media = :media')
+            ->setParameter('media', $media)
+            ->getQuery()
+            ->getResult();
+    
+        // Trier les reviews par le nombre de likes en utilisant la méthode getLikes()
+        usort($reviews, function ($a, $b) {
+            return $b->getLikes() - $a->getLikes();
+        });
+    
+        // Retourner les 3 reviews avec le plus de likes
+        return array_slice($reviews, 0, 3);
+    }
+    
 }

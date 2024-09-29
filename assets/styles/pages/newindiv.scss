@@ -146,3 +146,33 @@
         }
     }
 }
+
+.reply-form-container{
+    margin: 20px 0;
+    form{
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-family: $font-family-urbanist;
+        textarea{
+            min-height: 50px;
+        }
+    }
+}
+.form_comments{
+   padding: 20px;
+   background-color: white;
+   box-shadow: 0 4px 25px rgba(161, 81, 222, 0.3);
+   border-radius: $radius-3xl;
+    form{
+        display: flex;
+        flex-direction: column;
+        font-family: $font-family-urbanist;
+        width: 100%;
+        button{
+            width: fit-content;
+            height: fit-content;
+            margin-top: 20px;
+        }
+    }
+}

@@ -11,7 +11,7 @@
         {#Cover du film en bannière#}
         <div class="banneerCover relative"><img src="/uploads/{{media.cover}}" alt="Image du film {{media.title}}">   <div class="shadowWhite"></div></div>
     
-        <div class="wrapper py-24">
+        <div class="wrapper py-24 flex flex-col gap-24">
           
             <div class="media_presentation flex flex-wrap gap-12  w-full">
                 {#Poster du film#}
@@ -80,6 +80,31 @@
                     </div>
                 
                 </div>
+            </div>
+            <div class="topreview flex flex-col gap-5">
+                <h3 class="display-md object uppercase">Son top 3 <span class="color-tertiary">review</span></h3>
+                    <div class="grid sm:grid-cols-1 lg:grid-cols-3 mt-24 gap-5 w-full">
+                        {% for review in topReview %}
+                            <div class="review relative">
+                            <span class="absolute top-1/2 left-5 podium object text-9xl color-tertiary">
+                                {{ loop.index }}
+                            </span>
+                                {% include "partials/_card_reviews.html.twig" with {'review':review} %}
+                                <span class="z-10 absolute top-0 right-0 bg-[#a151deb3] border-2 border-[#a051de] flex justify-center items-center w-[50px] h-[50px] rounded-full text-lg font-semibold color-secondary urbanist flex-col my-2"><i class="pt-2 fa-solid fa-heart text-red-500"></i> <span class="mb-2">{{review.likes|length}}</span></span>
+                            </div>
+                            
+                        {% endfor %}
+                    </div>
+            </div>
+
+            <div class="toDiscover flex gap-5 flex-col">
+                <h3 class="object display-md uppercase">Découvrez <span class="color-tertiary">Aussi</span></h3>
+                 <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 w-full">
+                    {% for movie in latestMovies %}
+                        {% include "partials/_card_media.html.twig" with {'media':movie} %}
+                        
+                    {% endfor %}
+                 </div>
             </div>
 
 

@@ -17,7 +17,7 @@
 {%- endblock form_row -%}
 
 {%- block widget_attributes -%}
-    {%- set widget_class = widget_class|default('mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50') -%}
+    {%- set widget_class = widget_class|default('mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50') -%}
     {{- parent() -}}
 {%- endblock widget_attributes -%}
 
@@ -37,7 +37,7 @@
 {%- endblock form_errors -%}
 
 {%- block checkbox_widget -%}
-    {%- set widget_class = widget_class|default('mr-2 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50') -%}
+    {%- set widget_class = widget_class|default('mr-2 rounded border-gray-300 text-purple-600 shadow-sm focus:border-purple-300 focus:ring focus:ring-offset-0 focus:ring-purple-200 focus:ring-opacity-50') -%}
     {{- parent() -}}
 {%- endblock checkbox_widget -%}
 
@@ -47,7 +47,7 @@
 {%- endblock checkbox_label -%}
 
 {%- block textarea_widget -%}
-    {%- set attr = attr|merge({class: (attr.class|default('') ~ 'rounded border-gray-300 w-full min-h-[250px] resize-none shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50')|trim}) -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ 'rounded border-gray-300 w-full min-h-[250px] resize-none shadow-sm focus:border-purple-300 focus:ring focus:ring-offset-0 focus:ring-purple-200 focus:ring-opacity-50')|trim}) -%}
     {{- parent() -}}
 {%- endblock textarea_widget -%}
 

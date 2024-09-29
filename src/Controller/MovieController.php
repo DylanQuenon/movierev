@@ -6,6 +6,7 @@ use App\Entity\Media;
 use App\Service\PaginationService;
 use App\Repository\GenreRepository;
 use App\Repository\MediaRepository;
+use App\Repository\ReviewRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -109,9 +110,23 @@ class MovieController extends AbstractController
      * @return void
      */
     #[Route('/medias/{slug}', name: 'medias_show')]
-    public function show(Media $media){
+    public function show(Media $media, MediaRepository $repo, ReviewRepository $reviewRepository){
+        $mostLikedReviews = $reviewRepository->findMostLikedReviews($media);
+
+                // Récupère les trois dernières actualités, excluant celle affichée
+                $latestMovies = $repo->createQueryBuilder('n')
+                ->where('n.id != :currentNewsId')
+                ->setParameter('currentNewsId', $media->getId())
+                ->orderBy('n.id', 'DESC')
+                ->setMaxResults(3)
+                ->getQuery()
+                ->getResult();
+        
+    
         return $this->render('media/show.html.twig', [
             'media' => $media,
+            'topReview' => $mostLikedReviews,
+            'latestMovies' => $latestMovies,
         ]);
 
     } 
