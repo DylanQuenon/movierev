@@ -110,4 +110,22 @@ class CommentController extends AbstractController
             return $this->redirectToRoute('news_show', ['slug' => $news->getSlug()]);
         }
     }
+
+    #[Route("/comment/{id}/delete", name: "comment_delete")]
+    #[IsGranted(
+        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN") or is_granted("ROLE_MODERATEUR")'),
+        subject: new Expression('args["comment"].getAuthor()'),
+        message: "Le commentaire ne vous appartient pas, vous ne pouvez pas l'effacer"
+    )]
+    public function deleteComment(Comment $comment, EntityManagerInterface $manager): Response
+    {
+        // Vérifier si l'utilisateur connecté est l'auteur du commentaire
+        $news = $comment->getNews();
+        $manager->remove($comment);
+        $manager->flush();
+    
+        $this->addFlash('success', "Le commentaire a été effacé avec succès");
+
+        return $this->redirectToRoute('news_show', ['slug' => $news->getSlug()]);
+    }
 }

@@ -46,11 +46,17 @@
 
             {% endif %}
         </div>
-        <div class="commentsCard_actions answer   transition-all pr-3flex gap-2 items-center text-lg font">
+        <div class="commentsCard_actions answer   transition-all flex gap-2 items-center text-lg font">
             <button class="color-tertiary text-md urbanist hover:underline-offset-4 reply-button" data-comment-id="{{ comment.id }}">
                 Répondre
             </button>
         </div>
+        {% if app.user and (app.user == comment.author or is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATEUR')) %}
+            <div class="commentsCard_actions answer transition-all border-purple-500 border-l-2  pl-3 flex gap-2 items-center text-lg font">
+            <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('comment_delete', { 'id': comment.id }) }}', 'Supprimer', 'Annuler')"  class="fa-solid fa-trash color-secondary rounded-md py-2 px-2 bg-tertiary"></button>
+            </div>
+        
+        {% endif %}
     </div>
         {% if comment.comments is not empty %}
                 <div class="replies hidden fadeIn" id="replies-{{ comment.id }}">
@@ -69,3 +75,13 @@
             {% endif %}
     
     </div>
+
+    	{% include '/partials/_delete_modal.html.twig' with {
+		modal_id: 'deleteModal',
+		form_id: 'deleteForm',
+		title: 'Confirmation de suppression',
+		message: 'Êtes-vous sûr de vouloir supprimer ce commentaire ? Cette action est irréversible.',
+		action_url: '#',  
+		confirm_text: 'Supprimer',
+		cancel_text: 'Annuler'
+	} %}
