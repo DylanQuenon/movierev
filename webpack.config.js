@@ -33,6 +33,7 @@ Encore
     .addEntry('reviewIndiv', './assets/styles/pages/reviewIndiv.scss')
     .addEntry('contactStyle', './assets/styles/pages/contact.scss')
     .addEntry('aboutStyle', './assets/styles/pages/about.scss')
+    .addEntry('addMovieStyle', './assets/styles/pages/addMovies.scss')
     .addEntry('newIndivStyle', './assets/styles/pages/newindiv.scss')
     .addEntry('mediaIndiv', './assets/styles/pages/mediaindiv.scss')
     .addEntry('newsStyle', './assets/styles/pages/newsStyle.scss')

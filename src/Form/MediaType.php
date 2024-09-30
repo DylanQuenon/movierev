@@ -57,14 +57,14 @@ class MediaType extends ApplicationType
            
             ->add('producer',TextType::class,$this->getConfiguration('Réalisateur','Qui est le réalisateur'))
             ->add('trailer',UrlType::class,$this->getConfiguration('Url du trailer','URL YOUTUBE'))
+            ->add('poster', FileType::class, $this->getConfiguration("Poster du film", "EX : PosterTitanic.jpg"))
+            ->add('cover', FileType::class, $this->getConfiguration("Couverture du film", "EX : Titanic_qui_coule.png"))
             ->add('castings', CollectionType::class, [
                 'entry_type' => CastingType::class,
                 'allow_add' => true, // pour le data_prototype
                 'allow_delete' => true,
                 
             ])
-            ->add('poster', FileType::class, $this->getConfiguration("Poster du film", "EX : PosterTitanic.jpg"))
-            ->add('cover', FileType::class, $this->getConfiguration("Couverture du film", "EX : Titanic_qui_coule.png"))
         ;
     }
 

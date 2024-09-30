@@ -2,11 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Actor;
 use App\Entity\Media;
+use App\Form\ActorType;
+use App\Form\MediaType;
 use App\Service\PaginationService;
 use App\Repository\GenreRepository;
 use App\Repository\MediaRepository;
 use App\Repository\ReviewRepository;
+use App\Service\FileUploaderService;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,6 +108,93 @@ class MovieController extends AbstractController
         return new JsonResponse($jsonResults);
     }
 
+    #[Route("/medias/new", name:"medias_new")]
+    public function create(Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploader): Response
+    {
+        $media = new Media();
+        $form = $this->createForm(MediaType::class, $media);     
+        $form->handleRequest($request);
+        $actorForm = $this->createForm(ActorType::class, new Actor());
+
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+    
+            
+            $file = $form['cover']->getData();
+            if($file){
+                $imageName = $fileUploader->upload($file);
+                $media->setCover($imageName);
+            }
+
+            $file2 = $form['poster']->getData();
+            if($file2){
+                $imageName = $fileUploader->upload($file2);
+                $media->setPoster($imageName);
+            }
+
+           
+            foreach($media->getCastings() as $casting)
+            {
+                $casting->setMedia($media);
+                $manager->persist($casting);
+            }
+
+      
+
+            // je persiste mon objet media
+            $manager->persist($media);
+            $manager->flush();
+          
+            
+
+            $this->addFlash(
+                'success', 
+                "Le Media <strong>".$media->getTitle()."</strong> a bien été enregistré"
+            );
+
+            return $this->redirectToRoute('medias',[
+                'slug' => $media->getSlug()
+            ]);
+        }
+
+        return $this->render("media/add.html.twig",[
+            'myForm' => $form->createView(),
+            'actorForm' => $actorForm->createView(),
+        ]);
+    }
+
+    #[Route("/actors/new", name:"actors_new")]
+    public function createActor(Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploader): Response
+    {
+        $actor = new Actor();
+        $form = $this->createForm(ActorType::class, $actor);     
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $file = $form['picture']->getData();
+            if($file){
+                $imageName = $fileUploader->upload($file);
+                $actor->setPicture($imageName);
+            }
+
+       
+
+            // je persiste mon objet actor
+            $manager->persist($actor);
+            $manager->flush();
+          
+            $this->addFlash(
+                'success', 
+                "L'acteur <strong>".$actor->getFullName()."</strong> a bien été enregistré"
+            );
+
+            return $this->redirectToRoute('medias_new');
+        }
+
+    }
+
     /**
      * Affichage individuel
      *
@@ -130,4 +222,6 @@ class MovieController extends AbstractController
         ]);
 
     } 
+
+ 
 }

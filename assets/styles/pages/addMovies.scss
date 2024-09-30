@@ -1,0 +1,60 @@
+@import "../variables/variables.scss";
+.stepper{
+ 
+    li {
+        position: relative !important;
+        z-index: 5 !important;
+        font-family: $font-family-urbanist;
+    }
+        li span{
+            position: relative;
+            z-index: 1;
+            &.bg-tertiary{
+                &::before{
+            
+                    background-color: $color-tertiary !important;
+                  
+                }
+    
+            }  
+    
+            &::before{
+                content: "";
+                position: absolute;
+                width: 3.02rem;
+                height: 2px;
+                background-color: #ddd;
+                top: 50%;
+                right: 104%;
+                @media all and (max-width:640px) {
+                    width: 2.5rem;
+                    
+                }
+            }
+        }
+    
+        li {
+            &:first-child {
+                span {
+                    &::before {
+                        content: none;
+                    }
+                }
+            }
+        }
+    }
+    
+    .prev-step{
+        padding: $spacing-md $spacing-xl;
+        background-color: #D0ABEE !important;
+        font-family: $font-family-urbanist;
+    }
+    .next-step{
+        padding: $spacing-md $spacing-xl;
+        background-color: $color-tertiary;
+        font-family: $font-family-urbanist;
+    }
+
+    form{
+        font-family: $font-family-urbanist;
+    }

@@ -1,0 +1,353 @@
+{# templates/base_form_slider.html.twig #}
+{% extends "base.html.twig" %}
+
+{% block title %}Ajouter un film{% endblock %}
+
+{% block stylesheets %}{{encore_entry_link_tags('addMovieStyle')}}{% endblock %}
+
+{% form_theme myForm 'admin/media/_collection.html.twig' %}
+
+{% block body %}
+    <div class="slide bg-secondary flex" id="baseform">
+        <div class="slider_baseform max-md:mt-3 max-lg:w-full w-1/2 min-h-[100vh] bg-tertiary relative">
+        </div>
+        <div class="w-1/2">
+                
+            <div class="content_block max-md:w-full max-md:rounded-bl-[100px] flex-wrap w-[85%] min-h-[100vh] flex justify-between">
+                <div class="left_baseform  max-lg:w-full w-full flex flex-col gap-5  max-md:p-5 p-24">
+                    <img src="/images/movierevlogo.png" alt="Logo - Movierev" class= "w-[100px] mb-3">
+                    <div class="heading flex flex-col gap-2">
+                        <h2 class="display-sm object uppercase color-tertiary">Ajoutez un film </h2>
+                        <p class="text-md urbanist">Faites nous découvrir un nouveau <span class="font-semibold color-tertiary"> classique !</span> </p>
+                    </div>
+                                    <!-- Barre de progression (Stepper) -->
+                    <ol class=" stepper items-center w-full  flex max-sm:justify-between sm:space-x-12 max-sm:space-y-0 rtl:space-x-reverse">
+                        {% for i in 1..5 %}
+                            <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 rtl:space-x-reverse step-item" data-step="{{ i }}">
+                                <span class="flex items-center justify-center w-8 h-8 border rounded-full shrink-0 step-circle" data-step="{{ i }}">
+                                    {{ i }}
+                                </span>
+                            
+                            </li>
+                        {% endfor %}
+                    </ol>
+                  
+                      <form action="{{ path('medias_new') }}" method="POST" enctype="multipart/form-data" class="space-y-4" id="mediaForm" >
+                        <div id="multistep-form" >
+
+                            <!-- Étape 1 : Informations majeures -->
+                            <div class="step flex flex-col gap-6" id="step-1">
+                                <div class="space-y-6">
+                                      <button id="add-actor-btn" class="bg-tertiary text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300 text-lg urbanist ">Ajouter un acteur</button>
+                                    {{ form_row(myForm.castings) }}
+                                    {{ form_row(myForm.title) }}
+                                    {{ form_row(myForm.type) }}
+
+                                </div>
+                                <button type="button" class="w-fit next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
+                            </div>
+
+                            <!-- Étape 2 : Informations de date -->
+                            <div class="step hidden flex flex-col gap-6" id="step-2">
+                                <div class="space-y-6">
+                                    {{ form_row(myForm.duration) }}
+                                    {{ form_row(myForm.release_date) }}
+                                    {{ form_row(myForm.genres) }}
+                                </div>
+                                <div class="flex justify-between mt-4">
+
+
+                                    <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
+                                    <button type="button" class="next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
+                                </div>
+                            </div>
+
+                            <!-- Étape 3 : Informations de sécurité -->
+                            <div class="step hidden flex flex-col gap-6" id="step-3">
+                                <div class="space-y-6">
+                                    {{ form_row(myForm.trailer) }}
+                                    {{ form_row(myForm.synopsis) }}
+                                     {{ form_row(myForm.producer) }}
+                               
+                                  
+                                </div>
+                                <div class="flex justify-between mt-4">
+
+
+                                    <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
+                                    <button type="button" class="next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
+                                </div>
+                            </div>
+
+                            <!-- Étape 4 : Avatar et confidentialité -->
+                            <div class="step hidden flex flex-col gap-6" id="step-4">
+                                <div class="space-y-6">
+                                    {{ form_row(myForm.poster) }}
+                                    {{ form_row(myForm.cover) }}
+                                  
+                                </div>
+                                <div class="flex justify-between mt-4">
+                                    <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
+                                    <button type="button" class="next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
+                                </div>
+                            </div>
+
+                            <!-- Étape 5 : Récapitulatif -->
+                            <div class="step hidden flex flex-col gap-6" id="step-5">
+                                <h3 class="text-lg font-semibold">Récapitulatif du film à ajouter</h3>
+                                <ul class="list-none space-y-4 text-gray-600">
+                                    <li class="flex justify-between">
+                                        <span class="text-lg font-semibold urbanist color-primary">Titre:</span>
+                                        <span id="recap-title" class="text-lg color-tertiary text-right"></span>
+                                    </li>
+                                    <li class="flex justify-between">
+                                        <span class="text-lg font-semibold urbanist color-primary">Type:</span>
+                                        <span id="recap-type" class="text-lg color-tertiary text-right"></span>
+                                    </li>
+                                    <li class="flex justify-between">
+                                        <span class="text-lg font-semibold urbanist color-primary">Durée:</span>
+                                        <span id="recap-duration" class="text-lg color-tertiary text-right"></span>
+                                    </li>
+                                    <li class="flex justify-between">
+                                        <span class="text-lg font-semibold urbanist color-primary">Genre:</span>
+                                        <span id="recap-genre" class="text-lg color-tertiary text-right"></span>
+                                    </li>
+                                    <li class="flex justify-between">
+                                        <span class="text-lg font-semibold urbanist color-primary">Date:</span>
+                                        <span id="recap-date" class="text-lg color-tertiary text-right"></span>
+                                    </li>
+                                    <li class="flex justify-between">
+                                        <span class="text-lg font-semibold urbanist color-primary">Url du trailer:</span>
+                                        <span id="recap-trailer" class="text-lg color-tertiary text-right"></span>
+                                    </li>
+                                      <li class="flex justify-between">
+                                        <span class="text-lg font-semibold urbanist color-primary">Synopsis:</span>
+                                        <span id="recap-synopsis" class="text-lg color-tertiary text-right"></span>
+                                    </li>
+                               
+                                  
+                           
+                                </ul>
+                                <div class="flex justify-between mt-4 ">
+
+                                    <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
+                                    {{ form_widget(myForm) }}
+
+                                <button type="submit" class="button w-inline-block">
+                                    <div class="button_dot">
+                                        <div class="button_arrow w-embed">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><title>arrow-right</title><g fill="currentcolor"><path d="M1,7H8.586L6.293,9.293a1,1,0,1,0,1.414,1.414l4-4a1,1,0,0,0,0-1.416l-4-4A1,1,0,0,0,6.293,2.707L8.586,5H1A1,1,0,0,0,1,7Z" fill="currentColor"></path></g></svg>
+                                        </div>
+                                    </div>
+                                    <div class="button_text text-lg urbanist">Confirmer</div></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        
+        </div>
+        </div>
+    </div>
+
+<!-- Overlay pour ajouter un acteur -->
+<!-- Overlay pour ajouter un acteur -->
+<div id="actor-modal" class="z-50 fixed  inset-0 bg-black bg-opacity-50 hidden flex w justify-center items-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg h-[500px] overflow-y-scroll w-[50%] mx-4">
+        <h2 class="text-xl font-bold text-center mb-4">Ajouter un acteur</h2>
+        {{ form_start(actorForm, {'action': path('actors_new'), 'method': 'POST'}) }}
+        <div class="grid grid-cols-1 gap-4 mt-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    {{ form_row(actorForm.name) }}
+                </div>
+                <div>
+                    {{ form_row(actorForm.firstName) }}
+                </div>
+            </div>
+            <div>
+                {{ form_row(actorForm.birthdate) }}
+            </div>
+            <div>
+                {{ form_row(actorForm.picture) }}
+            </div>
+            <div class="col-span-1">
+                {{ form_row(actorForm.biography) }}
+            </div>
+        </div>
+        <div class="flex gap-5">
+            <button type="submit" class="w-fit bg-tertiary text-white rounded-md text-lg mt-4 px-4 py-2 hover:bg-opacity-80">Soumettre</button>
+            {{ form_end(actorForm) }}
+            <button type="button" id="close-actor-modal" class="mt-2 text-gray-600 hover:underline w-fit text-center">Fermer</button>
+        
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block javascripts %}
+    {{encore_entry_script_tags('casting')}}
+    {{ parent() }}
+
+    <!-- Inclure Choices.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+
+    <!-- Inclure Choices.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser Choices.js sur les champs de sélection multiples
+
+            const genreSelects = document.querySelectorAll('.choices-multiple');
+            genreSelects.forEach(select => {
+                new Choices(select, {
+                    removeItemButton: true,
+                    searchEnabled: true,
+                    itemSelectText: '',
+                    placeholder: true,
+                    placeholderValue: 'Sélectionnez ou ajoutez des genres'
+                });
+            });
+
+            // Exemple pour mettre à jour le placeholder en fonction du type de média
+            const typeSelect = document.getElementById('media_type');
+            const durationInput = document.getElementById('media_duration');
+
+            function updatePlaceholder() {
+                const selectedType = typeSelect.value;
+                if (selectedType === 'film') {
+                    durationInput.placeholder = 'EX: 1h30';
+                } else if (selectedType === 'serie') {
+                    durationInput.placeholder = 'EX: 3 saisons';
+                } else {
+                    durationInput.placeholder = 'EX: 1h30'; // Valeur par défaut pour les autres types
+                }
+            }
+
+            // Écoute les changements dans le select
+            typeSelect.addEventListener('change', updatePlaceholder);
+
+            // Met à jour le placeholder au chargement initial
+            updatePlaceholder();
+        });
+
+        {#Multi step#}
+        document.addEventListener('DOMContentLoaded', function () {
+            const addActorButton = document.getElementById("add-actor-btn");
+            const actorModal = document.getElementById("actor-modal");
+            const closeActorModalButton = document.getElementById("close-actor-modal");
+            const addActorForm = document.getElementById("add-actor-form");
+            const submitActorButton = document.getElementById("submit-actor");
+            let currentStep = 1;
+            const totalSteps = 5;
+
+                 addActorButton.addEventListener("click", () => {
+                actorModal.classList.remove("hidden");
+            });
+
+            closeActorModalButton.addEventListener("click", () => {
+                actorModal.classList.add("hidden");
+            });
+
+            function showStep(step) {
+                document.querySelectorAll('.step').forEach((element, index) => {
+                    element.classList.toggle('hidden', index + 1 !== step);
+                });
+
+                // Met à jour le stepper
+                document.querySelectorAll('.step-item').forEach((item) => {
+                    const stepNumber = parseInt(item.dataset.step);
+                    const circle = item.querySelector('.step-circle');
+
+                    if (stepNumber < currentStep) {
+                        circle.classList.add('bg-tertiary', 'text-white');
+                        circle.classList.remove('border-gray-500');
+                    } else if (stepNumber === currentStep) {
+                        circle.classList.add('bg-tertiary', 'text-white');
+                        circle.classList.remove('border-gray-500');
+                    } else {
+                        circle.classList.remove('bg-tertiary', 'text-white');
+                        circle.classList.add('border-gray-500');
+                    }
+                });
+            }
+
+            function saveToSession(step) {
+                document.querySelectorAll(`#step-${step} input, #step-${step} textarea, select `).forEach(element => {
+                    if (element.type === 'file') {
+                        sessionStorage.setItem(element.id, element.files[0] ? element.files[0].name : '');
+                    } else if (element.tagName.toLowerCase() === 'textarea') {
+                        sessionStorage.setItem(element.id, element.value);
+                    } else {
+                        sessionStorage.setItem(element.id, element.value);
+                    }
+                });
+            }
+
+            function updateRecap() {
+                document.getElementById('recap-title').textContent = sessionStorage.getItem('media_title') || '';
+                document.getElementById('recap-type').textContent = sessionStorage.getItem('media_type') || '';
+                document.getElementById('recap-duration').textContent = sessionStorage.getItem('media_duration') || '';
+                document.getElementById('recap-trailer').textContent = sessionStorage.getItem('media_trailer') || '';
+                document.getElementById('recap-genre').textContent = sessionStorage.getItem('media_genres') || '';
+                document.getElementById('recap-date').textContent = sessionStorage.getItem('media_release_date') || '';
+                document.getElementById('recap-synopsis').textContent = sessionStorage.getItem('media_synopsis') || '';
+
+                    const selectedGenres = Array.from(document.getElementById('media_genres').selectedOptions)
+                    .map(option => option.text)
+                    .join(', ');
+                document.getElementById('recap-genre').textContent = selectedGenres;
+     
+            }
+
+            function validateStep(step) {
+                let isValid = true;
+                document.querySelectorAll(`#step-${step} input, #step-${step} textarea`).forEach(input => {
+                    if (!input.checkValidity()) {
+                        isValid = false;
+                        input.classList.add('border-red-500');
+                    } else {
+                        input.classList.remove('border-red-500');
+                    }
+                });
+                return isValid;
+            }
+
+     
+
+            document.querySelectorAll('.next-step').forEach(button => {
+                button.addEventListener('click', function () {
+                    if (validateStep(currentStep)) {
+                        saveToSession(currentStep);
+                        if (currentStep < totalSteps) {
+                            currentStep++;
+                            if (currentStep === totalSteps) updateRecap();
+                            showStep(currentStep);
+                        }
+                    }
+                });
+            });
+
+            document.querySelectorAll('.prev-step').forEach(button => {
+                button.addEventListener('click', function () {
+                    if (currentStep > 1) {
+                        currentStep--;
+                        showStep(currentStep);
+                    }
+                });
+            });
+
+         
+
+            showStep(currentStep);
+        });
+
+ 
+    </script>
+{% endblock %}
+
+

@@ -22,7 +22,7 @@
                     <h3 class="display-2xl object uppercase" data-aos="fade-left" data-aos-duration="1000" data-aos-anchor-placement="top-center">{{media.title}}</h3>
                     <div class="media_presentation_content flex-wrap flex max-sm:gap-5">
                         {#infos majeures du film#}
-                        <div class="media_presentation_content_left max-sm:w-12/12  md:w-8/12 justify-between">
+                        <div class="media_presentation_content_left max-sm:w-12/12  md:w-8/12 gap-5">
                             {#Récupération des genres#}
                             <div class="flex gap-5">
                                 {% for genre in media.getGenres() %}
@@ -74,7 +74,7 @@
                                 {% for cast in media.castings %}
                                     {% if cast is not null %}
                                         <div class="flex items-center gap-2 my-2">
-                                            <img src="/uploads/{{cast.actor.picture}}" alt="Image de {{cast.actor.fullName}}" class=" shadow-none w-[40px] h-[40px] object-cover rounded-full">
+                                            <img src="/uploads/{{cast.actor.picture}}" alt="Image de {{cast.actor.fullName}}" class=" shadow-none resize-none min-h-[40px]  min-w-[40px] max-h-[40px] max-w-[40px] w-[40px] h-[40px] object-cover rounded-full">
                                             <div class="name text-md urbanist font-semibold"> <a href="{{path('actor_show', {'slug': cast.actor.slug})}}" class="color-tertiary">{{cast.actor.fullName}}</a> <span class="color-tertiary">-</span> {{cast.role}}</div>
                                         </div>
                                     
