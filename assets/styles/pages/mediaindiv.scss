@@ -126,6 +126,7 @@
     z-index: 2;
 }
 .media_card{
+
     @include flexGap(column,$spacing-sm);
     background-color: #FFFFFF;
     align-items: center;
@@ -143,6 +144,16 @@
             transform: scale(1.2);
         }
      
+    }
+    button{
+        background-color: $color-secondary;
+        border:solid 1px $color-tertiary;
+        color: $color-tertiary;
+        font-size: $text-font-size-md;
+        &:hover{
+            background-color: #D0ABEE;
+            color: $color-primary;
+        }
     }
     .photos{
         height: 300px;
@@ -220,14 +231,4 @@
         }
     }
 
-}
-button{
-    background-color: $color-secondary;
-    border:solid 1px $color-tertiary;
-    color: $color-tertiary;
-    font-size: $text-font-size-md;
-    &:hover{
-        background-color: #D0ABEE;
-        color: $color-primary;
-    }
 }

@@ -66,9 +66,16 @@
                             <img src="/uploads/{{reply.author.avatar}}" alt="Image de l'utilisateur {{reply.author.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
                             <a href="#" class="hover:text-purple-500 text-md urbanist">{{reply.author.fullName}}</a>
                         </div>
-                            
-
+                        <div class="flex flex-col gap-5">
                             <p class="text-md urbanist ">{{reply.content}}</p>
+                            {% if app.user and (app.user == reply.author or is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATEUR')) %}
+                      
+                                <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('comment_delete', { 'id': reply.id }) }}', 'Supprimer', 'Annuler')" data-tippy-content="Supprimer le commentaire" class="w-fit fa-solid fa-trash color-secondary rounded-md py-2 px-2 bg-tertiary"></button>
+                          
+                            
+                            {% endif %}
+                        
+                        </div>
                         </div>
                     {% endfor %}
                 </div>

@@ -9,7 +9,10 @@
     <div class="flex flex-col gap-2">
         <div class="card_actus_content flex flex-col gap-5">
             <div class="card_actus_content_stats w-full justify-between flex ">
-                {% include "partials/rating.html.twig" with {'rating': actu.getAvgRatings()} %}
+                {% if actu.comments|length > 0 %}
+                    {% include "partials/rating.html.twig" with {'rating': actu.getAvgRatings()} %} 
+                {% endif %}
+                
                     <p class="text-lg object color-tertiary uppercase flex gap-2">
                     <span class="material-symbols-outlined">
                         visibility

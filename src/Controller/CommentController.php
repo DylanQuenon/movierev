@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Likes;
+use App\Entity\Review;
 use App\Entity\Comment;
 use App\Form\ReplyType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -121,11 +122,17 @@ class CommentController extends AbstractController
     {
         // Vérifier si l'utilisateur connecté est l'auteur du commentaire
         $news = $comment->getNews();
+        $review = $comment->getReview();
         $manager->remove($comment);
         $manager->flush();
     
-        $this->addFlash('success', "Le commentaire a été effacé avec succès");
-
-        return $this->redirectToRoute('news_show', ['slug' => $news->getSlug()]);
+        
+        if ($review) {
+            $this->addFlash('success', "Le commentaire a été effacé avec succès");
+            return $this->redirectToRoute('reviews_show', ['slug' => $review->getSlug()]);
+        } else {
+            $this->addFlash('success', "Le commentaire a été effacé avec succès");
+            return $this->redirectToRoute('news_show', ['slug' => $news->getSlug()]);
+        }
     }
 }

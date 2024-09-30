@@ -88,6 +88,7 @@
 							</p>
 						</div>
 						<hr class="border-purple-500 border-1 rounded-full my-2">
+                        <div class="flex justify-between items-center">
                         {#Likes et commentaires#}
 						<div class="reviewIndiv_stats flex gap-5">
 							<div class="flex gap-2 text-xl urbanist color-tertiary">
@@ -101,50 +102,71 @@
                                 {{review.comments|length}}
                             </div>
 					    </div>
+                        <div class="flex gap-5 items-center">
+                          {% if app.user and (app.user == review.author or is_granted('ROLE_ADMIN')) %}
+                                 <a href="{{path('reviews_edit',{'slug':review.slug})}}" class='items-center text-lg urbanist py-2 px-4 bg-tertiary rounded-md flex color-secondary gap-2 w-fit h-fit group-hover:[bg-purple-50, text-purple-500]'>Modifier la review <i class="fa-solid fa-pen"></i></a>
+                          {% endif %}
+
+                        {% if app.user and (app.user == review.author or is_granted('ROLE_ADMIN')) or is_granted('ROLE_MODERATEUR') %}
+                            <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('review_delete', { 'slug': review.slug }) }}', 'Supprimer', 'Annuler')" class="bg-red-500 text-white w-[40px] h-[40px] justify-center rounded hover:bg-red-600 text-lg urbanist items-center  flex"><i data-tippy-content="Supprimer l'article" class="fa-solid fa-trash"></i></button>
+                        
+                        {% endif %}
+                          
+                        </div>
+                        
+                        </div>
 				</div>
 
 			</div>
             {#commentaires#}
 			<div class="relative max-m:w-full lg:w-4/12 h-[600px] bg-white overflow-y-scroll flex over flex-col gap-2 p-5 rounded-[20px]" id="sectionComments">
 				<h3 class="display-md object uppercase">Commentaires ({{review.comments|length}})</h3>
+                {% if review.comments|length <= 0 %}
+                    <div class="flex items-center justify-center h-full w-full">
+                        <p class="text-lg urbanist">Pas encore de commentaire <span class="color-tertiary font-semibold">Soyez le premier</span></p>
+                    </div>
 
-                {% for comment in review.comments %}
-                    {% if comment.parent is null %}
-                        <div class="w-full h-full">
-                            <div class="py-5 border-b border-tertiary-light">
-                             {% include "partials/_comment.html.twig" with {'comment':comment} %}
-                                <div class="w-full mt-2">
-                                    <div class="w-full">
-                                        <div class="reply-form-container hidden" id="reply-form-{{ comment.id }}">
-                                        {% if app.user %}
-                                            <form action="{{ path('comment_reply', {'id': comment.id}) }}" method="post">
-                                                {{ form_start(replyForms[comment.id]) }}
-                                                <div class="flex items-center gap-2">
-                                                       <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
-                                                    {{ form_widget(replyForms[comment.id].content) }}
-                                                    {{ form_errors(replyForms[comment.id].content) }}
-                                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                                                    <button class="group w-[50px] h-[50px] bg-highlight rounded-md">
-                                                        <i class="fa-solid fa-location-arrow text-background rotate-45 group-hover:rotate-0 transition duration-300 mr-1"></i>
-                                                    </button>
-                                                </div>
-                                                {{ form_end(replyForms[comment.id]) }}
-                                            </form>
-                                            {% else %}
-                                            <p class="flex gap-2 text-lg urbanist font-semibold ">Vous devez être connecté pour répondre <a href="#"class="color-tertiary">Connectez-vous</a></p>
-                                        
-                                        {% endif %}
-                                        
-                                        
-                                        
+                {% else %}
+                    {% for comment in review.comments %}
+                        {% if comment.parent is null %}
+                            <div class="w-full h-full">
+                                <div class="py-5 border-b border-tertiary-light">
+                                {% include "partials/_comment.html.twig" with {'comment':comment} %}
+                                    <div class="w-full mt-2">
+                                        <div class="w-full">
+                                            <div class="reply-form-container hidden" id="reply-form-{{ comment.id }}">
+                                            {% if app.user %}
+                                                <form action="{{ path('comment_reply', {'id': comment.id}) }}" method="post">
+                                                    {{ form_start(replyForms[comment.id]) }}
+                                                    <div class="flex items-center gap-2">
+                                                        <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
+                                                        {{ form_widget(replyForms[comment.id].content) }}
+                                                        {{ form_errors(replyForms[comment.id].content) }}
+                                                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                                        <button class="group w-[50px] h-[50px] bg-highlight rounded-md">
+                                                            <i class="fa-solid fa-location-arrow text-background rotate-45 group-hover:rotate-0 transition duration-300 mr-1"></i>
+                                                        </button>
+                                                    </div>
+                                                    {{ form_end(replyForms[comment.id]) }}
+                                                </form>
+                                                {% else %}
+                                                <p class="flex gap-2 text-lg urbanist font-semibold ">Vous devez être connecté pour répondre <a href="#"class="color-tertiary">Connectez-vous</a></p>
+                                            
+                                            {% endif %}
+                                            
+                                            
+                                            
+                                            </div>
                                         </div>
+                                
                                     </div>
-                              
                                 </div>
                             </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                
+                {% endif %}
+        
 
                 <div class="form_comments flex gap-5">
                         {% if app.user %}
@@ -201,9 +223,19 @@
         </ul>
     </div>
 </div>
+   	{% include '/partials/_delete_modal.html.twig' with {
+         modal_id: 'deleteModal',
+         form_id: 'deleteForm',
+         title: 'Confirmation de suppression',
+         message: 'Êtes-vous sûr de vouloir supprimer cette review ? Cette action est irréversible.',
+         action_url: '#',  
+         confirm_text: 'Supprimer',
+         cancel_text: 'Annuler'
+      } %}
 
-
-{% include "partials/_sliderReviews.html.twig" %}{% endblock %}{% block javascripts %}
+{% include "partials/_sliderReviews.html.twig" %}
+{% endblock %}
+{% block javascripts %}
 <script>
 	const copyLinkButton = document.getElementById("copyLink")
         copyLinkButton.addEventListener('click', function (event) {

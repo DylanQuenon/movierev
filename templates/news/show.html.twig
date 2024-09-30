@@ -53,7 +53,7 @@
                               {{news.comments|length}}
                            </p>
                            {#Nombre de partages dans l'article#}
-                           <p class="text-xl object color-tertiary uppercase flex gap-2"data-tippy-content="Nombre de partage">
+                           <p class="text-xl object color-tertiary uppercase flex gap-2"data-tippy-content="Nombre de partages">
                               <span class="material-symbols-outlined">share</span>
                               <span>{{news.shareCount}}</span>
                            </p>
@@ -61,8 +61,10 @@
                      </div>
                      {#Note de l'article#}
                      <div class="card_news_content_rating flex gap-2">
-                        {% include "partials/rating.html.twig" with {'rating': news.getAvgRatings()} %}
-                        <span class="text-xl urbanist color-primary uppercase font-semibold">{{news.getAvgRatings()}}/5</span>
+                      {% if news.comments is not empty %}
+                           {% include "partials/rating.html.twig" with {'rating': news.getAvgRatings()} %}
+                            <span class="text-xl urbanist color-primary uppercase font-semibold">{{news.getAvgRatings()}}/5</span>
+                     {% endif %}
                      </div>
                      {#Titre de l'article et liens#}
                      <div class="card_news_content_info1 flex max-sm:flex-col justify-between">
@@ -84,7 +86,7 @@
                         </div>
                      </div>
                      {#Auteur de l'article#}
-                     <div class="card_news_content_info1_author">
+                     <div class="card_news_content_info1_author flex justify-between flex-wrap">
                         <div class="card_news_content_info1_author_infos flex items-center gap-3">
                            {#avatar de l'auteur#}
                            <div class="card_news_content_info1_author_infos_avatar">
@@ -107,6 +109,15 @@
                            </div>
 
                         </div>
+                        {#Lien pour modifier l'article#}
+                           {% if app.user and (app.user == news.author or is_granted('ROLE_ADMIN')) %}
+                              <div class="flex flex-col gap-2 items-center">
+                                 <a href="{{path('news_edit',{'slug':news.slug})}}" class='items-center text-lg urbanist py-2 px-4 bg-tertiary rounded-md flex color-secondary gap-2 w-fit h-fit group-hover:[bg-purple-50, text-purple-500]'>Modifier l'article <i class="fa-solid fa-pen"></i></a>
+                                 <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('news_delete', { 'slug': news.slug }) }}', 'Supprimer', 'Annuler')" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 text-lg urbanist items-center w-fit flex gap-2">Supprimer l'article <i class="fa-solid fa-trash"></i></button>
+                              
+                              </div>
+                           {% endif %}
+                        
                      </div>
                   </div>
                </div>
@@ -117,6 +128,12 @@
 
                {#Commentaires#}
                <h2 class="object uppercase display-xl color-tertiary w-full">Commentaires ({{news.comments|length}}) </h2>
+                  {% if news.comments|length <= 0 %}
+                     <div class="flex items-center justify-center h-full w-full">
+                        <p class="text-lg urbanist">Pas encore de commentaire <span class="color-tertiary font-semibold">Soyez le premier</span></p>
+                    </div>
+                  {% else %}
+                          
                  {% for comment in news.comments %}
                     {% if comment.parent is null %}
                         <div class="w-full h-full">
@@ -157,6 +174,9 @@
                         </div>
                     {% endif %}
                 {% endfor %}
+                     
+                  {% endif %}
+          
 
                 {% if app.user %}
                   <div class="form_comments mt-10 flex flex-col gap-2">
@@ -286,6 +306,16 @@
          </div>
       </div>
    </div>
+
+   	{% include '/partials/_delete_modal.html.twig' with {
+         modal_id: 'deleteModal',
+         form_id: 'deleteForm',
+         title: 'Confirmation de suppression',
+         message: 'Êtes-vous sûr de vouloir supprimer cette actualité ? Cette action est irréversible.',
+         action_url: '#',  
+         confirm_text: 'Supprimer',
+         cancel_text: 'Annuler'
+      } %}
 
 {% endblock %}
 {% block javascripts %}

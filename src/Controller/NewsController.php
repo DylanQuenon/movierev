@@ -177,12 +177,7 @@ class NewsController extends AbstractController
 
         
         if ($form->isSubmitted() && $form->isValid()) {
-            // Vérifie si l'utilisateur essaie de commenter sa propre review
-            if ($this->getUser() === $news->getAuthor()) {
-                $this->addFlash('warning', 'Vous ne pouvez pas commenter votre propre review.');
-                return $this->redirectToRoute('news_show', ['slug' => $news->getSlug()]);
-            }
-
+        
             $comment->setNews($news)  // Associe la review au commentaire
                     ->setAuthor($this->getUser());  // Associe l'auteur
 
@@ -264,7 +259,7 @@ class NewsController extends AbstractController
      */
     #[Route("/news/{slug}/edit", name: "news_edit")]
     #[IsGranted(
-        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN") or is_granted("ROLE_REDACTEUR")'),
+        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
         subject: new Expression('args["news"].getAuthor()'),
         message: "Cette actualité ne vous appartient pas, vous ne pouvez pas la modifier"
     )]
@@ -305,6 +300,11 @@ class NewsController extends AbstractController
      * @return Response
      */
     #[Route("/news/{slug}/imgmodify", name:"news_img")]
+    #[IsGranted(
+        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
+        subject: new Expression('args["news"].getAuthor()'),
+        message: "Cette actualité ne vous appartient pas, vous ne pouvez pas la modifier"
+    )]
     public function imgModify(Request $request, EntityManagerInterface $manager, News $news, FileUploaderService $fileUploader): Response
     {
         $imgModify = new ImgModify();
@@ -354,7 +354,7 @@ class NewsController extends AbstractController
     #[IsGranted(
         attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
         subject: new Expression('args["news"].getAuthor()'),
-        message: "Cette annonce ne vous appartient pas, vous ne pouvez pas la supprimer"
+        message: "Cette actualité ne vous appartient pas, vous ne pouvez pas la supprimer"
     )]
     public function delete(News $news, EntityManagerInterface $manager): Response
     {

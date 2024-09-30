@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -167,6 +168,7 @@ class ReviewController extends AbstractController
      * @return Response
      */
     #[Route('/reviews/add/{mediaSlug}', name: 'reviews_create')]
+    #[IsGranted('ROLE_USER', message: "Vous devez être connecté pour poster un commentaire.")]
     public function create($mediaSlug, Request $request, EntityManagerInterface $manager): Response
     {
         // Création d'une nouvelle instance de Review
@@ -218,7 +220,12 @@ class ReviewController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return Response
      */
-#[Route('/reviews/edit/{id}', name: 'reviews_edit')]
+#[Route('/reviews/edit/{slug}', name: 'reviews_edit')]
+#[IsGranted(
+    attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
+    subject: new Expression('args["review"].getAuthor()'),
+    message: "La review ne vous appartient pas, vous ne pouvez pas la modifier"
+)]
 public function edit(Review $review, Request $request, EntityManagerInterface $manager): Response
 {
     $form = $this->createForm(ReviewsType::class, $review);
@@ -253,7 +260,12 @@ public function edit(Review $review, Request $request, EntityManagerInterface $m
  * @param Request $request
  * @return Response
  */
-#[Route('/reviews/{id}/delete', name: 'review_delete', methods: ['POST'])]
+#[Route('/reviews/{slug}/delete', name: 'review_delete')]
+#[IsGranted(
+    attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
+    subject: new Expression('args["review"].getAuthor()'),
+    message: "La review ne vous appartient pas, vous ne pouvez pas l'effacer"
+)]
 public function delete(Review $review, EntityManagerInterface $manager, Request $request): Response
 {
     

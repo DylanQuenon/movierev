@@ -17,6 +17,7 @@ class Likes
     private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Comment $comment = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
