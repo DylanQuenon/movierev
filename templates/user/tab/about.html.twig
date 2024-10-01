@@ -1,0 +1,23 @@
+{% extends 'user/index.html.twig' %}
+
+{% block title %}{{user.username}} | A propos{% endblock %}
+
+{% block stylesheets %}{{encore_entry_link_tags('accountStyle')}}{% endblock %}
+
+
+{% block profile_content %}
+    <div class="w-1/2 flex flex-col gap-5">
+        <div class="flex items-center justify-between flex-wrap">
+            <h3 class="display-xs object  uppercase">A propos de <span class="color-tertiary">{{user.username}}</span></h3>
+            <p class="text-md urbanist text-[#a4a4a4] flex items-center gap-2"><i class="fa-solid fa-calendar-days"></i> a rejoint Movierev en<span class="font-semibold color-tertiary">
+            {{user.createdAt |date('F Y', 'Europe/Paris')|format_datetime(pattern="MMMM yyyy", locale='fr')}}
+            </p>
+
+        
+        </div>
+        <p class="text-lg urbanist">{{user.description}}</p>
+
+    </div>
+
+{% endblock %}
+

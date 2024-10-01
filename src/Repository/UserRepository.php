@@ -50,6 +50,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
+    public function findLikedReviewsByUser(User $user){
+        $qb = $this->createQueryBuilder('u');
+        $qb->join('u.likes', 'lr')
+        ->where('lr.author = :user')
+        ->setParameter('user', $user);
+        return $qb->getQuery()->getResult();
+
+    }
+
+
 
 
   

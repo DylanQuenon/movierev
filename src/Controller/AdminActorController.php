@@ -79,6 +79,7 @@ class AdminActorController extends AbstractController
             'myForm' => $form->createView()
         ]);
     }
+    
 
     /**
      * Modifier un acteur

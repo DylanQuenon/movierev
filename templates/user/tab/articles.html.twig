@@ -1,0 +1,44 @@
+{% extends 'user/index.html.twig' %}
+
+{% block title %}articles de {{user.username}}{% endblock %}
+
+{% block stylesheets %}{{encore_entry_link_tags('accountStyle')}}{% endblock %}
+
+
+{% block profile_content %}
+    <div class="w-full">
+            {#Listes des films & séries#}
+            {% if user.isPrivate != true %}
+                    {% if articles|length <= 0 %}
+            <div class="flex flex-col gap-2 justify-center items-center">
+                <div class="w-[50px] h-[50px] rounded-full border-2 border-[#a051de] flex justify-center items-center color-tertiary">
+                    <span class="material-symbols-outlined">
+                    articles
+                    </span>
+                </div>
+                <p class="text-lg urbanist">Pas encore d'articles postés</p>
+            </div>
+        {% else %}
+          <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 place-items-center w-full">
+                {% for new in articles %}
+                    {% include "partials/_card_news.html.twig" with {"actu": new} %}
+                {% endfor %}
+            </div>
+    
+            
+        {% endif %}
+            
+            {% endif %}
+    
+        
+            
+          
+    </div>
+        {% if articles|length > 0 %}
+            <div class="pagination">
+                {{ knp_pagination_render(articles) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+

@@ -39,7 +39,7 @@
 								</div>
 								<div class="our_team_presentation_follow flex justify-between">
 									<div class="reviews flex text-lg urbanist color-primary flex-col gap-1">
-										<span class="text-xl urbanist font-semibold color-tertiary text-center">34</span>
+										<span class="text-xl urbanist font-semibold color-tertiary text-center">{{team.reviews|length}}</span>
 										Reviews
 									</div>
 									<div class="reviews flex text-lg urbanist color-primary flex-col gap-1">
@@ -53,7 +53,7 @@
 
 								</div>
 								<div class="our_team_presentation_actions flex justify-between">
-									{% include "partials/_button.html.twig" with {"text": "Voir le profil", "href":"home"} %}
+									{% include "partials/_button.html.twig" with {"text": "Voir le profil", "href":path('user_show', {'slug':team.slug})} %}
 									<a href="#" class="text-lg followlink urbanist px-[20px] py-2 flex items-center gap-2 bg-secondary color-tertiary border-purple-400 border-solid border-2">S'abonner</a>
 
 								</div>
