@@ -1,0 +1,112 @@
+{% extends 'user/index.html.twig' %}
+
+{% block title %}Collections {{user.username}}{% endblock %}
+
+{% block stylesheets %}{{encore_entry_link_tags('accountStyle')}}{% endblock %}
+
+{% block profile_content %}
+    <div class="w-1/2">
+        {% if collections is empty %}
+                    <p class="text-center flex justify-center">Pas de collections</p>
+        {% endif %}
+        <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 place-items-center w-full">
+        {% if app.user and app.user.id == user.id %}
+             <button class="w-[200px] h-[200px] addCollection bg-tertiary rounded-[20px] display-2xl color-secondary justify-center flex items-center">+</button>
+        {% endif %}
+            {% if app.user and app.user.id == user.id or not user.isPrivate  %}
+                {% for collection in collections %}
+                    {% set randomMedia = randomMediaByCollection[collection.id] %}
+                    <a href="{{path('collection_show', {'id':collection.id, 'slug':user.slug})}}" class="relative color-secondary w-[200px] h-[200px] color-primary rounded-[20px] {% if not randomMedia %} bg-tertiary {% endif %} text-lg font-semibold flex justify-center items-center">     
+                        {% if randomMedia %}
+                            <img src="/uploads/{{ randomMedia.cover }}" alt="{{ collection.name }}" class="absolute top-0 left-0 w-full h-full object-cover rounded-[20px]" style="z-index: 1;">
+                            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black rounded-[20px]" style="z-index: 2;"></div>
+                        {% endif %}
+                        
+
+                        <span class="z-10">{{ collection.name }}</span>
+                        
+                    </a>
+                {% endfor %}
+            {% endif %}
+       
+        </div>
+    </div>
+
+    <!-- Overlay pour ajouter une collection -->
+    {% if app.user and app.user.id == user.id %}
+        <div id="collectionOverlay" class="fixed inset-0 hidden bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div class="bg-white p-8 rounded-lg w-96">
+                <h2 class="text-lg font-bold mb-4">Ajout d'une collection</h2>
+                    {{ form_start(myForm, {'action': path('collection_new'), 'method': 'POST'}) }}
+            {{form_widget(myForm.name)}}
+            {{ form_label(myForm.isPrivate, 'Confidentialité de la collection', {'label_attr': {'class': 'text-sm font-medium text-gray-900 dark:text-gray-300'}}) }}
+                    <div class="flex gap-3 items-center">
+                        <label class="inline-flex items-center cursor-pointer">
+                            {{ form_widget(myForm.isPrivate, {'attr': {'class': 'sr-only peer', 'id': 'privacyToggle'}}) }}
+                            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                        </label>
+                        <!-- Texte et icône dynamiques -->
+                        <div id="privacyStatus" class="flex items-center text-sm font-medium text-gray-900 dark:text-gray-300">
+                            <span class="material-symbols-outlined" id="privacyIcon">lock</span>
+                            <span id="privacyText" class="ml-2">Privé</span>
+                        </div>
+                    </div>
+                <button type="submit" class="py-2 px-4 rounded-md bg-tertiary">
+                        Ajouter
+                </button>
+
+            {{form_end(myForm)}}
+            </div>
+        </div>
+    
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const privacyToggle = document.querySelector('#collection_isPrivate');
+        const privacyIcon = document.getElementById('privacyIcon');
+        const privacyText = document.getElementById('privacyText');
+
+        function updatePrivacyStatus() {
+            if (privacyToggle.checked) {
+                // Private mode
+                privacyIcon.textContent = 'lock';
+                privacyText.textContent = 'Privé';
+            } else {
+                // Public mode
+                privacyIcon.textContent = 'public';
+                privacyText.textContent = 'Public';
+            }
+        }
+
+        // Initialize the status on page load
+        updatePrivacyStatus();
+
+        // Update the status when the toggle is clicked
+        privacyToggle.addEventListener('change', updatePrivacyStatus);
+    });
+        document.querySelector('.addCollection').addEventListener('click', function() {
+            document.getElementById('collectionOverlay').classList.remove('hidden');
+        });
+
+        document.getElementById('cancelOverlay').addEventListener('click', function() {
+            document.getElementById('collectionOverlay').classList.add('hidden');
+        });
+
+        // Fermer l'overlay en cliquant à l'extérieur du formulaire
+        window.addEventListener('click', function(e) {
+            const overlay = document.getElementById('collectionOverlay');
+            const form = document.querySelector('#addCollectionForm');
+            if (e.target === overlay && !form.contains(e.target)) {
+                overlay.classList.add('hidden');
+            }
+        });
+
+        
+
+    </script>
+{% endblock %}

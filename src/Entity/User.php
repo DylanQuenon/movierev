@@ -111,6 +111,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'author')]
     private Collection $media;
 
+    /**
+     * @var Collection<int, Collections>
+     */
+    #[ORM\OneToMany(targetEntity: Collections::class, mappedBy: 'user')]
+    private Collection $collections;
+
     public function __construct()
     {
         $this->news = new ArrayCollection();
@@ -118,6 +124,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->comments = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->media = new ArrayCollection();
+        $this->collections = new ArrayCollection();
     }
 
       /**
@@ -488,6 +495,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($medium->getAuthor() === $this) {
                 $medium->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Collections>
+     */
+    public function getCollections(): Collection
+    {
+        return $this->collections;
+    }
+
+    public function addCollection(Collections $collection): static
+    {
+        if (!$this->collections->contains($collection)) {
+            $this->collections->add($collection);
+            $collection->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCollection(Collections $collection): static
+    {
+        if ($this->collections->removeElement($collection)) {
+            // set the owning side to null (unless already changed)
+            if ($collection->getUser() === $this) {
+                $collection->setUser(null);
             }
         }
 

@@ -53,6 +53,25 @@
 				</ul>
 			</nav>
 		</div>
+		<div class="relative">
+			<li class="{% if app.user %}max-md:ml-8 lg:ml-44 {% else %} max-md:mr-12{% endif %}  color-[#a051de] cursor-pointer openSearchUser w-[40px] rounded-full border border-[#a051de] h-[40px]  transition-all flex justify-center items-center list-none hover:bg-[#a051de] hover:text-white hover:border-white"><i class="list-none rotate-[85deg] fa-solid fa-magnifying-glass"></i></li>
+			<div class="dropdown">
+				<form id="searchUserForm" class="{% if not app.user %}  max-md:-left-40 {% else %} left-5 {% endif %} text-lg urbanist hidden absolute  flex flex-col gap-3 mt-2 w-64 bg-white rounded-lg shadow-lg p-5 text-gray-800">
+					<input 
+						type="text" 
+						name="username" 
+						placeholder="Rechercher un utilisateur" 
+						class="p-2 border border-[#a051de] rounded-lg w-full"
+						id="search-input-users"
+					/>
+				<div class="dropdown-menu" id="search-results-users" style="display: none;">
+					<ul class="list-unstyled p-3"></ul>
+				</div>
+				</form>
+			
+			</div>
+		</div>
+
 
 		{% if app.user %}
           <li class="relative list-none logged">
@@ -142,6 +161,7 @@
 							<span class="text-sm urbanist color-secondary">{{ app.user.username }}</span>
 						</div>
 					</div>
+
 				</li>
 
 			{% else %}
@@ -185,6 +205,24 @@
 {% block javascripts %}
 	{{ encore_entry_script_tags('burgerJS') }}
 	<script>
+		document.querySelector('.openSearchUser').addEventListener('click', function(event) {
+    const searchForm = document.getElementById('searchUserForm');
+    
+    // Toggle the visibility of the form
+    if (searchForm.classList.contains('hidden')) {
+        searchForm.classList.remove('hidden');
+        
+        // Fermer le formulaire si l'utilisateur clique à l'extérieur
+        document.addEventListener('click', function closeForm(event) {
+            if (!searchForm.contains(event.target) && !event.target.closest('.openSearchUser')) {
+                searchForm.classList.add('hidden');
+                document.removeEventListener('click', closeForm); // Supprime l'écouteur pour éviter la duplication
+            }
+        });
+    } else {
+        searchForm.classList.add('hidden');
+    }
+});
 	  document.getElementById('accountDropdownLink').addEventListener('click', function() {
     document.getElementById('dropdown').classList.toggle('hidden');
   });
@@ -214,6 +252,61 @@
 		message.classList.add('slide-out');
 		setTimeout(() => message.style.display = 'none', 500); // Allow animation to complete
 		}
+
+
+
+
+		    document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.querySelector('#search-input-users');
+            const searchResults = document.querySelector('#search-results-users');
+            const resultsList = searchResults.querySelector('ul');
+
+            // Réinitialiser la valeur de l'input à une chaîne vide
+            searchInput.value = '';
+
+            searchInput.addEventListener('input', function () {
+                const query = this.value.trim();
+                if (query.length > 1) {
+                    fetch(`/users/search/ajax?query=${encodeURIComponent(query)}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            resultsList.innerHTML = '';
+                            if (data.length > 0) {
+                                searchResults.style.display = 'block';
+                                data.forEach((result) => {
+                                    const item = document.createElement('li');
+                                    const link = document.createElement('a');
+                                    link.href = `/user/${result.slug}`;
+                                        link.innerHTML = `
+										<div class="flex gap-2 border-b border-[#a051de] my-2 pb-4 items-center">
+                                            <img src="/uploads/${result.avatar}" alt="${result.fullName}" class="search-result-poster" style="height:50px; width:50px; border-radius:100%; object-fit:cover;">
+                                            <div class="search-result-info">
+                                                <h4 class="search-result-title text-lg urbanist font-semibold color-tertiary ">${result.username}</h4>
+                                                <h4 class="search-result-title text-md">${result.fullName}</h4>
+                                            
+                                            </div>
+										</div>
+                                    
+                                    `;
+                                    item.appendChild(link);
+                                    resultsList.appendChild(item);
+                                });
+                            } else {
+                                searchResults.style.display = 'block';
+                                resultsList.innerHTML = '<li>Aucun résultat</li>';
+                            }
+                        });
+                } else {
+                    searchResults.style.display = 'none';
+                }
+            });
+
+            searchInput.addEventListener('blur', () => {
+                setTimeout(() => {
+                    searchResults.style.display = 'none';
+                }, 200);
+            });
+        });
 
 	</script>
 {% endblock %}

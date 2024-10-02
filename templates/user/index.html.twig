@@ -9,7 +9,7 @@
         <div class="wrapper py-24 flex flex-col gap-10 items-center">
             <div class="w-full items-center flex flex-col gap-5">
                 <div class="flex flex-wrap justify-evenly w-full relative">
-                 {% if app.user.id == user.id %}
+                 {% if app.user and app.user.id == user.id %}
                     <div class="block-notif h-[300px] max-md:w-full max-md:my-5 lg:w-[20%] bg-white">
                     
                     </div>
@@ -64,7 +64,7 @@
 
                         </div>
                     </div>
-                    {% if app.user.id == user.id %}
+                    {% if app.user and app.user.id == user.id %}
                         <div class="block-actions max-md:w-full max-md:order-2 max-md:my-10 h-fit px-4 py-4 rounded-[20px] flex flex-col gap-5  lg:w-[20%] bg-white ">
                             <a href="{{path('medias_new')}}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">Ajouter un film <i class="fa-solid fa-chevron-right"></i> </a>
                             <a href="{{path('medias_new')}}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">Voir mes listes <i class="fa-solid fa-chevron-right"></i> </a>
@@ -119,10 +119,14 @@
                                         </li>
                                     {% endif %}
 
-                            
-                                <li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table border-[#A4A4A4]">
-                                    <a href="#" class="font-semibold text-[#A4A4A4]">Collections</a>
+                                   <li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table {% if app.request.get('_route') == 'user_collections' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-[#a051de]{% else %}text-[#A4A4A4] border-[#A4A4A4] {% endif %} ">
+                                    <a href="{{path('user_collections',{'slug':user.slug})}}" class="w-full h-full font-semibold ">
+                                        Collections
+                                    </a>
                                 </li>
+
+                            
+                           
                                 <li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table {% if app.request.get('_route') == 'user_about' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-[#a051de]{% else %}text-[#A4A4A4] border-[#A4A4A4] {% endif %} ">
                                     <a href="{{path('user_about',{'slug':user.slug})}}" class="w-full h-full font-semibold ">
                                         A propos

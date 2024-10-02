@@ -34,6 +34,29 @@ class MovieController extends AbstractController
     #[Route('/medias/{page<\d+>?1}', name: 'medias')]
     public function index(Request $request, MediaRepository $repo, GenreRepository $genreRepo, PaginatorInterface $paginator, int $page = 1): Response
     {
+
+         // Récupère l'utilisateur connecté
+    $user = $this->getUser();
+    
+    // Initialisation d'un tableau pour stocker tous les médias
+    $allMedia = [];
+
+    if ($user) {
+        // Récupère les collections de l'utilisateur
+        $collections = $user->getCollections(); // Assure-toi que cette méthode existe dans l'entité User
+        
+        // Parcours chaque collection pour récupérer les médias
+        foreach ($collections as $collection) {
+            $collectionMedias = $collection->getCollectionsMedia(); // Assure-toi que cette méthode existe dans l'entité Collection
+            
+            foreach ($collectionMedias as $collectionMedia) {
+                $media = $collectionMedia->getMedias(); // Récupère le média associé
+                if ($media) {
+                    $allMedia[] = $media; // Ajoute le média au tableau
+                }
+            }
+        }
+    }
         // Récupère le genre et l'ordre depuis les paramètres GET
         $genre = $request->query->get('genre');
         $order = $request->query->get('order', 'newest'); // Valeur par défaut
@@ -69,6 +92,7 @@ class MovieController extends AbstractController
         return $this->render('media/index.html.twig', [
             'medias' => $medias,
             'genres' => $genres,
+            'allMedia' => $allMedia, // Ajoute le tableau de tous les médias à la vue
             'currentGenre' => $genre,
             'order' => $order, // Passe l'ordre à la vue
         ]);

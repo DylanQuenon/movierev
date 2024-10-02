@@ -80,11 +80,20 @@ class Media
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'Media', orphanRemoval: true)]
     private Collection $reviews;
 
+    /**
+     * @var Collection<int, CollectionsMedia>
+     */
+    #[ORM\OneToMany(targetEntity: CollectionsMedia::class, mappedBy: 'medias')]
+    private Collection $collectionsMedia;
+
+
+
     public function __construct()
     {
         $this->genres = new ArrayCollection();
         $this->castings = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->collectionsMedia = new ArrayCollection();
     }
 
     public function getAvgRatings(): int
@@ -325,5 +334,37 @@ class Media
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, CollectionsMedia>
+     */
+    public function getCollectionsMedia(): Collection
+    {
+        return $this->collectionsMedia;
+    }
+
+    public function addCollectionsMedium(CollectionsMedia $collectionsMedium): static
+    {
+        if (!$this->collectionsMedia->contains($collectionsMedium)) {
+            $this->collectionsMedia->add($collectionsMedium);
+            $collectionsMedium->setMedias($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCollectionsMedium(CollectionsMedia $collectionsMedium): static
+    {
+        if ($this->collectionsMedia->removeElement($collectionsMedium)) {
+            // set the owning side to null (unless already changed)
+            if ($collectionsMedium->getMedias() === $this) {
+                $collectionsMedium->setMedias(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 
 }

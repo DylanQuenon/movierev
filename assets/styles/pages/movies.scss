@@ -60,7 +60,7 @@
                 height: 50px;
                 border: solid 2px $color-tertiary;
                 border-radius: 100%;
-                background-color: $color-secondary;
+                // background-color: $color-secondary;
                 cursor: pointer;
                 @include flex(row);
                  position: absolute;
@@ -106,7 +106,7 @@
         }
 
     }
-    button{
+    .media_card_actions button{
         background-color: $color-secondary;
         border:solid 1px $color-tertiary;
         color: $color-tertiary;

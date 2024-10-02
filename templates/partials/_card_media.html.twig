@@ -12,11 +12,21 @@
     <div class="media_card_infos">
         <div class="media_card_infos_content">
             {#Ajouter dans une liste data tippy#}
-            <div data-tippy-content="Enregistrer dans une liste" class="saving_list w-full flex justify-end">
-                <span class="material-symbols-outlined color-tertiary">
+            {# Vérifie si l'utilisateur est connecté #}
+        {% set user = app.user %}
+        {# Vérifie si le média est dans le tableau $allMedia #}
+        {% set mediaInCollection = media.id in allMedia|map(media => media.id) %}
+        {% if app.user %}
+            <button data-tippy-content="Enregistrer dans une liste" 
+                class="saving_list w-full flex justify-end {{ user ? (mediaInCollection ? 'bg-tertiary' : 'bg-secondary') : 'bg-secondary' }}" 
+                data-media-id="{{ media.id }}">
+                <span class="material-symbols-outlined {{ user ? (mediaInCollection ? 'color-secondary' : 'color-tertiary') : 'color-tertiary' }}">
                     bookmark
                 </span>
-            </div>
+            </button>
+        
+        {% endif %}
+
             {#text de la carte#}
             <div class="media_card_infos_heading">
                 <div class="card_infos_heading_main">
@@ -34,4 +44,69 @@
         </div>
     </div>
 </div>
+  <!-- Overlay pour les listes de collections -->
+  {% if app.user %}
+<div id="collectionOverlay" class="fixed inset-0 z-50 hidden bg-gray-800 bg-opacity-50">
+    <div class="flex items-center justify-center h-full">
+        <div class="bg-white p-5 rounded shadow-lg">
+            <h3 class="text-lg font-semibold mb-4">Choisissez une collection</h3>
+            <ul id="collectionList">
+                
+                {% for collection in app.user.collections %}
+                    <li class="flex justify-between text-md urbanist items-center w-full p-2 border-b">
+                        <span>{{ collection.name }}</span>
+                        <button class="add-media-btn rounded-full h-[30px] w-[30px] flex justify-center items-center bg-tertiary text-lg color-secondary font-semibold urbanist" data-collection-id="{{ collection.id }}" data-media-id="{{ media.id }}">
+                            +
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button id="closeOverlay" class="mt-4 p-2 bg-gray-300 rounded text-lg urbanist">Fermer</button>
+        </div>
+    </div>
+</div>
   
+  {% endif %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const savingListButtons = document.querySelectorAll('.saving_list');
+    const overlay = document.getElementById('collectionOverlay');
+    const closeOverlayButton = document.getElementById('closeOverlay');
+    let currentMediaId = null;
+
+    // Ouvrir l'overlay lors du clic sur le bouton
+    savingListButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            currentMediaId = button.getAttribute('data-media-id'); // Récupérer l'ID du média
+            console.log("Média ID: " + currentMediaId); // Pour déboguer
+            overlay.classList.remove('hidden');
+        });
+    });
+
+    // Fermer l'overlay
+    closeOverlayButton.addEventListener('click', function() {
+        overlay.classList.add('hidden');
+        currentMediaId = null; // Réinitialiser l'ID du média
+    });
+
+    // Ajouter le média à la collection via un formulaire
+    const addMediaButtons = document.querySelectorAll('.add-media-btn');
+    addMediaButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const collectionId = button.getAttribute('data-collection-id');
+            
+            if (!currentMediaId) {
+                alert('Aucun média sélectionné.');
+                return;
+            }
+
+            // Créer un formulaire pour envoyer les données
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/collections/add/${collectionId}/${currentMediaId}`;
+            document.body.appendChild(form); // Ajouter le formulaire au body
+            form.submit(); // Soumettre le formulaire
+        });
+    });
+});
+</script>

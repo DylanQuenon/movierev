@@ -8,12 +8,46 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class UserController extends AbstractController
 {
+
+        /**
+     * Effectue la recherche ajax pour prendre les news
+     *
+     * @param Request $request
+     * @param NewsRepository $newsRepo
+     * @return JsonResponse
+     */
+    #[Route('/users/search/ajax', name: 'user_search_ajax', methods: ['GET'])]
+    public function searchAjax(Request $request, UserRepository $repo): JsonResponse
+    {
+        $query = $request->query->get('query', '');
+
+        if (empty($query)) {
+            return new JsonResponse([]); // Renvoie un tableau vide si aucun terme
+        }
+
+        $results = $repo->findByUsername($query)
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+
+        $jsonResults = array_map(function ($users) {
+            return [
+                'fullName' => $users->getFullName(),
+                'username' => $users->getUsername(),
+                'slug' => $users->getSlug(),
+                'avatar'=>$users->getAvatar(),
+            ];
+        }, $results);
+
+        return new JsonResponse($jsonResults);
+    }
     #[Route('/user/{slug}', name: 'user_show')]
     public function index(User $user, UserRepository $repo): Response
     {

@@ -33,6 +33,7 @@
         "choices.js": "^11.0.2",
         "rough-notation": "^0.5.1",
         "select2": "^4.1.0-rc.0",
+        "sortablejs": "^1.15.3",
         "swiper": "^11.1.12",
         "tinymce": "^7.3.0",
         "tippy.js": "^6.3.7"
