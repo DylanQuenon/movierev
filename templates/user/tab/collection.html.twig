@@ -91,15 +91,14 @@
             document.getElementById('collectionOverlay').classList.remove('hidden');
         });
 
-        document.getElementById('cancelOverlay').addEventListener('click', function() {
-            document.getElementById('collectionOverlay').classList.add('hidden');
-        });
+    
 
         // Fermer l'overlay en cliquant à l'extérieur du formulaire
         window.addEventListener('click', function(e) {
-            const overlay = document.getElementById('collectionOverlay');
-            const form = document.querySelector('#addCollectionForm');
-            if (e.target === overlay && !form.contains(e.target)) {
+        
+                const overlay = document.getElementById('collectionOverlay');
+          
+            if (e.target === overlay) {
                 overlay.classList.add('hidden');
             }
         });

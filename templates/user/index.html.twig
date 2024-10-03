@@ -49,9 +49,16 @@
 												Modifier le profil
 											</a>
 										{% else %}
-										<a href="{{ path(isFollowing ? 'app_unfollow' : 'app_follow', { 'followerId': app.user.id, 'followedId': user.id }) }}" class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
-                                            {{ isFollowing ? 'Ne plus suivre' : 'Suivre' }}
+								{% if isFollowing %}
+                                  		<a href="{{ path('app_unfollow', { 'followerId': app.user.id, 'followedId': user.id }) }}" class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+                                            Ne plus suivre
                                         </a>
+                                    {% else %}
+                                    <a href="{{ path('app_follow', { 'followerId': app.user.id, 'followedId': user.id }) }}" class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+                                            Suivre
+                                        </a>
+                                        
+                                {% endif %}
 
 										{% endif %}
 									{% else %}

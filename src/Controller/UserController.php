@@ -55,7 +55,7 @@ class UserController extends AbstractController
           // Votre logique pour récupérer l'utilisateur par le slug
           $slug = $user->getSlug();
           $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
-          $isFollowing = !$isPrivate || ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
+          $isFollowing = !$isPrivate || ($this->getUser() && $follllowing($this->getUser(), $user));
 
           if ($user) {
               // Redirection vers la section Reviews
@@ -73,7 +73,7 @@ class UserController extends AbstractController
     public function about(User $user, UserRepository $repo, SubscriptionRepository $followingRepo): Response
     {
         $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
-        $isFollowing = !$isPrivate || ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
+        $isFollowing = ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
         return $this->render('user/tab/about.html.twig', [
             'user' => $user,
             'isFollowing' => $isFollowing,
@@ -85,7 +85,7 @@ class UserController extends AbstractController
     public function userReviews(User $user,Request $request, UserRepository $repo, PaginatorInterface $paginator, SubscriptionRepository $followingRepo, int $page = 1): Response
     {
         $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
-        $isFollowing = !$isPrivate || ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
+        $isFollowing = ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
         $allReviews= $user->getReviews();
        
         // Pagination avec KnpPaginator
@@ -150,7 +150,7 @@ class UserController extends AbstractController
         
         $allNews= $user->getNews();
         $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
-        $isFollowing = !$isPrivate || ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
+        $isFollowing = ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
        
         // Pagination avec KnpPaginator
         $news = $paginator->paginate(

@@ -13,6 +13,7 @@ use App\Repository\LikesRepository;
 use App\Repository\ReviewRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\SubscriptionRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,7 +82,7 @@ class ReviewController extends AbstractController
     #[Route('/reviews/page/{page<\d+>?1}', name: 'reviews_index')]
     public function index( ReviewRepository $repo, Request $request, PaginatorInterface $paginator, int $page = 1): Response
     {
-        $allReviews= $repo->findAll();
+        $allReviews= $repo->findPublicReviews();
        
         // Pagination avec KnpPaginator
         $reviews = $paginator->paginate(
@@ -98,8 +99,16 @@ class ReviewController extends AbstractController
     // src/Controller/ReviewController.php
 
     #[Route("/reviews/{slug}", name:"reviews_show")]
-    public function show(string $slug, ReviewRepository $repo, Review $reviews, Request $request, CommentRepository $commentRepo, EntityManagerInterface $manager,LikesRepository $repoLikes): Response
+    public function show(string $slug, ReviewRepository $repo, Review $reviews, Request $request, SubscriptionRepository $subrepo, CommentRepository $commentRepo, EntityManagerInterface $manager,LikesRepository $repoLikes): Response
     {
+
+        $author = $reviews->getAuthor();
+    
+        // Si l'utilisateur connecté n'est pas l'auteur et que le compte est privé, vérifiez l'abonnement
+        if ($author->getIsPrivate() && $this->getUser() !== $author && !$subrepo->isFollowing($this->getUser(), $author)) {
+            return $this->redirectToRoute('home'); // Remplacez 'home' par le nom de votre route pour la page d'accueil
+        }
+    
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);

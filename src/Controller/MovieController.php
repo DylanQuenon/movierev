@@ -239,9 +239,7 @@ class MovieController extends AbstractController
                 ->getResult();
            // Initialisation d'un tableau pour stocker tous les médias
     $allMedia = [];
-
     $user=$this->getUser();
-
     if ($user) {
         // Récupère les collections de l'utilisateur
         $collections = $user->getCollections(); // Assure-toi que cette méthode existe dans l'entité User
@@ -251,9 +249,9 @@ class MovieController extends AbstractController
             $collectionMedias = $collection->getCollectionsMedia(); // Assure-toi que cette méthode existe dans l'entité Collection
             
             foreach ($collectionMedias as $collectionMedia) {
-                $media = $collectionMedia->getMedias(); // Récupère le média associé
-                if ($media) {
-                    $allMedia[] = $media; // Ajoute le média au tableau
+                $mediaContent = $collectionMedia->getMedias(); // Récupère le média associé
+                if ($mediaContent) {
+                    $allMedia[] = $mediaContent; // Ajoute le média au tableau
                 }
             }
         }
@@ -265,7 +263,7 @@ class MovieController extends AbstractController
             'media' => $media,
             'topReview' => $mostLikedReviews,
             'latestMovies' => $latestMovies,
-            'allMedia'=>$allMedia
+            'allMedia' => $allMedia,
         ]);
 
     } 
