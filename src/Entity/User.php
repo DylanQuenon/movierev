@@ -117,6 +117,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Collections::class, mappedBy: 'user')]
     private Collection $collections;
 
+    /**
+     * @var Collection<int, Subscription>
+     */
+    #[ORM\OneToMany(targetEntity: Subscription::class, mappedBy: 'follower', orphanRemoval: true)]
+    private Collection $followers;
+
+    /**
+     * @var Collection<int, Subscription>
+     */
+    #[ORM\OneToMany(targetEntity: Subscription::class, mappedBy: 'followed')]
+    private Collection $followeds;
+
+    /**
+     * @var Collection<int, FollowRequest>
+     */
+    #[ORM\OneToMany(targetEntity: FollowRequest::class, mappedBy: 'requester', orphanRemoval: true)]
+    private Collection $followRequests;
+
     public function __construct()
     {
         $this->news = new ArrayCollection();
@@ -125,6 +143,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->likes = new ArrayCollection();
         $this->media = new ArrayCollection();
         $this->collections = new ArrayCollection();
+        $this->followers = new ArrayCollection();
+        $this->followeds = new ArrayCollection();
+        $this->followRequests = new ArrayCollection();
     }
 
       /**
@@ -525,6 +546,96 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($collection->getUser() === $this) {
                 $collection->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subscription>
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function addFollower(Subscription $follower): static
+    {
+        if (!$this->followers->contains($follower)) {
+            $this->followers->add($follower);
+            $follower->setFollower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollower(Subscription $follower): static
+    {
+        if ($this->followers->removeElement($follower)) {
+            // set the owning side to null (unless already changed)
+            if ($follower->getFollower() === $this) {
+                $follower->setFollower(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subscription>
+     */
+    public function getFolloweds(): Collection
+    {
+        return $this->followeds;
+    }
+
+    public function addFollowed(Subscription $followed): static
+    {
+        if (!$this->followeds->contains($followed)) {
+            $this->followeds->add($followed);
+            $followed->setFollowed($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollowed(Subscription $followed): static
+    {
+        if ($this->followeds->removeElement($followed)) {
+            // set the owning side to null (unless already changed)
+            if ($followed->getFollowed() === $this) {
+                $followed->setFollowed(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FollowRequest>
+     */
+    public function getFollowRequests(): Collection
+    {
+        return $this->followRequests;
+    }
+
+    public function addFollowRequest(FollowRequest $followRequest): static
+    {
+        if (!$this->followRequests->contains($followRequest)) {
+            $this->followRequests->add($followRequest);
+            $followRequest->setRequester($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollowRequest(FollowRequest $followRequest): static
+    {
+        if ($this->followRequests->removeElement($followRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($followRequest->getRequester() === $this) {
+                $followRequest->setRequester(null);
             }
         }
 

@@ -22,6 +22,9 @@
                                     <div class="accountBanneer_info_user_content_heading_name max-md:text-center max-md:w-full">
                                         <p class="display-sm urbanist font-semibold">{{user.fullName}}</p>
                                         <p class="text-lg urbanist">@{{user.username}}</p>
+                                        <pre>
+                                    
+                                        </pre>
                                     </div>
                                 
                                 </div>
@@ -32,29 +35,53 @@
                                         Reviews
                                     </div>
                                     <div class="reviews flex text-lg urbanist color-primary flex-col gap-1 font-semibold">
-                                        <span class="text-xl urbanist font-semibold color-tertiary text-center">1555</span>
+                                        <span class="text-xl urbanist font-semibold color-tertiary text-center">{{user.followeds|length}}</span>
                                         Abonné(e)s
                                     </div>
                                     <div class="reviews flex text-lg urbanist color-primary flex-col gap-1 font-semibold">
-                                        <span class="text-xl urbanist font-semibold color-tertiary text-center">200</span>
+                                        <span class="text-xl urbanist font-semibold color-tertiary text-center">{{user.followers|length}}</span>
                                         Suivis
                                     </div>
 
                                 </div>
                                 <div class="accountBanneer_info_user_actions flex justify-between">
-                                {% if app.user and app.user.id == user.id %}
-                                    <a href="#" class="py-2 w-2/5 h-fit bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
-                                        Modifier le profil
-                                    </a>
-                                {% elseif user.isPrivate == true %}
-                                    <a href="#" class="py-2 w-2/5 h-fit transition-all ease-in-out border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
-                                        Privé
-                                    </a>
-                                {% else %}
-                                    <a href="#" class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE]  bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
-                                        Suivre
-                                    </a>
-                                {% endif %}
+                                  {% if app.user %}
+                      {# Récupérer les abonnés de l'utilisateur #}
+{% set followedUsers = user.followeds %}
+
+{# Vérifier si l'utilisateur connecté suit l'utilisateur cible #}
+{% set isSubscribed = app.user is not null and followedUsers|filter(followed => followed.follower.id == app.user.id) is not empty %}
+
+
+    
+    {% if app.user.id == user.id %}
+        <a href="#" class="py-2 w-2/5 h-fit bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+            Modifier le profil
+        </a>
+    {% elseif user.isPrivate %}
+        {% if isSubscribed %}
+            <a href="#"
+               class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+                Ne plus suivre
+            </a>
+        {% else %}
+               <a href="{{ path('app_follow', { 'followerId': app.user.id, 'followedId': user.id }) }}"
+               class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+                Suivre
+            </a>
+        {% endif %}
+    {% else %}
+        <a href="#"
+           class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+            {{ isSubscribed ? 'Ne plus suivre' : 'Suivre' }}
+        </a>
+    {% endif %}
+{% else %}
+    <a href="{{ path('account_login') }}" class="py-2 w-2/5 h-fit bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+        Se connecter
+    </a>
+{% endif %}
+
 
                                 
                                     <button class="py-2 w-2/5 h-fit bg-secondary transition-all ease-in-out hover:bg-[rgba(161,81,222,0.15)] border border-[#A051DE] copyLink color-tertiary text-center rounded-md text-lg urbanist ">Copier l'url du profil</button>
@@ -84,7 +111,8 @@
                     {% endif %}
                 
                 </div>
-             {% if user.isPrivate == true and app.user.id != user.id %}
+         {% if  (user.isPrivate == true and app.user is null) or app.user.id != user.id and isSubscribed == false %}
+
                 <div class="flex flex-col gap-2 justify-center items-center">
                     <div class="w-[50px] h-[50px] rounded-full border-2 border-[#a051de] flex justify-center items-center color-tertiary">
                         <span class="material-symbols-outlined">
@@ -139,7 +167,7 @@
 
                 {% endif %}
             </div>
-            {% if not user.isPrivate %}
+            {% if (app.user and  isSubscribed == true) or not user.isPrivate or (app.user and app.user.id == user.id)   %}
                 {% block profile_content %}
                     {# Contenu du profil ici #}
                 {% endblock %}
