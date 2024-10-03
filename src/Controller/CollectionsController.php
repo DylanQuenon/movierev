@@ -9,6 +9,7 @@ use App\Form\CollectionType;
 use App\Entity\CollectionsMedia;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CollectionsRepository;
+use App\Repository\SubscriptionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class CollectionsController extends AbstractController
 {
     #[Route('/user/{slug}/collections', name: 'user_collections')]
-    public function index(User $user, CollectionsRepository $repo, EntityManagerInterface $entityManager): Response
+    public function index(User $user, CollectionsRepository $repo, EntityManagerInterface $entityManager,SubscriptionRepository $followingRepo): Response
     {
         $currentUser = $this->getUser();
     
@@ -32,6 +33,10 @@ class CollectionsController extends AbstractController
                 'isPrivate' => false,
             ]);
         }
+
+        $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
+        $isFollowing = !$isPrivate || ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
+
     
         // Créer un tableau pour stocker un média aléatoire par collection
         $randomMediaByCollection = [];
@@ -58,11 +63,13 @@ class CollectionsController extends AbstractController
             'user' => $user,
             'myForm' => $form ? $form->createView() : null,
             'randomMediaByCollection' => $randomMediaByCollection,
+            'isPrivate' => $isPrivate,
+            'isFollowing' => $isFollowing,
         ]);
     }
     
     #[Route('/users/{slug}/collections/{id}', name: 'collection_show')]
-    public function show(Request $request, Collections $collection, EntityManagerInterface $entityManager, string $slug): Response
+    public function show(Request $request, Collections $collection, EntityManagerInterface $entityManager, string $slug ): Response
     {
         $user = $entityManager->getRepository(User::class)->findOneBy(['slug' => $slug]);
         $form = $this->getUser() && $this->getUser()->getId() === $user->getId()

@@ -1,195 +1,174 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{user.username}}{% endblock %}
+{% block title %}
+	{{user.username}}
+{% endblock %}
 
-{% block stylesheets %}{{encore_entry_link_tags('accountStyle')}}{% endblock %}
+{% block stylesheets %}
+	{{encore_entry_link_tags('accountStyle')}}
+{% endblock %}
 
 {% block body %}
-    <div class="slide bg-secondary">
-        <div class="wrapper py-24 flex flex-col gap-10 items-center">
-            <div class="w-full items-center flex flex-col gap-5">
-                <div class="flex flex-wrap justify-evenly w-full relative">
-                 {% if app.user and app.user.id == user.id %}
-                    <div class="block-notif h-[300px] max-md:w-full max-md:my-5 lg:w-[20%] bg-white">
-                    
-                    </div>
-                {% endif %}
-                    <div class="accountBanneer max-md:order-3 h-fit max-md:w-full max-md:flex-wrap lg:w-1/2 flex gap-5 p-5 items-center rounded-3xl bg-white">
-                        <img src="/uploads/{{user.avatar}}" alt="Image de l'utilisateur {{user.username}}" class=" max-md:mx-auto w-[200px] h-[200px] object-cover rounded-3xl">
-                        <div class="accountBanneer_info_user max-md:w-full lg:w-3/5 max-md:justify-center flex flex-col gap-5">
-                            <div class="accountBanneer_info_user_content flex flex-col gap-3">
-                                <div class="accountBanneer_info_user_content_heading flex justify-between">
-                                    <div class="accountBanneer_info_user_content_heading_name max-md:text-center max-md:w-full">
-                                        <p class="display-sm urbanist font-semibold">{{user.fullName}}</p>
-                                        <p class="text-lg urbanist">@{{user.username}}</p>
-                                        <pre>
-                                    
-                                        </pre>
-                                    </div>
-                                
-                                </div>
-                                <p class="biography text-lg urbanist">{{user.biography}}</p>
-                                <div class="accountBanneer_info_user_stats w-full flex justify-between px-5 py-3 bg-secondary rounded-3xl">
-                                    <div class="reviews flex text-lg urbanist color-primary flex-col gap-1 font-semibold">
-                                        <span class="text-xl urbanist font-semibold color-tertiary text-center">{{user.reviews|length}}</span>
-                                        Reviews
-                                    </div>
-                                    <div class="reviews flex text-lg urbanist color-primary flex-col gap-1 font-semibold">
-                                        <span class="text-xl urbanist font-semibold color-tertiary text-center">{{user.followeds|length}}</span>
-                                        Abonné(e)s
-                                    </div>
-                                    <div class="reviews flex text-lg urbanist color-primary flex-col gap-1 font-semibold">
-                                        <span class="text-xl urbanist font-semibold color-tertiary text-center">{{user.followers|length}}</span>
-                                        Suivis
-                                    </div>
+	<div class="slide bg-secondary">
+		<div class="wrapper py-24 flex flex-col gap-10 items-center">
+			<div class="w-full items-center flex flex-col gap-5">
+				<div class="flex flex-wrap justify-evenly w-full relative">
+					{% if app.user and app.user.id == user.id %}
+						<div class="block-notif h-[300px] max-md:w-full max-md:my-5 lg:w-[20%] bg-white"></div>
+					{% endif %}
+					<div class="accountBanneer max-md:order-3 h-fit max-md:w-full max-md:flex-wrap lg:w-1/2 flex gap-5 p-5 items-center rounded-3xl bg-white">
+						<img src="/uploads/{{user.avatar}}" alt="Image de l'utilisateur {{user.username}}" class=" max-md:mx-auto w-[200px] h-[200px] object-cover rounded-3xl">
+						<div class="accountBanneer_info_user max-md:w-full lg:w-3/5 max-md:justify-center flex flex-col gap-5">
+							<div class="accountBanneer_info_user_content flex flex-col gap-3">
+								<div class="accountBanneer_info_user_content_heading flex justify-between">
+									<div class="accountBanneer_info_user_content_heading_name max-md:text-center max-md:w-full">
+										<p class="display-sm urbanist font-semibold">{{user.fullName}}</p>
+										<p class="text-lg urbanist">@{{user.username}}</p>
+									</div>
+								</div>
+								<p class="biography text-lg urbanist">{{user.biography}}</p>
+								<div class="accountBanneer_info_user_stats w-full flex justify-between px-5 py-3 bg-secondary rounded-3xl">
+									<div class="reviews flex text-lg urbanist color-primary flex-col gap-1 font-semibold">
+										<span class="text-xl urbanist font-semibold color-tertiary text-center">{{user.reviews|length}}</span>
+										Reviews
+									</div>
+									<div class="reviews flex text-lg urbanist color-primary flex-col gap-1 font-semibold">
+										<span class="text-xl urbanist font-semibold color-tertiary text-center">{{user.followeds|length}}</span>
+										Abonné(e)s
+									</div>
+									<div class="reviews flex text-lg urbanist color-primary flex-col gap-1 font-semibold">
+										<span class="text-xl urbanist font-semibold color-tertiary text-center">{{user.followers|length}}</span>
+										Suivis
+									</div>
 
-                                </div>
-                                <div class="accountBanneer_info_user_actions flex justify-between">
-                                  {% if app.user %}
-                      {# Récupérer les abonnés de l'utilisateur #}
-{% set followedUsers = user.followeds %}
+								</div>
+								<div class="accountBanneer_info_user_actions flex justify-between">
+									{% if app.user %}
+										{% if app.user.id == user.id %}
+											<a href="#" class="py-2 w-2/5 h-fit bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+												Modifier le profil
+											</a>
+										{% else %}
+										<a href="{{ path(isFollowing ? 'app_unfollow' : 'app_follow', { 'followerId': app.user.id, 'followedId': user.id }) }}" class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+                                            {{ isFollowing ? 'Ne plus suivre' : 'Suivre' }}
+                                        </a>
 
-{# Vérifier si l'utilisateur connecté suit l'utilisateur cible #}
-{% set isSubscribed = app.user is not null and followedUsers|filter(followed => followed.follower.id == app.user.id) is not empty %}
-
-
-    
-    {% if app.user.id == user.id %}
-        <a href="#" class="py-2 w-2/5 h-fit bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
-            Modifier le profil
-        </a>
-    {% elseif user.isPrivate %}
-        {% if isSubscribed %}
-            <a href="#"
-               class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
-                Ne plus suivre
-            </a>
-        {% else %}
-               <a href="{{ path('app_follow', { 'followerId': app.user.id, 'followedId': user.id }) }}"
-               class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
-                Suivre
-            </a>
-        {% endif %}
-    {% else %}
-        <a href="#"
-           class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
-            {{ isSubscribed ? 'Ne plus suivre' : 'Suivre' }}
-        </a>
-    {% endif %}
-{% else %}
-    <a href="{{ path('account_login') }}" class="py-2 w-2/5 h-fit bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
-        Se connecter
-    </a>
-{% endif %}
+										{% endif %}
+									{% else %}
+										<a href="{{ path('account_login') }}" class="py-2 w-2/5 h-fit bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+											Se connecter
+										</a>
+									{% endif %}
 
 
-                                
-                                    <button class="py-2 w-2/5 h-fit bg-secondary transition-all ease-in-out hover:bg-[rgba(161,81,222,0.15)] border border-[#A051DE] copyLink color-tertiary text-center rounded-md text-lg urbanist ">Copier l'url du profil</button>
-                                </div>
-                            </div>
+									<button class="py-2 w-2/5 h-fit bg-secondary transition-all ease-in-out hover:bg-[rgba(161,81,222,0.15)] border border-[#A051DE] copyLink color-tertiary text-center rounded-md text-lg urbanist ">Copier l'url du profil</button>
+								</div>
+							</div>
 
 
-                        </div>
-                    </div>
-                    {% if app.user and app.user.id == user.id %}
-                        <div class="block-actions max-md:w-full max-md:order-2 max-md:my-10 h-fit px-4 py-4 rounded-[20px] flex flex-col gap-5  lg:w-[20%] bg-white ">
-                            <a href="{{path('medias_new')}}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">Ajouter un film <i class="fa-solid fa-chevron-right"></i> </a>
-                            <a href="{{path('medias_new')}}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">Voir mes listes <i class="fa-solid fa-chevron-right"></i> </a>
-                            {% if app.user.id == user.id and 'ROLE_REDACTEUR' in user.getRoles() %}
-                                <a href="{{ path('news_create') }}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">
-                                    Ajouter un article <i class="fa-solid fa-chevron-right"></i>
-                                </a>
+						</div>
+					</div>
+					{% if app.user and app.user.id == user.id %}
+						<div class="block-actions max-md:w-full max-md:order-2 max-md:my-10 h-fit px-4 py-4 rounded-[20px] flex flex-col gap-5  lg:w-[20%] bg-white ">
+							<a href="{{path('medias_new')}}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">Ajouter un film
+								<i class="fa-solid fa-chevron-right"></i>
+							</a>
+							<a href="{{path('user_collections',{'slug':app.user.slug})}}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">Voir mes listes
+								<i class="fa-solid fa-chevron-right"></i>
+							</a>
+							{% if app.user.id == user.id and 'ROLE_REDACTEUR' in user.getRoles() %}
+								<a href="{{ path('news_create') }}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">
+									Ajouter un article
+									<i class="fa-solid fa-chevron-right"></i>
+								</a>
 
-                            {% endif %}
-                            <a href="{{ path('medias_new') }}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">
-                                Paramètres <i class="fa-solid fa-chevron-right"></i>
-                            </a>
+							{% endif %}
+							<a href="{{ path('medias_new') }}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">
+								Paramètres
+								<i class="fa-solid fa-chevron-right"></i>
+							</a>
+						</div>
+					{% endif %}
+
+				</div>
+				{% if isPrivate and not isFollowing %}
+
+					<div class="flex flex-col gap-2 justify-center items-center">
+						<div class="w-[50px] h-[50px] rounded-full border-2 border-[#a051de] flex justify-center items-center color-tertiary">
+							<span class="material-symbols-outlined">
+								lock
+							</span>
+						</div>
+						<p class="text-lg urbanist font-semibold">Ce compte est privé</p>
+					</div>
+
+				{% else %}
+					<div class="navigation lg:w-1/2 max-md:w-full">
+						<nav class="w-full">
+							<ul class="flex flex-wrap justify-between w-full">
+								<li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table {% if app.request.get('_route') == 'user_reviews' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-[#a051de]{% else %}text-[#A4A4A4] border-[#A4A4A4] {% endif %} ">
+									<a href="{{path('user_reviews',{'slug':user.slug})}}" class="w-full h-full font-semibold ">
+										Reviews
+									</a>
+								</li>
+								{% if app.user and app.user.id == user.id %}
+									<li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table {% if app.request.get('_route') == 'user_likes' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-[#a051de]{% else %}text-[#A4A4A4] border-[#A4A4A4] {% endif %} ">
+										<a href="{{path('user_likes',{'slug':user.slug})}}" class="w-full h-full font-semibold ">
+											Likes
+										</a>
+									</li>
+
+								{% endif %}
+								{% if "ROLE_REDACTEUR" in user.roles %}
+									<li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table {% if app.request.get('_route') == 'user_news' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-[#a051de]{% else %}text-[#A4A4A4] border-[#A4A4A4] {% endif %} ">
+										<a href="{{path('user_news',{'slug':user.slug})}}" class="w-full h-full font-semibold ">
+											Articles
+										</a>
+									</li>
+								{% endif %}
+
+								<li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table {% if app.request.get('_route') == 'user_collections' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-[#a051de]{% else %}text-[#A4A4A4] border-[#A4A4A4] {% endif %} ">
+									<a href="{{path('user_collections',{'slug':user.slug})}}" class="w-full h-full font-semibold ">
+										Collections
+									</a>
+								</li>
 
 
-                    
-                        </div>
-                    {% endif %}
-                
-                </div>
-         {% if  (user.isPrivate == true and app.user is null) or app.user.id != user.id and isSubscribed == false %}
+								<li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table {% if app.request.get('_route') == 'user_about' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-[#a051de]{% else %}text-[#A4A4A4] border-[#A4A4A4] {% endif %} ">
+									<a href="{{path('user_about',{'slug':user.slug})}}" class="w-full h-full font-semibold ">
+										A propos
+									</a>
+								</li>
+							</ul>
+						</nav>
 
-                <div class="flex flex-col gap-2 justify-center items-center">
-                    <div class="w-[50px] h-[50px] rounded-full border-2 border-[#a051de] flex justify-center items-center color-tertiary">
-                        <span class="material-symbols-outlined">
-                        lock
-                        </span>
-                    </div>
-                    <p class="text-lg urbanist font-semibold">Ce compte est privé</p>
-                </div>
-                    
-                    {% else %}
-                    <div class="navigation lg:w-1/2 max-md:w-full">
-                        <nav class="w-full">
-                            <ul class="flex flex-wrap justify-between w-full">
-                                 <li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table {% if app.request.get('_route') == 'user_reviews' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-[#a051de]{% else %}text-[#A4A4A4] border-[#A4A4A4] {% endif %} ">
-                                    <a href="{{path('user_reviews',{'slug':user.slug})}}" class="w-full h-full font-semibold ">
-                                        Reviews
-                                    </a>
-                                </li>
-                                    {% if app.user and app.user.id == user.id %}
-                                         <li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table {% if app.request.get('_route') == 'user_likes' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-[#a051de]{% else %}text-[#A4A4A4] border-[#A4A4A4] {% endif %} ">
-                                            <a href="{{path('user_likes',{'slug':user.slug})}}" class="w-full h-full font-semibold ">
-                                                Likes
-                                            </a>
-                                        </li>
-                                    
-                                    {% endif %}
-                                    {% if "ROLE_REDACTEUR" in user.roles %}
-                                        <li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table {% if app.request.get('_route') == 'user_news' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-[#a051de]{% else %}text-[#A4A4A4] border-[#A4A4A4] {% endif %} ">
-                                            <a href="{{path('user_news',{'slug':user.slug})}}" class="w-full h-full font-semibold ">
-                                                Articles
-                                            </a>
-                                        </li>
-                                    {% endif %}
+					</div>
 
-                                   <li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table {% if app.request.get('_route') == 'user_collections' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-[#a051de]{% else %}text-[#A4A4A4] border-[#A4A4A4] {% endif %} ">
-                                    <a href="{{path('user_collections',{'slug':user.slug})}}" class="w-full h-full font-semibold ">
-                                        Collections
-                                    </a>
-                                </li>
+				{% endif %}
+			</div>
+			{% if not isPrivate or isFollowing %}
+				{% block profile_content %}
+					{# Contenu du profil ici #}
+				{% endblock %}
+			{% endif %}
 
-                            
-                           
-                                <li class="text-lg urbanist flex-grow text-center border-b-2 border-spacing-2 table {% if app.request.get('_route') == 'user_about' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-[#a051de]{% else %}text-[#A4A4A4] border-[#A4A4A4] {% endif %} ">
-                                    <a href="{{path('user_about',{'slug':user.slug})}}" class="w-full h-full font-semibold ">
-                                        A propos
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-
-                    </div>
-
-                {% endif %}
-            </div>
-            {% if (app.user and  isSubscribed == true) or not user.isPrivate or (app.user and app.user.id == user.id)   %}
-                {% block profile_content %}
-                    {# Contenu du profil ici #}
-                {% endblock %}
-            {% endif %}
-                        
-        </div>
-    </div>
+		</div>
+	</div>
 {% endblock %}
 {% block javascripts %}
-<script>
-    const copyLinkButton = document.querySelector('.copyLink')
-    copyLinkButton.addEventListener('click', function(event) {
-    event.preventDefault();
-    navigator.clipboard.writeText(window.location.href).then(function() {
-        copyLinkButton.innerHTML = 'Lien copié';
-        setTimeout(function() {
-            copyLinkButton.innerHTML = 'Copier l\'url du profil';
-        }, 3000);
-    }, function(err) {
-        console.error('Erreur lors de la copie du lien : ', err);
-    });
-});
-</script>
+	<script>
+		const copyLinkButton = document.querySelector('.copyLink')
+        copyLinkButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            navigator.clipboard.writeText(window.location.href).then(function () {
+            copyLinkButton.innerHTML = 'Lien copié';
+                setTimeout(function () {
+                    copyLinkButton.innerHTML = 'Copier l\'url du profil';
+                }, 3000);
+            }, function (err) {
+                console.error('Erreur lors de la copie du lien : ', err);
+            });
+        });
+	</script>
 
 {% endblock %}

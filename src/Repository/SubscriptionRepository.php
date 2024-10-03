@@ -40,4 +40,12 @@ class SubscriptionRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function isFollowing($followerUser, $followedUser): bool
+    {
+        return $this->findOneBy([
+            'follower' => $followerUser,
+            'followed' => $followedUser,
+        ]) !== null;
+    }
 }

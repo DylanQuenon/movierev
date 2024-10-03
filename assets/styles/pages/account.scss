@@ -1,1 +1,10 @@
 @import "../variables/variables.scss";
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: $font-family-urbanist;
+    button{
+        color: $color-secondary;
+    }
+}

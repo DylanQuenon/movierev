@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Repository\SubscriptionRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,10 +50,12 @@ class UserController extends AbstractController
         return new JsonResponse($jsonResults);
     }
     #[Route('/user/{slug}', name: 'user_show')]
-    public function index(User $user, UserRepository $repo): Response
+    public function index(User $user, UserRepository $repo, SubscriptionRepository $followingRepo): Response
     {
           // Votre logique pour récupérer l'utilisateur par le slug
           $slug = $user->getSlug();
+          $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
+          $isFollowing = !$isPrivate || ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
 
           if ($user) {
               // Redirection vers la section Reviews
@@ -67,16 +70,22 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/{slug}/about', name: 'user_about')]
-    public function about(User $user, UserRepository $repo): Response
+    public function about(User $user, UserRepository $repo, SubscriptionRepository $followingRepo): Response
     {
+        $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
+        $isFollowing = !$isPrivate || ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
         return $this->render('user/tab/about.html.twig', [
             'user' => $user,
+            'isFollowing' => $isFollowing,
+            'isPrivate' => $isPrivate,
           
         ]);
     }
     #[Route('/user/{slug}/reviews/{page<\d+>?1}', name: 'user_reviews')]
-    public function userReviews(User $user,Request $request, UserRepository $repo, PaginatorInterface $paginator, int $page = 1): Response
+    public function userReviews(User $user,Request $request, UserRepository $repo, PaginatorInterface $paginator, SubscriptionRepository $followingRepo, int $page = 1): Response
     {
+        $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
+        $isFollowing = !$isPrivate || ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
         $allReviews= $user->getReviews();
        
         // Pagination avec KnpPaginator
@@ -89,6 +98,8 @@ class UserController extends AbstractController
         return $this->render('user/tab/reviews.html.twig', [
             'user' => $user,
             'reviews' => $reviews,
+            'isFollowing' => $isFollowing,
+            'isPrivate' => $isPrivate,
           
         ]);
     }
@@ -116,13 +127,6 @@ class UserController extends AbstractController
             }
         }
 
-    
-    
-     
-
-        
-
-    
         // Pagination avec KnpPaginator
         $likedReviews = $paginator->paginate(
             $likedReviews, // La requête
@@ -138,13 +142,15 @@ class UserController extends AbstractController
 
     #[Route('/user/{slug}/news/{page<\d+>?1}', name: 'user_news')]
     
-    public function userNews(User $user,Request $request, UserRepository $repo, PaginatorInterface $paginator, int $page = 1): Response
+    public function userNews(User $user,Request $request, UserRepository $repo, PaginatorInterface $paginator, SubscriptionRepository $followingRepo, int $page = 1): Response
     {
         if (!in_array('ROLE_REDACTEUR', $user->getRoles())) {
             return $this->redirectToRoute('user_show', ['slug' => $user->getSlug()]);
         }
         
         $allNews= $user->getNews();
+        $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
+        $isFollowing = !$isPrivate || ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
        
         // Pagination avec KnpPaginator
         $news = $paginator->paginate(
@@ -156,6 +162,8 @@ class UserController extends AbstractController
         return $this->render('user/tab/articles.html.twig', [
             'user' => $user,
             'articles' => $news,
+            'isFollowing' => $isFollowing,
+            'isPrivate' => $isPrivate,
           
         ]);
     }
