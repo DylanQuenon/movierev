@@ -14,6 +14,7 @@ class CollectionsMedia
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'collectionsMedia')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Collections $collection = null;
 
     #[ORM\ManyToOne(inversedBy: 'collectionsMedia')]

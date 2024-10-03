@@ -16,14 +16,12 @@
             {% if app.user and app.user.id == user.id or not user.isPrivate  %}
                 {% for collection in collections %}
                     {% set randomMedia = randomMediaByCollection[collection.id] %}
-                    <a href="{{path('collection_show', {'id':collection.id, 'slug':user.slug})}}" class="relative color-secondary w-[200px] h-[200px] color-primary rounded-[20px] {% if not randomMedia %} bg-tertiary {% endif %} text-lg font-semibold flex justify-center items-center">     
+                    <a href="{{path('collection_show', {'id':collection.id, 'slug':user.slug})}}" class="relative color-secondary w-[200px] h-[200px] color-primary rounded-[20px] {% if not randomMedia %} bg-tertiary {% endif %} text-lg font-semibold flex  items-end ">     
                         {% if randomMedia %}
                             <img src="/uploads/{{ randomMedia.cover }}" alt="{{ collection.name }}" class="absolute top-0 left-0 w-full h-full object-cover rounded-[20px]" style="z-index: 1;">
                             <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black rounded-[20px]" style="z-index: 2;"></div>
                         {% endif %}
-                        
-
-                        <span class="z-10">{{ collection.name }}</span>
+                        <span class="z-10 p-3 text-lg font-semibold">{{ collection.name }}</span>
                         
                     </a>
                 {% endfor %}

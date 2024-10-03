@@ -65,6 +65,9 @@ class CollectionsController extends AbstractController
     public function show(Request $request, Collections $collection, EntityManagerInterface $entityManager, string $slug): Response
     {
         $user = $entityManager->getRepository(User::class)->findOneBy(['slug' => $slug]);
+        $form = $this->getUser() && $this->getUser()->getId() === $user->getId()
+        ? $this->createForm(CollectionType::class, $collection)
+        : null;
 
         $collectionsMedia = $entityManager->getRepository(CollectionsMedia::class)
         ->findBy(['collection' => $collection], ['position' => 'ASC']); // Trie par position
@@ -72,6 +75,7 @@ class CollectionsController extends AbstractController
             'collection' => $collection,
             'user' => $user,
             'collectionsMedia' => $collectionsMedia, // Passer la liste triée à la vue
+            'myForm' => $form ? $form->createView() : null,
         ]);
 
     }
@@ -135,6 +139,25 @@ class CollectionsController extends AbstractController
             'collection' => $collection,
         ]);
     }
+    #[Route('/collections/delete/{id}', name: 'collection_delete')]
+    public function delete(Request $request, Collections $collection, EntityManagerInterface $entityManager): Response
+    {
+        // Vérifier si l'utilisateur a les droits de modifier cette collection
+        if ($collection->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas supprimer cette collection.');
+        }
+
+        $entityManager->remove($collection);
+        $entityManager->flush();
+        $this->addFlash(
+            "success",
+            "La collection <strong>".$collection->getName()."</strong> a bien été supprimée"
+        );
+
+        return $this->redirectToRoute('user_collections', [
+            'slug' => $this->getUser()->getSlug(),
+        ]);
+    }
 
 
     
@@ -188,6 +211,49 @@ class CollectionsController extends AbstractController
         $this->addFlash('success', 'Media added to collection');
         return $this->redirect($request->headers->get('referer')); // Rediriger vers la page précédente
     }
+
+    #[Route('/collections/remove/{collectionId}/{mediaId}', name: 'remove_media_from_collection')]
+    public function removeMediaFromCollection(int $collectionId, int $mediaId, EntityManagerInterface $entityManager, CollectionsRepository $repo, Request $request): Response
+    {
+        // Trouver la collection par ID
+        $collection = $repo->find($collectionId);
+
+        if (!$collection) {
+            // Rediriger avec un message d'erreur si la collection n'est pas trouvée
+            $this->addFlash('error', 'Collection Introuvable');
+            return $this->redirect($request->headers->get('referer')); // Rediriger vers la page précédente
+        }
+
+        // Récupérer le média à supprimer
+        $media = $entityManager->getRepository(Media::class)->find($mediaId);
+
+        if (!$media) {
+            // Rediriger avec un message d'erreur si le média n'est pas trouvé
+            $this->addFlash('error', 'Media introuvable');
+            return $this->redirect($request->headers->get('referer')); // Rediriger vers la page précédente
+        }
+
+        // Trouver l'entrée dans CollectionsMedia
+        $collectionsMedia = $entityManager->getRepository(CollectionsMedia::class)->findOneBy([
+            'collection' => $collection,
+            'medias' => $media,
+        ]);
+
+        if (!$collectionsMedia) {
+            // Rediriger avec un message d'erreur si le média n'est pas dans la collection
+            $this->addFlash('error', 'Media introuvable dans la collection');
+            return $this->redirect($request->headers->get('referer')); // Rediriger vers la page précédente
+        }
+
+        // Supprimer l'entrée dans CollectionsMedia
+        $entityManager->remove($collectionsMedia);
+        $entityManager->flush();
+
+        // Rediriger avec un message de succès après la suppression
+        $this->addFlash('success', 'Media retiré de la collection');
+        return $this->redirect($request->headers->get('referer')); // Rediriger vers la page précédente
+    }
+
 
     // src/Controller/CollectionController.php
 

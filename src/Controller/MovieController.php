@@ -237,12 +237,35 @@ class MovieController extends AbstractController
                 ->setMaxResults(3)
                 ->getQuery()
                 ->getResult();
+           // Initialisation d'un tableau pour stocker tous les médias
+    $allMedia = [];
+
+    $user=$this->getUser();
+
+    if ($user) {
+        // Récupère les collections de l'utilisateur
+        $collections = $user->getCollections(); // Assure-toi que cette méthode existe dans l'entité User
+        
+        // Parcours chaque collection pour récupérer les médias
+        foreach ($collections as $collection) {
+            $collectionMedias = $collection->getCollectionsMedia(); // Assure-toi que cette méthode existe dans l'entité Collection
+            
+            foreach ($collectionMedias as $collectionMedia) {
+                $media = $collectionMedia->getMedias(); // Récupère le média associé
+                if ($media) {
+                    $allMedia[] = $media; // Ajoute le média au tableau
+                }
+            }
+        }
+    }
+        //
         
     
         return $this->render('media/show.html.twig', [
             'media' => $media,
             'topReview' => $mostLikedReviews,
             'latestMovies' => $latestMovies,
+            'allMedia'=>$allMedia
         ]);
 
     } 

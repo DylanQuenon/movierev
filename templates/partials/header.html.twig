@@ -13,9 +13,10 @@
     }
   }
 
-  {# .flash-message {
-    transition: opacity 0s ease-in-out;
-  } #}
+  .flash-message {
+
+	z-index: 70;
+  }
 
   .flash-message.slide-out {
     animation: slideOut 0.5s ease-in-out;
@@ -206,23 +207,75 @@
 	{{ encore_entry_script_tags('burgerJS') }}
 	<script>
 		document.querySelector('.openSearchUser').addEventListener('click', function(event) {
-    const searchForm = document.getElementById('searchUserForm');
-    
-    // Toggle the visibility of the form
-    if (searchForm.classList.contains('hidden')) {
-        searchForm.classList.remove('hidden');
-        
-        // Fermer le formulaire si l'utilisateur clique à l'extérieur
-        document.addEventListener('click', function closeForm(event) {
-            if (!searchForm.contains(event.target) && !event.target.closest('.openSearchUser')) {
-                searchForm.classList.add('hidden');
-                document.removeEventListener('click', closeForm); // Supprime l'écouteur pour éviter la duplication
-            }
-        });
-    } else {
-        searchForm.classList.add('hidden');
-    }
-});
+			const searchForm = document.getElementById('searchUserForm');
+			
+			// Toggle the visibility of the form
+			if (searchForm.classList.contains('hidden')) {
+				searchForm.classList.remove('hidden');
+				
+				// Fermer le formulaire si l'utilisateur clique à l'extérieur
+				document.addEventListener('click', function closeForm(event) {
+					if (!searchForm.contains(event.target) && !event.target.closest('.openSearchUser')) {
+						searchForm.classList.add('hidden');
+						document.removeEventListener('click', closeForm); // Supprime l'écouteur pour éviter la duplication
+					}
+				});
+			} else {
+				searchForm.classList.add('hidden');
+			}
+		});
+		document.addEventListener('DOMContentLoaded', () => {
+			const searchInput = document.querySelector('#search-input-users');
+			const searchResults = document.querySelector('#search-results-users');
+			const resultsList = searchResults.querySelector('ul');
+
+			// Réinitialiser la valeur de l'input à une chaîne vide
+			searchInput.value = '';
+
+			searchInput.addEventListener('input', function () {
+				const query = this.value.trim();
+				if (query.length > 1) {
+					fetch(`/users/search/ajax?query=${encodeURIComponent(query)}`)
+						.then((response) => response.json())
+						.then((data) => {
+							resultsList.innerHTML = '';
+							if (data.length > 0) {
+								searchResults.style.display = 'block';
+								data.forEach((result) => {
+									const item = document.createElement('li');
+									const link = document.createElement('a');
+									link.href = `/user/${result.slug}`;
+										link.innerHTML = `
+										<div class="flex gap-2 border-b border-[#a051de] my-2 pb-4 items-center">
+											<img src="/uploads/${result.avatar}" alt="${result.fullName}" class="search-result-poster" style="height:50px; width:50px; border-radius:100%; object-fit:cover;">
+											<div class="search-result-info">
+												<h4 class="search-result-title text-lg urbanist font-semibold color-tertiary ">${result.username}</h4>
+												<h4 class="search-result-title text-md">${result.fullName}</h4>
+											
+											</div>
+										</div>
+									
+									`;
+									item.appendChild(link);
+									resultsList.appendChild(item);
+								});
+							} else {
+								searchResults.style.display = 'block';
+								resultsList.innerHTML = '<li>Aucun résultat</li>';
+							}
+						});
+				} else {
+					searchResults.style.display = 'none';
+				}
+			});
+
+			searchInput.addEventListener('blur', () => {
+				setTimeout(() => {
+					searchResults.style.display = 'none';
+				}, 200);
+			});
+		});
+
 	  document.getElementById('accountDropdownLink').addEventListener('click', function() {
     document.getElementById('dropdown').classList.toggle('hidden');
   });
@@ -254,59 +307,7 @@
 		}
 
 
-
-
-		    document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.querySelector('#search-input-users');
-            const searchResults = document.querySelector('#search-results-users');
-            const resultsList = searchResults.querySelector('ul');
-
-            // Réinitialiser la valeur de l'input à une chaîne vide
-            searchInput.value = '';
-
-            searchInput.addEventListener('input', function () {
-                const query = this.value.trim();
-                if (query.length > 1) {
-                    fetch(`/users/search/ajax?query=${encodeURIComponent(query)}`)
-                        .then((response) => response.json())
-                        .then((data) => {
-                            resultsList.innerHTML = '';
-                            if (data.length > 0) {
-                                searchResults.style.display = 'block';
-                                data.forEach((result) => {
-                                    const item = document.createElement('li');
-                                    const link = document.createElement('a');
-                                    link.href = `/user/${result.slug}`;
-                                        link.innerHTML = `
-										<div class="flex gap-2 border-b border-[#a051de] my-2 pb-4 items-center">
-                                            <img src="/uploads/${result.avatar}" alt="${result.fullName}" class="search-result-poster" style="height:50px; width:50px; border-radius:100%; object-fit:cover;">
-                                            <div class="search-result-info">
-                                                <h4 class="search-result-title text-lg urbanist font-semibold color-tertiary ">${result.username}</h4>
-                                                <h4 class="search-result-title text-md">${result.fullName}</h4>
-                                            
-                                            </div>
-										</div>
-                                    
-                                    `;
-                                    item.appendChild(link);
-                                    resultsList.appendChild(item);
-                                });
-                            } else {
-                                searchResults.style.display = 'block';
-                                resultsList.innerHTML = '<li>Aucun résultat</li>';
-                            }
-                        });
-                } else {
-                    searchResults.style.display = 'none';
-                }
-            });
-
-            searchInput.addEventListener('blur', () => {
-                setTimeout(() => {
-                    searchResults.style.display = 'none';
-                }, 200);
-            });
-        });
+		 
 
 	</script>
 {% endblock %}

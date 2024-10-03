@@ -2,27 +2,44 @@
 
 {% block title %}Collection {{ collection.name }}{% endblock %}
 
-
 {% block body %}
     <div class="slide">
-        <div class="wrapper py-24">
-            <h1 class="text-3xl font-bold mb-6">Collection: {{ collection.name }}</h1>
+        <div class="wrapper py-24 flex-col gap-10">
+            <div class="flex items-center justify-between mb-10">
+                <h2 class="display-md object uppercase font-bold">Collection: <span class="color-tertiary"> {{ collection.name }}</span></h2>
+                {% if app.user and app.user.id == user.id %}
+                    <div class="flex gap-2">
+                        <button class="py-2 px-4 addCollection rounded-full text-white bg-purple-500 text-lg urbanist hover:bg-purple-700 transition-all">Modifier la collection</button>
+                         <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('collection_delete', { 'id': collection.id }) }}', 'Supprimer', 'Annuler')" class="text-lg urbanist bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600">Supprimer</button>
+                    </div>
+                {% endif %}
             
+            </div>
             {% if app.user and app.user.id == user.id %}
                 {# L'utilisateur peut modifier la liste #}
                 <div id="sortable-list" class=" cursor-grabbing grid grid-cols-1 gap-5">
                     {% for collectionsMedia in collectionsMedia %}
-                        <div class="flex items-center bg-white p-4 rounded-lg shadow-md border border-gray-200"
-                             data-media-id="{{ collectionsMedia.medias.id }}">
-                            <span class="material-symbols-outlined mr-4 cursor-move">
-                                drag_indicator
-                            </span>
-                            <div class="flex items-center gap-5 w-full">
-                                <img src="/uploads/{{ collectionsMedia.medias.poster }}" alt="{{ collectionsMedia.medias.title }}" class="w-16 h-24 object-cover rounded">
-                                <div class="flex flex-col">
-                                    <h2 class="text-lg font-semibold">{{ collectionsMedia.medias.title }}</h2>
-                                    <p class="text-gray-500">{{ collectionsMedia.medias.releaseDate|date('Y-m-d') }}</p>
-                                    <p class="text-gray-700 truncate max-w-xs">{{ collectionsMedia.medias.synopsis|slice(0, 80) ~ (collectionsMedia.medias.synopsis|length > 80 ? '...' : '') }}</p>
+                        <div class="flex items-center bg-white p-4 rounded-lg shadow-md border border-gray-200" data-media-id="{{ collectionsMedia.medias.id }}">
+                            <span class="material-symbols-outlined mr-4 cursor-move">drag_indicator</span>
+                            <div class="flex max-md:flex-col max-md:justify-center items-center gap-5 w-full">
+                                <img src="/uploads/{{ collectionsMedia.medias.poster }}" alt="{{ collectionsMedia.medias.title }}" class="w-[64px] h-24 object-cover rounded">
+                       
+                                <div class="flex flex-col gap-5 text-lg urbanist">
+                                    <div class="flex flex-col gap-2">
+                                        <div class="flex items-center flex-wrap justify-between w-full">
+                                            <h3 class="text-xl font-semibold">{{ collectionsMedia.medias.title }}</h3>
+                                            {% if app.user and app.user.id == user.id  %}
+                                                <a href="{{path('remove_media_from_collection', {'collectionId': collection.id, 'mediaId':collectionsMedia.medias.id})}}" class="rounded-full bg-tertiary w-[40px] h-[40px] flex justify-center items-center text-lg color-secondary" data-tippy-content="Retirer de la collection"><i class="fa-solid fa-trash"></i></a>
+                                            {% endif %}
+                                        
+                                        </div>
+                                        <p class="color-tertiary font-semibold">{{ collectionsMedia.medias.releaseDate|date('d-m-Y') }}</p>
+                                        <p class="text-gray-700 ">{{ collectionsMedia.medias.synopsis|slice(0, 200) ~ (collectionsMedia.medias.synopsis|length > 200 ? '...' : '') }}</p>
+                                    </div>
+                                    <div class="actions flex gap-2">
+                                        {% include "partials/_trailer_button.html.twig" with {'trailerUrl': collectionsMedia.medias.trailer} %}
+                                        <a href="{{ path('medias_show', {'slug': collectionsMedia.medias.slug}) }}" class="transition-all flex px-4 py-2 rounded-full bg-[rgba(161,81,222,0.15)] color-tertiary hover:bg-[#a051de] hover:text-[#f5f5f5] ">Voir les détails</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -31,14 +48,22 @@
             {% else %}
                 {# L'utilisateur ne peut pas modifier la liste #}
                 <div class="grid grid-cols-1 gap-5">
-                    {% for collectionsMedia in collectionsMedia %}
-                        <div class="flex items-center bg-white p-4 rounded-lg shadow-md border border-gray-200">
-                            <div class="flex items-center gap-5 w-full">
-                                <img src="/uploads/{{ collectionsMedia.medias.poster }}" alt="{{ collectionsMedia.medias.title }}" class="w-16 h-24 object-cover rounded">
-                                <div class="flex flex-col">
-                                    <h2 class="text-lg font-semibold">{{ collectionsMedia.medias.title }}</h2>
-                                    <p class="text-gray-500">{{ collectionsMedia.medias.releaseDate|date('Y-m-d') }}</p>
-                                    <p class="text-gray-700 truncate max-w-xs">{{ collectionsMedia.medias.synopsis|slice(0, 80) ~ (collectionsMedia.medias.synopsis|length > 80 ? '...' : '') }}</p>
+                     {% for collectionsMedia in collectionsMedia %}
+                        <div class="flex items-center bg-white p-4 rounded-lg shadow-md border border-gray-200" data-media-id="{{ collectionsMedia.medias.id }}">
+                            <span class="material-symbols-outlined mr-4 cursor-move">drag_indicator</span>
+                            <div class="flex max-md:flex-col max-md:justify-center items-center gap-5 w-full">
+                                <img src="/uploads/{{ collectionsMedia.medias.poster }}" alt="{{ collectionsMedia.medias.title }}" class="w-[64px] h-24 object-cover rounded">
+                       
+                                <div class="flex flex-col gap-5 text-lg urbanist">
+                                    <div class="flex flex-col gap-2">
+                                        <h3 class="text-xl font-semibold">{{ collectionsMedia.medias.title }}</h3>
+                                        <p class="color-tertiary font-semibold">{{ collectionsMedia.medias.releaseDate|date('d-m-Y') }}</p>
+                                        <p class="text-gray-700 ">{{ collectionsMedia.medias.synopsis|slice(0, 200) ~ (collectionsMedia.medias.synopsis|length > 200 ? '...' : '') }}</p>
+                                    </div>
+                                    <div class="actions flex gap-2">
+                                        {% include "partials/_trailer_button.html.twig" with {'trailerUrl': collectionsMedia.medias.trailer} %}
+                                        <a href="{{ path('medias_show', {'slug': collectionsMedia.medias.slug}) }}" class="transition-all flex px-4 py-2 rounded-full bg-[rgba(161,81,222,0.15)] color-tertiary hover:bg-[#a051de] hover:text-[#f5f5f5] ">Voir les détails</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -47,11 +72,62 @@
             {% endif %}
         </div>
     </div>
+
+    {% include '/partials/_delete_modal.html.twig' with {
+		modal_id: 'deleteModal',
+		form_id: 'deleteForm',
+		title: 'Confirmation de suppression',
+		message: 'Êtes-vous sûr de vouloir supprimer cette collection ? Cette action est irréversible.',
+		action_url: '#',  
+		confirm_text: 'Supprimer',
+		cancel_text: 'Annuler'
+	} %}
+
+    {% include "partials/_trailer_modal.html.twig" %}
+    
+    <!-- Overlay pour ajouter une collection -->
+    {% if app.user and app.user.id == user.id %}
+        <div id="collectionOverlay" class="fixed inset-0 hidden bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div class="bg-white p-8 rounded-lg w-96">
+                <h2 class="text-lg font-bold mb-4">Modification d'une collection</h2>
+                    {{ form_start(myForm, {'action': path('collection_edit',{"id": collection.id}), 'method': 'POST'}) }}
+            {{form_widget(myForm.name)}}
+            {{ form_label(myForm.isPrivate, 'Confidentialité de la collection', {'label_attr': {'class': 'text-sm font-medium text-gray-900 dark:text-gray-300'}}) }}
+                    <div class="flex gap-3 items-center">
+                        <label class="inline-flex items-center cursor-pointer">
+                            {{ form_widget(myForm.isPrivate, {'attr': {'class': 'sr-only peer', 'id': 'privacyToggle'}}) }}
+                            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                        </label>
+                        <!-- Texte et icône dynamiques -->
+                        <div id="privacyStatus" class="flex items-center text-sm font-medium text-gray-900 dark:text-gray-300">
+                            <span class="material-symbols-outlined" id="privacyIcon">lock</span>
+                            <span id="privacyText" class="ml-2">Privé</span>
+                        </div>
+                    </div>
+                <button type="submit" class="py-2 px-4 rounded-md bg-tertiary">
+                        Modifier
+                </button>
+
+            {{form_end(myForm)}}
+            </div>
+        </div>
+    
+    {% endif %}
 {% endblock %}
+
 
 {% block javascripts %}
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
+
+     // Fermer l'overlay en cliquant à l'extérieur du formulaire
+        window.addEventListener('click', function(e) {
+            const overlay = document.getElementById('collectionOverlay');
+          
+            if (e.target === overlay) {
+                overlay.classList.add('hidden');
+            }
+        });
     document.addEventListener('DOMContentLoaded', function () {
         const el = document.getElementById('sortable-list');
 
@@ -72,6 +148,8 @@
 
             
     });
+
+
 
     function saveNewOrder(order) {
         fetch('/collections/{{ collection.id }}/update-order', {
@@ -95,5 +173,40 @@
             console.error('Error:', error);
         });
     }
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const privacyToggle = document.querySelector('#collection_isPrivate');
+        const privacyIcon = document.getElementById('privacyIcon');
+        const privacyText = document.getElementById('privacyText');
+
+        function updatePrivacyStatus() {
+            if (privacyToggle.checked) {
+                // Private mode
+                privacyIcon.textContent = 'lock';
+                privacyText.textContent = 'Privé';
+            } else {
+                // Public mode
+                privacyIcon.textContent = 'public';
+                privacyText.textContent = 'Public';
+            }
+        }
+
+        // Initialize the status on page load
+        updatePrivacyStatus();
+
+        // Update the status when the toggle is clicked
+        privacyToggle.addEventListener('change', updatePrivacyStatus);
+    });
+        document.querySelector('.addCollection').addEventListener('click', function() {
+            document.getElementById('collectionOverlay').classList.remove('hidden');
+        });
+
+        document.getElementById('cancelOverlay').addEventListener('click', function() {
+            document.getElementById('collectionOverlay').classList.add('hidden');
+        });
+
+   
+
+
 </script>
 {% endblock %}

@@ -24,6 +24,7 @@ Encore
     .addEntry('headerStyle', './assets/styles/partials/header.scss')
     .addEntry('sliderRevStyle', './assets/styles/partials/_sliderReviews.scss')
     .addEntry('cardNewsStyle', './assets/styles/partials/cardNews.scss')
+    .addEntry('cardMediaStyle', './assets/styles/partials/cardMedia.scss')
     .addEntry('sliderNewsStyle', './assets/styles/partials/sliderNews.scss')
     .addEntry('cardReviewsStyle', './assets/styles/partials/cardReviews.scss')
     .addEntry('buttonStyle', './assets/styles/partials/_buttonStyle.scss')
