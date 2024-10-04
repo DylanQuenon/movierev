@@ -46,4 +46,22 @@ class HomeController extends AbstractController
             "lastNews"=>$latestNews
         ]);
     }
+
+     /**
+     * Affiche la page d'accueil
+     *
+     * @param MediaRepository $repo
+     * @param StatsService $stats
+     * @param UserRepository $userRepo
+     * @return Response
+     */
+    #[Route('/legals', name: 'legals')]
+    public function legals(): Response
+    {
+
+     
+        return $this->render('legals/index.html.twig');
+    }
+
+    
 }
