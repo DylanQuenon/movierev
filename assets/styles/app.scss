@@ -275,3 +275,9 @@ body{
 .no-scroll {
   overflow: hidden;
 }
+#deleteAccount{
+  input{
+    @apply bg-transparent border-t-0 border-r-0 border-l-0 rounded-none border-b-2 border-b-[#a051de] focus:shadow-none;
+ box-shadow: none !important;
+  }
+}

@@ -55,7 +55,7 @@ class UserController extends AbstractController
           // Votre logique pour récupérer l'utilisateur par le slug
           $slug = $user->getSlug();
           $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
-          $isFollowing = !$isPrivate || ($this->getUser() && $follllowing($this->getUser(), $user));
+          $isFollowing = ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
 
           if ($user) {
               // Redirection vers la section Reviews
@@ -140,7 +140,7 @@ class UserController extends AbstractController
             'user' => $user,
             'reviews' => $likedReviews,
             'isFollowing' => $isFollowing,
-            'isPrivate' => $isPrivate,
+            
         ]);
     }
 

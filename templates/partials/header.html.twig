@@ -77,11 +77,16 @@
 		{% if app.user %}
           <li class="relative list-none logged">
             <button class="flex items-center focus:outline-none" id="accountDropdownLink">
-              {% if app.user.avatar %}
-                <img src="/uploads/{{ app.user.avatar }}" class="w-12 h-12 border-purple-500  rounded-full mr-2 border-2" alt="">
-              {% else %}
-                <img src="http://placehold.it/64x64" class="w-8 h-8 rounded-full mr-2 border border-gray-300" alt="">
-              {% endif %}
+			{% if app.user.avatar %}
+				{% if app.request.get('_route') == 'account_profile' %}
+					<img src="/uploads/{{avatar}}" class="w-12 h-12 border-purple-500 rounded-full mr-2 border-2" alt="Avatar">
+				{% else %}
+					<img src="/uploads/{{ app.user.avatar }}" class="w-12 h-12 border-purple-500 rounded-full mr-2 border-2" alt="Avatar actuel">
+				{% endif %}
+			{% else %}
+				<img src="http://placehold.it/64x64" class="w-8 h-8 rounded-full mr-2 border border-gray-300" alt="Placeholder Avatar">
+			{% endif %}
+
               <span class="color-primary text-lg urbanist font-semibold">{{ app.user.username }}</span>
               <i class="fas fa-chevron-down ml-2 color-tertiary"></i>
             </button>
