@@ -14,6 +14,20 @@
                 </div>
                    {% include "partials/_search_reviews.html.twig" %}
         </div>
+        <div class="flex justify-center gap-2">
+            <div class="flex justify-center mb-4">
+                <a href="{{ path('reviews_index', { 'filterType': 'general' }) }}" 
+                class="flex justify-center items-center w-[120px] h-[50px] mx-2 text-xl urbanist font-semibold   {{ filterType == 'general' ? ' shadowCustom bg-[rgba(161,81,222,0.15)] color-tertiary border-b-[#a051de] border-b-4' : 'text-[#a4a4a4]  border-b-0' }}">
+                    Général
+                </a>
+                {% if app.user %}
+                    <a href="{{ path('reviews_index', { 'filterType': 'suivis' }) }}" 
+                    class=" flex justify-center items-center w-[120px] h-[50px] mx-2 text-xl urbanist font-semibold {{ filterType == 'suivis' ? 'shadowCustom bg-[rgba(161,81,222,0.15)] color-tertiary border-b-[#a051de] border-b-4' : 'text-[#a4a4a4] border-b-0' }} ">
+                        Suivis
+                    </a>
+                {% endif %}
+            </div>
+        </div>
             {#Listes des films & séries#}
         <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 w-full">
             {% for review in reviews %}

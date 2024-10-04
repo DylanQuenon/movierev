@@ -79,20 +79,37 @@ class ReviewController extends AbstractController
     
         return new JsonResponse($jsonResults);
     }
-    #[Route('/reviews/page/{page<\d+>?1}', name: 'reviews_index')]
-    public function index( ReviewRepository $repo, Request $request, PaginatorInterface $paginator, int $page = 1): Response
+    #[Route('/reviews/{filterType}/page/{page<\d+>?1}', name: 'reviews_index')]
+    public function index( ReviewRepository $repo, Request $request, PaginatorInterface $paginator,string $filterType = 'general', int $page = 1): Response
     {
-        $allReviews= $repo->findPublicReviews();
+        $currentUser = $this->getUser();
+    
+        // Selon le type de filtre, récupère les critiques
+        if ($filterType === 'suivis' && $currentUser) {
+            // Critiques des utilisateurs suivis seulement
+            $query = $repo->findReviewsFromFollowedUsers($currentUser);
+         
+        } elseif ($filterType === 'general') {
+            // Critiques générales (toutes les critiques publiques)
+            $query = $repo->findPublicReviews();
+        
+        } else {
+            // Si aucun des deux filtres n'est valide, on redirige vers une page 404
+            throw $this->createNotFoundException('La page demandée est introuvable.');
+        }
+ 
+        
        
         // Pagination avec KnpPaginator
         $reviews = $paginator->paginate(
-            $allReviews, // La requête
+            $query, // La requête
             $request->query->getInt('page', $page), // Numéro de la page
             9 // Nombre de résultats par page
         );
     
         return $this->render('review/index.html.twig', [
             'reviews' => $reviews,
+            'filterType' => $filterType,
         ]);
     }
 

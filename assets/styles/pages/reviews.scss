@@ -2,6 +2,9 @@
 #reviewsPage {
     .wrapper{
         padding: $spacing-9xl 0;
+        .shadowCustom{
+            box-shadow: 0 4px 16px hsla(274, 68%, 59%, 0.3);
+        }
     }
 
 }

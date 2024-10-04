@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Media;
 use App\Entity\Review;
 use Doctrine\Persistence\ManagerRegistry;
@@ -80,13 +81,28 @@ class ReviewRepository extends ServiceEntityRepository
     
 
     public function findPublicReviews()
-{
-    return $this->createQueryBuilder('r')
-        ->innerJoin('r.author', 'u') // Assurez-vous que 'user' est le champ de relation avec l'entité User
-        ->where('u.isPrivate = false') // Filtrer les utilisateurs dont le compte est public
-        ->getQuery()
-        ->getResult();
-}
+    {
+        return $this->createQueryBuilder('r')
+            ->innerJoin('r.author', 'u') // Assurez-vous que 'user' est le champ de relation avec l'entité User
+            ->where('u.isPrivate = false') // Filtrer les utilisateurs dont le compte est public
+            ->orderBy('r.createdAt', 'DESC') // Trier par date de création, du plus récent au plus ancien
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findReviewsFromFollowedUsers(User $currentUser)
+    {
+        return $this->createQueryBuilder('r')
+            ->innerJoin('r.author', 'u') // Liaison avec l'auteur
+            ->innerJoin('u.followeds', 's') // Liaison avec les abonnements (les abonnés de l'auteur)
+            ->where('s.follower = :currentUser') // Seules les critiques des utilisateurs suivis par l'utilisateur courant
+            ->setParameter('currentUser', $currentUser->getId())
+            ->orderBy('r.createdAt', 'DESC') // Trier par date de création, du plus récent au plus ancien
+            ->getQuery()
+            ->getResult();
+    }
+    
+
 
 
 
