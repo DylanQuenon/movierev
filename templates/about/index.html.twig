@@ -54,9 +54,9 @@
 								</div>
 								<div class="our_team_presentation_actions flex justify-between">
 									{% include "partials/_button.html.twig" with {"text": "Voir le profil", "href":path('user_show', {'slug':team.slug})} %}
-									<a href="#" class="text-lg followlink urbanist px-[20px] py-2 flex items-center gap-2 bg-secondary color-tertiary border-purple-400 border-solid border-2">S'abonner</a>
-
+									<button class="copyLink text-lg followlink urbanist px-[20px] py-2 flex items-center gap-2 bg-secondary color-tertiary border-purple-400 border-solid border-2" data-url="{{ path('user_show', {'slug':team.slug}) }}">Copier le lien</button>
 								</div>
+
 
 							</div>
 
@@ -110,6 +110,26 @@
 		{#slider news#}
 		{% include "partials/_slider_news.html.twig" with {'lastNews' : lastNews} %}
 	</div>
+{% endblock %}
+{% block javascripts %}
+	<script>
+    document.querySelectorAll('.copyLink').forEach(copyLinkButton => {
+        copyLinkButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            const userProfileUrl = this.getAttribute('data-url');
+            const fullUrl = window.location.origin + userProfileUrl;  // Combine le domaine avec l'URL du profil
+            navigator.clipboard.writeText(fullUrl).then(function () {
+                copyLinkButton.innerHTML = 'Lien copié';
+                setTimeout(function () {
+                    copyLinkButton.innerHTML = 'Copier le lien';
+                }, 3000);
+            }, function (err) {
+                console.error('Erreur lors de la copie du lien : ', err);
+            });
+        });
+    });
+</script>
+
 {% endblock %}
 
 
