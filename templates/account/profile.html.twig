@@ -1,0 +1,55 @@
+
+{% extends "/base/settings.html.twig" %}
+
+{% block title %}Modification du profil{% endblock %}
+
+{% block content_settings %}
+<div>
+    {{form_start (myForm)}}
+
+        <div class="flex flex-col gap-3 py-5">
+            {{ form_label(myForm.isPrivate, 'Confidentialité du compte', {'label_attr': {'class': 'text-sm font-medium text-gray-900 dark:text-gray-300'}}) }}
+            <div class="flex gap-3 items-center">
+                <label class="inline-flex items-center cursor-pointer">
+                    {{ form_widget(myForm.isPrivate, {'attr': {'class': 'sr-only peer', 'id': 'privacyToggle'}}) }}
+                    <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                </label>
+                <!-- Texte et icône dynamiques -->
+                <div id="privacyStatus" class="flex items-center text-sm font-medium text-gray-900 dark:text-gray-300">
+                    <span class="material-symbols-outlined" id="privacyIcon">lock</span>
+                    <span id="privacyText" class="ml-2">Privé</span>
+                </div>
+            </div>
+        </div>
+            {{form_widget (myForm)}}
+    <button type="submit" class="text-lg bg-tertiary rounded-md color-secondary py-2 px-4">Mettre à jour les informations</button>
+    {{form_end (myForm)}}
+</div>
+{% endblock %}
+   {% block javascripts %}
+    <script>
+            document.addEventListener('DOMContentLoaded', function () {
+        const privacyToggle = document.getElementById('account_isPrivate');
+        const privacyIcon = document.getElementById('privacyIcon');
+        const privacyText = document.getElementById('privacyText');
+
+        function updatePrivacyStatus() {
+            if (privacyToggle.checked) {
+                // Private mode
+                privacyIcon.textContent = 'lock';
+                privacyText.textContent = 'Privé';
+            } else {
+                // Public mode
+                privacyIcon.textContent = 'public';
+                privacyText.textContent = 'Public';
+            }
+        }
+
+        // Initialize the status on page load
+        updatePrivacyStatus();
+
+        // Update the status when the toggle is clicked
+        privacyToggle.addEventListener('change', updatePrivacyStatus);
+    });
+    </script>
+   {% endblock %}

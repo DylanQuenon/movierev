@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paramètres du compte {{ app.user.name }}{% endblock %}
+
+{% block body %}
+    <div class="slide bg-secondary">
+        <div class="wrapper py-24 flex flex-col gap-5">
+            <div class="flex flex-col gap-5">
+                <a href="{{path('user_show', {'slug':app.user.slug})}}" class="items-center flex gap-2 text-lg urbanist color-tertiary transition-all hover:underline hover:underline-offset-2"><i class="fa-solid fa-chevron-left"></i> Revenir au profil</a>
+                <h5 class="display-xs object uppercase">Paramètres du compte</h5>
+            </div>
+            <div class="flex w-full flex-wrap gap-5">
+                <div class="block_user h-fit flex flex-col gap-5 bg-white rounded-[20px] py-5 w-[250px] sticky top-5">
+                    <div class="high flex flex-col gap-2 items-center">
+                        <img src="/uploads/{{avatar}}" alt="Avatar de {{app.user.fullName}}" class="w-[50px] h-[50px] border-2 border-[#a051de] rounded-full object-cover">
+                        <p class="text-lg urbanist font-semibold">{{app.user.fullName}}<br>@{{app.user.username}}</p>
+                    </div>
+                    <nav class="w-full">
+                        <ul class="w-full flex flex-col">
+                            <li class="w-full text-lg urbanist py-2 {% if app.request.get('_route') == 'account_profile' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-r-2 font-semibold border-r-[#a051de] {% endif %}">
+                                <a href="{{ path('account_profile') }}" class="{% if app.request.get('_route') == 'account_profile' %} font-semibold {% endif %} pl-5 text-lg urbanist">
+                                    Modification du profil
+                                </a>
+                            </li>
+                            <li class="w-full text-lg urbanist py-2 {% if app.request.get('_route') == 'account_modifimg' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-r-2 font-semibold border-r-[#a051de] {% endif %}">
+                                <a href="{{ path('account_modifimg') }}" class="{% if app.request.get('_route') == 'account_modifimg' %} font-semibold {% endif %} pl-5 text-lg urbanist">
+                                    Modification de l'avatar
+                                </a>
+                            </li>
+                            <li class="w-full text-lg urbanist py-2 {% if app.request.get('_route') == 'account_password' %} bg-[rgba(161,81,222,0.15)] color-tertiary border-r-2 font-semibold border-r-[#a051de] {% endif %}">
+                                <a href="{{ path('account_password') }}" class="{% if app.request.get('_route') == 'account_password' %} font-semibold {% endif %} pl-5 text-lg urbanist">
+                                    Modification du mot de passe
+                                </a>
+                            </li>
+
+                           
+                            <li class="w-full py-2"><a href="#" class="pl-5 text-lg text-red-500 urbanist">Supprimer le compte</a></li>
+                        </ul>
+                    </nav>
+                
+                </div>
+                <div class="block_user flex flex-col gap-5 bg-white rounded-[20px] p-5 w-3/4">
+                    {% block content_settings %}
+                    
+                    {% endblock %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+{% endblock %}
+
+

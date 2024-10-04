@@ -1,0 +1,20 @@
+
+{% extends "/base/settings.html.twig" %}
+
+{% block title %}Modification du profil{% endblock %}
+
+{% block content_settings %}
+<div class="flex flex-col gap-10"> 
+
+<div class="flex justify-between">
+    <img src="/uploads/{{avatar}}" alt="Avatar actuel de {{app.user.username}}" class="w-[80px] h-[80px] border-4 border-[#a051de] rounded-full object-cover">
+    <a href="{{path('account_delimg')}}" class="bg-red-500 rounded-md py-2 px-4 h-fit color-secondary hover:bg-red-700 text-lg urbanist">Supprimer l'avatar</a>
+</div>
+    {{form_start (myForm)}}
+
+        {{form_widget (myForm)}}
+    <button type="submit" class="text-lg bg-tertiary rounded-md color-secondary py-2 px-4">Mettre à jour l'avatar</button>
+    {{form_end (myForm)}}
+
+{% endblock %}
+

@@ -110,7 +110,7 @@ class UserController extends AbstractController
         subject: new Expression('args["user"]'), // Assurez-vous que le sujet est l'utilisateur correct
         message: "Vous n'avez pas accès à cette page"
     )]
-    public function userLikes(User $user, Request $request, UserRepository $repo, PaginatorInterface $paginator, int $page = 1): Response
+    public function userLikes(User $user, Request $request, UserRepository $repo, PaginatorInterface $paginator,SubscriptionRepository $followingRepo, int $page = 1): Response
     {
         // Récupérer toutes les reviews que l'utilisateur a aimée
 
@@ -118,6 +118,8 @@ class UserController extends AbstractController
 
         // Initialisation d'un tableau pour stocker les Reviews
         $likedReviews = [];
+        $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
+        $isFollowing = ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
     
         // Boucle sur chaque Like pour récupérer les Reviews
         foreach ($likedLikes as $like) {
@@ -137,6 +139,8 @@ class UserController extends AbstractController
         return $this->render('user/tab/likes.html.twig', [
             'user' => $user,
             'reviews' => $likedReviews,
+            'isFollowing' => $isFollowing,
+            'isPrivate' => $isPrivate,
         ]);
     }
 

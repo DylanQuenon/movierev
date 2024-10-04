@@ -45,7 +45,7 @@
 								<div class="accountBanneer_info_user_actions flex justify-between">
 									{% if app.user %}
 										{% if app.user.id == user.id %}
-											<a href="#" class="py-2 w-2/5 h-fit bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+											<a href="{{path('account_profile')}}" class="py-2 w-2/5 h-fit bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
 												Modifier le profil
 											</a>
 										{% else %}
