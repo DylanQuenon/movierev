@@ -176,6 +176,63 @@ class NotificationRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function markLikesAsRead($user): void
+    {
+        $this->createQueryBuilder('n')
+            ->update()
+            ->set('n.isRead', 'true')
+            ->where(
+                'n.relatedUser = :user AND (n.type = :likeType OR n.type = :commentType)'
+            )
+            ->setParameter('user', $user)
+            ->setParameter('likeType', 'like')
+            ->setParameter('commentType', 'likeComment')
+            ->getQuery()
+            ->execute();
+    }    
+
+    public function markFollowsAsRead($user)
+    {
+        $this->createQueryBuilder('n')
+        ->update()
+        ->set('n.isRead', ':isRead')
+        ->where('n.relatedUser = :user')
+        ->andWhere('n.type IN (:types)')
+        ->setParameter('user', $user)
+        ->setParameter('types', ['follow', 'request'])
+        ->setParameter('isRead', true)
+        ->getQuery()
+        ->execute();
+    }
+    public function markReviewsAsRead($user)
+    {
+        $this->createQueryBuilder('n')
+        ->update()
+        ->set('n.isRead', ':isRead')
+        ->where('n.relatedUser = :user')
+        ->andWhere('n.type IN (:types)')
+        ->setParameter('user', $user)
+        ->setParameter('types', ['review'])
+        ->setParameter('isRead', true)
+        ->getQuery()
+        ->execute();
+    }
+
+    public function markCommentsAsRead($user)
+    {
+        $this->createQueryBuilder('n')
+            ->update()
+            ->set('n.isRead', ':isRead')
+            ->where('n.relatedUser = :user')
+            ->andWhere('n.type IN (:types)')
+            ->setParameter('user', $user)
+            ->setParameter('types', ['comment', 'reply'])
+            ->setParameter('isRead', true)
+            ->getQuery()
+            ->execute();
+    }
+
+
 
     
 }

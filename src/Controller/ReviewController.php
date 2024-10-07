@@ -49,15 +49,16 @@ class ReviewController extends AbstractController
             $like->setReview($review);
             $manager->persist($like);
             $action = 'liked';
+                  // Appeler le service de notification ici
+        $notifService->addNotification(
+            'like', 
+            $user, 
+            $review->getAuthor(), // Utilisateur qui a posté la review
+            $review // On passe la review à la notification
+        );
         }
 
-        // Appeler le service de notification ici
-        $notifService->addNotification(
-        'like', 
-        $user, 
-        $review->getAuthor(), // Utilisateur qui a posté la review
-        $review // On passe la review à la notification
-    );
+  
         
 
         $manager->flush();
