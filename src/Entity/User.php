@@ -135,6 +135,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: FollowRequest::class, mappedBy: 'requester', orphanRemoval: true)]
     private Collection $followRequests;
 
+    /**
+     * @var Collection<int, Notification>
+     */
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $notifications;
+
     public function __construct()
     {
         $this->news = new ArrayCollection();
@@ -146,6 +152,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->followers = new ArrayCollection();
         $this->followeds = new ArrayCollection();
         $this->followRequests = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
       /**
@@ -636,6 +643,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($followRequest->getRequester() === $this) {
                 $followRequest->setRequester(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
             }
         }
 

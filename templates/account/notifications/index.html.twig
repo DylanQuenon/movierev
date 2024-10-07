@@ -1,0 +1,88 @@
+{% extends 'account/notifications/layout.html.twig' %}
+
+{% block title %}Mes notifications{% endblock %}
+
+{% block notifications_content %}
+
+    {% if notifications is empty %}
+        <p class="text-gray-500 text-center text-lg urbanist">Vous n'avez aucune notification ici.</p>
+    {% else %}
+        <div class="grid grid-cols-2 gap-4 mt-8">
+            {% for notification in notifications %}
+                <div class="{% if not notification.isRead %}bg-[#a051de] bg-opacity-30 border-l-4 border-[#a051de]{% else %}bg-white{% endif %} shadow-md rounded-lg p-4 flex items-start">
+                    <div class="flex-shrink-0">
+                        <img class="h-10 w-10 rounded-full" src="/uploads/{{ notification.user.avatar }}" alt="{{ notification.user.username }}">
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-lg urbanist font-medium text-gray-900">
+                            <a href="{{ path('user_show', {'slug': notification.user.slug}) }}" class="text-lg urbanist font-semibold color-tertiary">{{ notification.user.username }}</a>
+                            {% if notification.type == 'follow' %}
+                                a commencé à vous suivre.
+                            {% elseif notification.type == 'follow_request' %}
+                                a demandé à vous suivre.
+                                <div class="flex space-x-2 mt-2">
+                                    <form action="{{ path('follow_request_accept', {'id': notification.id}) }}" method="POST">
+                                        <button type="submit" class="bg-purple-500 text-white px-3 text-lg urbanist py-1 rounded hover:bg-purple-600">Accepter</button>
+                                    </form>
+                                    <form action="{{ path('follow_request_decline', {'id': notification.id}) }}" method="POST">
+                                        <button type="submit" class="bg-red-500 text-white px-3 py-1 text-lg urbanist rounded hover:bg-red-600">Décliner</button>
+                                    </form>
+                                </div>
+                            {% elseif notification.type == 'like' %}
+                                a aimé votre review.
+                            {% elseif notification.type == 'comment' %}
+                                a commenté votre review.
+                            {% elseif notification.type == 'reply' and notification.review is not null %}
+                                a répondu à votre commentaire sur la review.
+                                <a href="{{ path('reviews_show', {'slug': notification.review.slug}) }}" class="text-blue-500 hover:underline">Voir la review</a>
+                            {% elseif notification.type == 'reply' and notification.news is not null %}
+                                a répondu à votre commentaire sur l'actualité.
+                                <a href="{{ path('news_show', {'slug': notification.news.slug}) }}" class="text-blue-500 hover:underline">Voir l'actu</a>
+                            {% elseif notification.type == 'newsLike' or notification.type == 'likeComment' %}
+                                a aimé votre commentaire.
+                            {% elseif notification.type == 'newsComment' %}
+                                a commenté votre article.
+                            {% else %}
+                                a une nouvelle notification.
+                            {% endif %}
+                        </p>
+
+                        {% set now = "now"|date("U") %}
+                        {% set notificationTime = notification.createdAt|date("U") %}
+                        {% set diff = now - notificationTime %}
+
+                        <p class="text-md urbanist text-gray-500">
+                            {% if diff < 60 %}
+                                {{ diff }} seconde{{ diff > 1 ? 's' : '' }} 
+                            {% elseif diff < 3600 %}
+                                {% set minutes = (diff / 60)|round(0, 'floor') %}
+                                {{ minutes }} minute{{ minutes > 1 ? 's' : '' }} 
+                            {% elseif diff < 86400 %}
+                                {% set hours = (diff / 3600)|round(0, 'floor') %}
+                                {{ hours }} heure{{ hours > 1 ? 's' : '' }} 
+                            {% elseif diff < 604800 %}
+                                {% set days = (diff / 86400)|round(0, 'floor') %}
+                                {{ days }} jour{{ days > 1 ? 's' : '' }} 
+                            {% elseif diff < 2419200 %}
+                                {% set weeks = (diff / 604800)|round(0, 'floor') %}
+                                {{ weeks }} semaine{{ weeks > 1 ? 's' : '' }} 
+                            {% elseif diff < 29030400 %}
+                                {% set months = (diff / 2419200)|round(0, 'floor') %}
+                                {{ months }} mois 
+                            {% else %}
+                                {{ notification.createdAt|date('d M Y H:i') }}
+                            {% endif %}
+                        </p>
+
+                        {% if notification.type in ['like', 'comment'] %}
+                            <a href="{{ path('reviews_show', {'slug': notification.review.slug}) }}" class="text-md urbanist text-blue-500 hover:underline">Voir la review</a>
+                        {% elseif notification.type in ['newsLike', 'newsComment'] %}
+                            <a href="{{ path('news_show', {'slug': notification.news.slug}) }}" class="text-md urbanist text-blue-500 hover:underline">Voir l'article</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock %}

@@ -11,6 +11,7 @@ use App\Form\CommentType;
 use App\Form\ReviewsType;
 use App\Repository\LikesRepository;
 use App\Repository\ReviewRepository;
+use App\Service\NotificationService;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SubscriptionRepository;
@@ -27,7 +28,7 @@ class ReviewController extends AbstractController
 {
     #[Route('/reviews/{id}/like', name: 'reviews_like', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function like(Request $request, Review $review, EntityManagerInterface $manager): JsonResponse
+    public function like(Request $request, NotificationService $notifService, Review $review, EntityManagerInterface $manager): JsonResponse
     {
         $user = $this->getUser();
         if (!$user) {
@@ -49,6 +50,15 @@ class ReviewController extends AbstractController
             $manager->persist($like);
             $action = 'liked';
         }
+
+        // Appeler le service de notification ici
+        $notifService->addNotification(
+        'like', 
+        $user, 
+        $review->getAuthor(), // Utilisateur qui a posté la review
+        $review // On passe la review à la notification
+    );
+        
 
         $manager->flush();
 
