@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\SubscriptionRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,6 +58,7 @@ class UserController extends AbstractController
           $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
           $isFollowing = ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
 
+
           if ($user) {
               // Redirection vers la section Reviews
               return $this->redirectToRoute('user_reviews', ['slug' => $slug]);
@@ -65,6 +67,7 @@ class UserController extends AbstractController
        
         return $this->render('user/index.html.twig', [
             'user' => $user,
+            
           
         ]);
     }
@@ -82,11 +85,15 @@ class UserController extends AbstractController
         ]);
     }
     #[Route('/user/{slug}/reviews/{page<\d+>?1}', name: 'user_reviews')]
-    public function userReviews(User $user,Request $request, UserRepository $repo, PaginatorInterface $paginator, SubscriptionRepository $followingRepo, int $page = 1): Response
+    public function userReviews(User $user,Request $request, UserRepository $repo, PaginatorInterface $paginator, NotificationRepository $notificationRepo, SubscriptionRepository $followingRepo, int $page = 1): Response
     {
         $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
         $isFollowing = ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
         $allReviews= $user->getReviews();
+        if ($this->getUser()){
+            $notifications = $notificationRepo->getAllNotifications($this->getUser(),5);
+            $unreadCount = $notificationRepo->countUnreadNotifications($this->getUser());
+        }
        
         // Pagination avec KnpPaginator
         $reviews = $paginator->paginate(
@@ -100,6 +107,8 @@ class UserController extends AbstractController
             'reviews' => $reviews,
             'isFollowing' => $isFollowing,
             'isPrivate' => $isPrivate,
+            'unreadCount' => $unreadCount,
+            'notifications' => $notifications,
           
         ]);
     }

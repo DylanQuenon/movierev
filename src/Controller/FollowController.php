@@ -51,6 +51,32 @@ public function acceptFollowRequest(int $requestId, EntityManagerInterface $enti
 
     
 }
+
+#[Route('/follow/decline/{requestId}', name: 'app_decline_follow_request')]
+public function declineFollowRequest(int $requestId, EntityManagerInterface $entityManager, Request $request): Response
+{
+    // Récupérer la demande de suivi
+    $followRequest = $entityManager->getRepository(FollowRequest::class)->find($requestId);
+
+    if (!$followRequest) {
+        throw new \Exception("Follow request not found.");
+    }
+
+    // Vérifier si l'utilisateur actuel est le destinataire de la demande de suivi
+    $currentUser = $this->getUser(); // Récupérer l'utilisateur actuel
+    if ($followRequest->getRequested() !== $currentUser) {
+        // Retourner une réponse 403 si l'utilisateur n'est pas autorisé
+        throw $this->createAccessDeniedException("Vous n'avez pas la permission de refuser cette demande de suivi.");
+    }
+
+    // Supprimer la demande de suivi
+    $entityManager->remove($followRequest);
+    $entityManager->flush();
+
+    $this->addFlash('success', 'Demande refusée.');
+    return $this->redirectToRoute('user_show', ['slug' => $followRequest->getRequested()->getSlug()]);
+}
+
 #[Route('/follow/{followerId}/{followedId}', name: 'app_follow')]
 public function addSubscription(int $followerId, int $followedId, EntityManagerInterface $entityManager, Request $request): Response
 {
@@ -142,6 +168,28 @@ public function removeSubscription(int $followerId, int $followedId, EntityManag
     return $this->redirect($request->headers->get('referer')); // Rediriger vers la page précédente
 }
 
+#[Route('/account/requests', name: 'follow_requests')]
+#[IsGranted('ROLE_USER')]
+public function followRequests(EntityManagerInterface $entityManager): Response
+{
+    // Récupérer l'utilisateur actuel
+    $currentUser = $this->getUser();
+
+    // Vérifier si l'utilisateur est connecté
+    if (!$currentUser) {
+        return $this->redirectToRoute('account_login'); // Rediriger vers la page de connexion
+    }
+
+    // Récupérer toutes les demandes de suivi pour l'utilisateur actuel
+    $followRequests = $entityManager->getRepository(FollowRequest::class)
+        ->findBy(['requested' => $currentUser, 'is_accepted' => false]);
+
+ 
+
+    return $this->render('account/requests.html.twig', [
+        'followRequests' => $followRequests,
+    ]);
+}
 
 
 }

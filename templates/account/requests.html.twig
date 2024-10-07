@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes notifications{% endblock %}
+
+{% block body %}
+
+<div class="slide bg-secondary overflow-hidden">
+    <div class="wrapper py-24 flex flex-col gap-5">
+        <div class="heading flex flex-col gap-2">
+            <a href="{{ path('account_index') }}" class="text-lg urbanist items-center flex gap-2 transition-all hover:underline color-tertiary hover:text-[#252525]">
+                <i class="fa-chevron-left fa-solid"></i>Revenir au profil
+            </a>
+            <h4 class="display-md object color-tertiary uppercase">Demandes d'abonnements</h4>
+        </div>
+
+         <div class="w-[50%] flex flex-col gap-5">
+        {% if followRequests is empty %}
+            <p class="text-lg urbanist">Aucune demande d'abonnement.</p>
+        {% else %}
+            {% for request in followRequests %}
+                <div class="flex items-center gap-5 justify-between p-4 border border-gray-300 rounded-lg shadow-md">
+                    <div class="flex gap-5 items-center">
+                        <img src="/uploads/{{ request.requester.avatar }}" alt="{{ request.requester.username }}" class="w-12 h-12 rounded-full mr-3">
+                        <div>
+                            <a href="{{ path('user_show', { slug: request.requester.slug }) }}" class="text-lg font-semibold text-purple-600 hover:underline">{{ request.requester.username }}</a>
+                            <p class="text-lg urbanist text-gray-600">a demandé à vous suivre.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-5 items-end">
+                        <a href="{{ path('app_accept_follow_request', { requestId: request.id }) }}" class="bg-purple-500 text-lg urbanist  text-white py-2 px-4 rounded hover:bg-purple-600">Accepter</a>
+                        <a href="{{ path('app_decline_follow_request', { requestId: request.id }) }}" class="bg-red-500 text-lg urbanist text-white py-2 px-4 rounded hover:bg-red-600">Refuser</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+        
+    </div>
+</div>
+
+{% endblock %}

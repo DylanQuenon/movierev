@@ -8,3 +8,53 @@ form{
         color: $color-secondary;
     }
 }
+
+.block-notif {
+    /* Supprime les flèches directionnelles sur la scrollbar */
+ 
+        scrollbar-width: thin; /* "auto" or "thin" */
+        scrollbar-color: $color-tertiary white; /* scroll thumb and track */
+        box-shadow: 0 4px 16px rgba(160, 81, 222,0.15);
+    
+      
+      
+}
+
+.block-notif::-webkit-scrollbar {
+    width: 10px; /* Largeur de la scrollbar */
+    height: 0px; /* Pas de scrollbar horizontale */
+    background-color: white; /* Couleur de fond de la scrollbar */
+}
+
+/* Personnalisation du curseur (le "thumb") */
+.block-notif::-webkit-scrollbar-thumb {
+    background-color: #346abf; /* Couleur du curseur */
+    border-radius: 0px; /* Pas d'arrondi sur les coins du curseur */
+    border: 2px solid white; /* Espacement autour du curseur */
+}
+
+/* Si tu veux arrondir la scrollbar pour donner un effet plus élégant */
+.block-notif::-webkit-scrollbar-thumb:hover {
+    background-color: #285a9e; /* Couleur au survol */
+}
+
+/* Retirer les boutons de défilement (flèches haut/bas) */
+.block-notif::-webkit-scrollbar-button {
+    display: none; /* Masque les flèches */
+}
+
+
+/* Pour une personnalisation plus précise sur WebKit (Chrome, Safari) */
+.block-notif::-webkit-scrollbar {
+    width: 12px; /* Largeur de la scrollbar */
+    background-color: white; /* Fond de la scrollbar */
+}
+
+.block-notif::-webkit-scrollbar-thumb {
+    background-color: #346abf; /* Couleur du curseur */
+    border-radius: 6px; /* Coins arrondis */
+}
+
+.block-notif::-webkit-scrollbar-thumb:hover {
+    background-color: #285a9e; /* Couleur au survol */
+}

@@ -24,6 +24,12 @@
     border-radius: $radius-3xl
 }
 }
+
+#sectionComments{
+    scrollbar-width: thin; /* "auto" or "thin" */
+    scrollbar-color: $color-tertiary white; /* scroll thumb and track */
+
+}
 // .liked{
 //     background-color: $color-tertiary;
 // }
@@ -35,6 +41,9 @@
     padding: 10px;
     position: sticky;
     bottom: 5px;
+     
+
+    box-shadow: 0 4px 16px rgba(160, 81, 222,0.15);
     form{
         display: flex;
         gap: 20px;
