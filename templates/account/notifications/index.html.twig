@@ -21,7 +21,7 @@
                 <button type="submit" class="bg-purple-500 text-white px-3 py-1 text-lg urbanist rounded hover:bg-purple-600">Marquer toutes comme lues</button>
             </form>
         {% endif %}
-        <div class="grid grid-cols-2 gap-4 mt-8">
+        <div class="grid  max-md:grid-cols-1 lg:grid-cols-2 gap-4 mt-8">
             {% for notification in notifications %}
            
                 <div class="{% if not notification.isRead %}bg-[#a051de] bg-opacity-30 border-l-4 border-[#a051de]{% else %}bg-white{% endif %} shadow-md rounded-lg p-4 flex items-start">

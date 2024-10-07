@@ -13,7 +13,7 @@
             <h4 class="display-md object color-tertiary uppercase">Notifications</h4>
         </div>
 
-        <div class="w-[70%] flex flex-col gap-5">
+        <div class=" max-md:w-full lg:w-[70%] flex flex-col gap-5">
             {% set navItems = [
                 {'text': 'Tout', 'route': 'notifications_index', 'count': unreadCount},
                 {'text': 'Abonnements', 'route': 'notifications_follows', 'count': unreadCountFollows},
@@ -23,7 +23,7 @@
             ] %}
 
             <nav class="headerNotifications w-full flex justify-center items-center py-5 px-4 bg-white rounded-[20px]">
-                <ul class="flex w-full justify-between">
+                <ul class="flex w-full flex-wrap max-md:flex-col max-md:gap-2 max-md:items-center justify-between">
                     {% set currentRoute = app.request.attributes.get('_route') %}
 
                     {% for item in navItems %}
