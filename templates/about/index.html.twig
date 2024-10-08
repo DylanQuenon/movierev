@@ -18,14 +18,15 @@
 					</h2>
 					<p class="max-sm:w-full md:w-[50%] mx-auto text-xl urbanist text-center">Plongez au cœur de Movierev en découvrant l'équipe passionnée qui fait vivre votre expérience cinéma.</p>
 				</div>
+				
 				<div class="our_team_presentation flex flex-wrap w-full justify-center gap-11">
 					{% for team in teams %}
 						<div class="our_team_presentation_card relative flex p-5" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
-
+							{#avatar des gens de l'équipe#}
 							<div class="our_team_presentation_card_img rounded-3xl relative">
 								<img src="/uploads/{{team.avatar}}" alt="Photo de profil de {{team.fullName}}" class="object-cover rounded-3xl">
 							</div>
-
+							{#heading avec le nom #}
 							<div class="our_team_presentation_card_text flex flex-col justify-between">
 								<div class="name">
 									<p class="display-sm urbanist font-semibold color-primary">{{team.fullName}}</p>
@@ -37,6 +38,7 @@
 										{% endif %}
 									</p>
 								</div>
+								{#stats du compte#}
 								<div class="our_team_presentation_follow flex justify-between">
 									<div class="reviews flex text-lg urbanist color-primary flex-col gap-1">
 										<span class="text-xl urbanist font-semibold color-tertiary text-center">{{team.reviews|length}}</span>
@@ -52,23 +54,20 @@
 									</div>
 
 								</div>
+								{# Action du comptes#}
 								<div class="our_team_presentation_actions flex justify-between">
 									{% include "partials/_button.html.twig" with {"text": "Voir le profil", "href":path('user_show', {'slug':team.slug})} %}
-									<button class="copyLink text-lg followlink urbanist px-[20px] py-2 flex items-center gap-2 bg-secondary color-tertiary border-purple-400 border-solid border-2" data-url="{{ path('user_show', {'slug':team.slug}) }}">Copier le lien</button>
+									<button class="copyLink text-lg followlink urbanist px-[15px] py-2 flex items-center gap-2 bg-secondary color-tertiary border-purple-400 border-solid border-2" data-url="{{ path('user_show', {'slug':team.slug}) }}">Copier le lien</button>
 								</div>
-
-
 							</div>
-
 						</div>
-
 					{% endfor %}
-
 				</div>
 			</div>
 		</div>
 		{# Nos rédacteurs #}
 		<div class="team_roles w-full flex">
+			{#video #}
 			<video src="/video/video.mp4" autoplay muted playsinline loop></video>
 			<div class="team_roles_right flex flex-col gap-4 pt-24 max-md:w-full lg:w-1/2" data-aos="fade-up">
 				<h4 class="display-xl object uppercase color-primary" data-aos="fade-up" data-aos-delay="100">Nos
@@ -89,19 +88,18 @@
 				<div class="team_roles_second_right  flex flex-col justify-end max-md:w-full  lg:w-1/2">
 					{% for team in teams %}
 						{% if team.fullName == "Pierre Niney" or team.fullName == "Fivel Stewart" %}
-							<div class="content_biography relative flex flex-col gap-5  " id="{{team.lastName}}" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 200 }}" data-aos-duration='500'>
-								<div class="biography_content flex flex-col gap-4">
+							<div class="content_biography relative flex gap-5  " id="{{team.lastName}}" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 200 }}" data-aos-duration='500'>
+								<div class="biography_content flex flex-col w-[70%] gap-4">
 									<span class="start display-xl object color-tertiary">"</span>
 									<p class="text-xl urbanist font-semibold italic">{{team.biography}}</p>
 									<span class="end display-xl object color-tertiary">"</span>
+									<p class="text-lg font-semibold urbanist color-tertiary">{{team.username}}</p>
 								</div>
 								<div class="flex gap-2 items-center">
-									<img src="/uploads/{{team.avatar}}" alt="Avatar de {{team.fullName}}" class=" rounded-full w-[50px] h-[50px] object-cover">
-									<p class="text-lg font-semibold urbanist color-secondary">{{team.firstName}}</p>
+									<img src="/uploads/{{team.avatar}}" alt="Avatar de {{team.fullName}}" class=" rounded-full w-[130px] h-[130px] object-cover">
 								</div>
 							</div>
 						{% endif %}
-
 
 					{% endfor %}
 				</div>
@@ -113,22 +111,22 @@
 {% endblock %}
 {% block javascripts %}
 	<script>
-    document.querySelectorAll('.copyLink').forEach(copyLinkButton => {
-        copyLinkButton.addEventListener('click', function (event) {
-            event.preventDefault();
-            const userProfileUrl = this.getAttribute('data-url');
-            const fullUrl = window.location.origin + userProfileUrl;  // Combine le domaine avec l'URL du profil
-            navigator.clipboard.writeText(fullUrl).then(function () {
-                copyLinkButton.innerHTML = 'Lien copié';
-                setTimeout(function () {
-                    copyLinkButton.innerHTML = 'Copier le lien';
-                }, 3000);
-            }, function (err) {
-                console.error('Erreur lors de la copie du lien : ', err);
-            });
-        });
-    });
-</script>
+		document.querySelectorAll('.copyLink').forEach(copyLinkButton => {
+			copyLinkButton.addEventListener('click', function (event) {
+				event.preventDefault();
+				const userProfileUrl = this.getAttribute('data-url');
+				const fullUrl = window.location.origin + userProfileUrl;  // Combine le domaine avec l'URL du profil
+				navigator.clipboard.writeText(fullUrl).then(function () {
+					copyLinkButton.innerHTML = 'Lien copié';
+					setTimeout(function () {
+						copyLinkButton.innerHTML = 'Copier le lien';
+					}, 3000);
+				}, function (err) {
+					console.error('Erreur lors de la copie du lien : ', err);
+				});
+			});
+		});
+	</script>
 
 {% endblock %}
 

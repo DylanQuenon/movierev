@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AboutController extends AbstractController
 {
     /**
-     * Page "qui sommes-nous
+     * Page à propos
      *
      * @param UserRepository $userRepo
      * @param NewsRepository $newsRepo
@@ -20,8 +20,10 @@ class AboutController extends AbstractController
     #[Route('/about', name: 'about')]
     public function index(UserRepository $userRepo, NewsRepository $newsRepo): Response
     {
+        // Récupérer les utilisateurs ayant le rôle de modérateur ou rédacteur
         $roles = ['ROLE_MODERATEUR', 'ROLE_REDACTEUR'];
         $users = $userRepo->findByRoles($roles);
+
         $latestNews = $newsRepo->findBy([], ['createdAt' => 'DESC'], 10);
         return $this->render('about/index.html.twig', [
             'teams' => $users,

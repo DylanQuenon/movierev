@@ -22,10 +22,8 @@
                 img{
                     transform: scale(1.10);
                 }
-
             }
         
-       
             &_img{
                 width: 40%;
                 height: 100%;
@@ -82,7 +80,8 @@ video{
 .team_roles_second_right{
 
     .content_biography{
-        background-color: #D0ABEE;
+        background-color: white;
+        box-shadow: 0 4px 16px rgba(160, 79, 222, 0.15);
         border-radius: $radius-3xl;
         margin: 20px 0;
         width: 70%;
@@ -90,20 +89,28 @@ video{
         padding-top: 40px;
         span{
             position: absolute;
+            font-size: 60px;
+            font-style: italic;
             &.start{
-                top: 2%;
-                left: 2%;
+                top: -15%;
+                left: 0%;
             }
             &.end{
-                bottom: 2%;
+                bottom: -25%;
                 right: 2%;
             }
-
+        }
+        img{
+            position: absolute;
+            top: 10%;
+            right: -10%;
+            border: solid 8px white;
+            box-shadow: 100% 4px 16px rgba(160, 79, 222, 0.15);
         }
     }
 }
 #Stewart{
-    transform: translateX(56%);
+    transform: translateX(50%);
 
 }
 
