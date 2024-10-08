@@ -73,7 +73,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const savingListButtons = document.querySelectorAll('.saving_list');
     const overlay = document.getElementById('collectionOverlay');
-    const closeOverlayButton = document.getElementById('closeOverlay');
+    const closeOverlayButton = document.getElementById('closeOverlay') || null;
     let currentMediaId = null;
 
     // Ouvrir l'overlay lors du clic sur le bouton
@@ -86,10 +86,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Fermer l'overlay
+    if (closeOverlayButton){
     closeOverlayButton.addEventListener('click', function() {
         overlay.classList.add('hidden');
         currentMediaId = null; // Réinitialiser l'ID du média
     });
+
+    }
 
     // Ajouter le média à la collection via un formulaire
     const addMediaButtons = document.querySelectorAll('.add-media-btn');

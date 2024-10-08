@@ -54,7 +54,10 @@
                             {#actions#}
                             <div class="media_presentation_content_left_actions  items-center flex flex-wrap gap-6" data-aos="fade-left" data-aos-delay="600" data-aos-duration="1000">
                                 {% include "partials/_trailer_button.html.twig" with {'trailerUrl': media.trailer} %}
-                                <a href="#" class="text-lg urbanist flex gap-1" data-aos="fade-left" data-aos-delay="0" data-aos-duration=""> <span class="material-symbols-outlined color-tertiary">bookmark</span>Enregistrer dans une liste</a> 
+                                {% if app.user %}
+                                
+                                <button class="saving_list color-tertiary text-lg urbanist flex gap-1" data-aos="fade-left" data-aos-delay="0" data-aos-duration="" data-media-id={{media.id}}> <span class="material-symbols-outlined color-tertiary">bookmark</span>Enregistrer dans une liste</button> 
+                                {% endif %}
                             </div>
                         </div>
                         {#infos réalisateurs et casting#}
@@ -134,6 +137,29 @@
     </div>
     {% include "partials/_trailer_modal.html.twig"  %}
 
+      {% if app.user %}
+<div id="collectionOverlay" class="fixed inset-0 z-50 hidden bg-gray-800 bg-opacity-50">
+    <div class="flex items-center justify-center h-full">
+        <div class="bg-white px-8 py-5 rounded shadow-lg">
+            <h3 class="text-lg font-semibold mb-4">Choisissez une collection</h3>
+            <ul id="collectionList">
+                
+                {% for collection in app.user.collections %}
+                    <li class="flex justify-between text-md urbanist items-center w-full p-2 border-b">
+                        <span class="w-[80%]">{{ collection.name }}</span>
+                        <button class="add-media-btn rounded-full h-[30px] w-[30px] flex justify-center items-center bg-tertiary text-lg color-secondary font-semibold urbanist" data-collection-id="{{ collection.id }}" data-media-id="{{ media.id }}">
+                            +
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button id="closeOverlay" class="mt-4 p-2 bg-gray-300 rounded text-lg urbanist">Fermer</button>
+        </div>
+    </div>
+</div>
+  
+  {% endif %}
+
 {% endblock %}
 
 {% block javascripts %}
@@ -157,5 +183,51 @@
                 }
             });
         });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const savingListButtons = document.querySelectorAll('.saving_list');
+    const overlay = document.getElementById('collectionOverlay');
+    const closeOverlayButton = document.getElementById('closeOverlay');
+    let currentMediaId = null;
+
+    // Ouvrir l'overlay lors du clic sur le bouton
+    savingListButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            currentMediaId = button.getAttribute('data-media-id'); // Récupérer l'ID du média
+            console.log("Média ID: " + currentMediaId); // Pour déboguer
+            overlay.classList.remove('hidden');
+        });
+    });
+
+    // Fermer l'overlay
+    if(closeOverlayButton){
+        closeOverlayButton.addEventListener('click', function() {
+            overlay.classList.add('hidden');
+            currentMediaId = null; // Réinitialiser l'ID du média
+        });
+
+    }
+
+    // Ajouter le média à la collection via un formulaire
+    const addMediaButtons = document.querySelectorAll('.add-media-btn');
+    addMediaButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const collectionId = button.getAttribute('data-collection-id');
+            
+            if (!currentMediaId) {
+                alert('Aucun média sélectionné.');
+                return;
+            }
+
+            // Créer un formulaire pour envoyer les données
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/collections/add/${collectionId}/${currentMediaId}`;
+            document.body.appendChild(form); // Ajouter le formulaire au body
+            form.submit(); // Soumettre le formulaire
+        });
+    });
+});
+
     </script>
 {% endblock %}

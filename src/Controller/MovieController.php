@@ -34,29 +34,28 @@ class MovieController extends AbstractController
     #[Route('/medias/{page<\d+>?1}', name: 'medias')]
     public function index(Request $request, MediaRepository $repo, GenreRepository $genreRepo, PaginatorInterface $paginator, int $page = 1): Response
     {
-
-         // Récupère l'utilisateur connecté
-    $user = $this->getUser();
-    
-    // Initialisation d'un tableau pour stocker tous les médias
-    $allMedia = [];
-
-    if ($user) {
-        // Récupère les collections de l'utilisateur
-        $collections = $user->getCollections(); // Assure-toi que cette méthode existe dans l'entité User
+        // Récupère l'utilisateur connecté
+        $user = $this->getUser();
         
-        // Parcours chaque collection pour récupérer les médias
-        foreach ($collections as $collection) {
-            $collectionMedias = $collection->getCollectionsMedia(); // Assure-toi que cette méthode existe dans l'entité Collection
+        // Initialisation d'un tableau pour stocker tous les médias
+        $allMedia = [];
+
+        if ($user) {
+            // Récupère les collections de l'utilisateur
+            $collections = $user->getCollections(); // Assure-toi que cette méthode existe dans l'entité User
             
-            foreach ($collectionMedias as $collectionMedia) {
-                $media = $collectionMedia->getMedias(); // Récupère le média associé
-                if ($media) {
-                    $allMedia[] = $media; // Ajoute le média au tableau
+            // Parcours chaque collection pour récupérer les médias
+            foreach ($collections as $collection) {
+                $collectionMedias = $collection->getCollectionsMedia(); // Assure-toi que cette méthode existe dans l'entité Collection
+                
+                foreach ($collectionMedias as $collectionMedia) {
+                    $media = $collectionMedia->getMedias(); // Récupère le média associé
+                    if ($media) {
+                        $allMedia[] = $media; // Ajoute le média au tableau
+                    }
                 }
             }
         }
-    }
         // Récupère le genre et l'ordre depuis les paramètres GET
         $genre = $request->query->get('genre');
         $order = $request->query->get('order', 'newest'); // Valeur par défaut
@@ -132,6 +131,14 @@ class MovieController extends AbstractController
         return new JsonResponse($jsonResults);
     }
 
+    /**
+     * Créer un nouveau media
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param FileUploaderService $fileUploader
+     * @return Response
+     */
     #[Route("/medias/new", name:"medias_new")]
     public function create(Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploader): Response
     {
@@ -143,8 +150,6 @@ class MovieController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
-    
-            
             $file = $form['cover']->getData();
             if($file){
                 $imageName = $fileUploader->upload($file);
@@ -164,14 +169,10 @@ class MovieController extends AbstractController
                 $manager->persist($casting);
             }
 
-      
-
             // je persiste mon objet media
             $manager->persist($media);
             $manager->flush();
-          
-            
-
+        
             $this->addFlash(
                 'success', 
                 "Le Media <strong>".$media->getTitle()."</strong> a bien été enregistré"
@@ -202,9 +203,6 @@ class MovieController extends AbstractController
                 $imageName = $fileUploader->upload($file);
                 $actor->setPicture($imageName);
             }
-
-       
-
             // je persiste mon objet actor
             $manager->persist($actor);
             $manager->flush();

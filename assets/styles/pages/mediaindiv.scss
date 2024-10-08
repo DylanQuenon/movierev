@@ -56,11 +56,11 @@
             &_left{
                 @include flexGap(column,$spacing-4xl);
                 &_actions{
-                    a{
+                    button,a{
                         padding: $spacing-md $spacing-xl;
                         border-radius: $radius-full;
                         border: solid 1px $color-tertiary;
-                        color: $color-tertiary;
+                   
                         &:hover{
                             background-color: #d99ef5;
                             color: $color-primary;

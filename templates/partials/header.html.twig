@@ -275,9 +275,13 @@
 			});
 		});
 
+		if(document.getElementById('accountDropdownLink')){
+
 	  document.getElementById('accountDropdownLink').addEventListener('click', function() {
     document.getElementById('dropdown').classList.toggle('hidden');
   });
+		}
+
 		document.querySelectorAll('.flash-message').forEach(message => {
 			const displayTime = 5000; // 5 seconds
 			let timer;
