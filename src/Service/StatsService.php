@@ -38,6 +38,27 @@ class  StatsService{
         return $this->manager->createQuery("SELECT COUNT(a) FROM App\Entity\News a")->getSingleScalarResult();
     }
 
+    /**
+     * Permet de récup le nombre de reviews
+     *
+     * @return integer|null
+     */
+    public function getReviewsCount(): ?int
+    {
+        return $this->manager->createQuery("SELECT COUNT(a) FROM App\Entity\Review a")->getSingleScalarResult();
+    }
+    /**
+     * récupère le nombre de likes
+     *
+     * @return integer|null
+     */
+    public function getLikesCount(): ?int
+    {
+        return $this->manager->createQuery("SELECT COUNT(a) FROM App\Entity\Likes a")->getSingleScalarResult();
+    }
+
+
+
 
 }
 

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\StatsService;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,17 +12,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminDashboardController extends AbstractController
 {
     #[Route('/admin', name: 'admin_dashboard_index')]
-    public function index(EntityManagerInterface $manager, UserRepository $userRepo): Response
+    public function index(EntityManagerInterface $manager, UserRepository $userRepo, StatsService $stats): Response
     {
         // Compter le nombre total d'utilisateurs
-        $usersNumbers = $manager->createQuery("SELECT COUNT(u) FROM App\Entity\User u")->getSingleScalarResult();
+        $totalMedia = $stats->getMediaCount();
+        $totalUser = $stats->getUsersCount();
+        $totalLikes = $stats->getLikesCount();
+        $totalNews = $stats->getNewsCount();
+        $totalReviews = $stats->getReviewsCount();
 
-        // Récupérer les utilisateurs avec leur date d'inscription
         $users = $manager->createQuery("
-            SELECT u.createdAt 
-            FROM App\Entity\User u
-        ")->getResult();
+        SELECT u.createdAt 
+        FROM App\Entity\User u
+    ")->getResult();
 
+       
         // Regrouper les inscriptions par mois/année côté PHP
         $registrationStats = [];
         foreach ($users as $user) {
@@ -43,8 +48,13 @@ class AdminDashboardController extends AbstractController
 
         return $this->render('admin/dashboard/index.html.twig', [
             'stats' => [
-                'users' => $usersNumbers,
+                'allMedias' => $totalMedia,
+                'allNews' => $totalNews,
+                'allReviews' => $totalReviews,
+                'allLikes'=>$totalLikes,
+                'allUsers' => $totalUser,
                 'registrationStats' => $registrationStatsFormatted,
+         
             ],
         ]);
     }
