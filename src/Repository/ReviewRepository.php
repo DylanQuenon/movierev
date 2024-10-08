@@ -80,15 +80,21 @@ class ReviewRepository extends ServiceEntityRepository
     }
     
 
-    public function findPublicReviews()
+    public function findPublicReviews(?int $limit = null)
     {
-        return $this->createQueryBuilder('r')
-            ->innerJoin('r.author', 'u') // Assurez-vous que 'user' est le champ de relation avec l'entité User
+        $queryBuilder = $this->createQueryBuilder('r')
+            ->innerJoin('r.author', 'u') 
             ->where('u.isPrivate = false') // Filtrer les utilisateurs dont le compte est public
-            ->orderBy('r.createdAt', 'DESC') // Trier par date de création, du plus récent au plus ancien
-            ->getQuery()
+            ->orderBy('r.createdAt', 'DESC'); // Trier par date de création, du plus récent au plus ancien
+
+        if ($limit !== null) {
+            $queryBuilder->setMaxResults($limit); // Appliquer la limite si définie
+        }
+
+        return $queryBuilder->getQuery()
             ->getResult();
     }
+
 
     public function findReviewsFromFollowedUsers(User $currentUser)
     {

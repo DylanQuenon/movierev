@@ -73,14 +73,21 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/{slug}/about', name: 'user_about')]
-    public function about(User $user, UserRepository $repo, SubscriptionRepository $followingRepo): Response
+    public function about(User $user, UserRepository $repo, SubscriptionRepository $followingRepo,NotificationRepository $notificationRepo,): Response
     {
         $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
         $isFollowing = ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
+        
+            $notifications = $notificationRepo->getAllNotifications($this->getUser(),5);
+            $unreadCount = $notificationRepo->countUnreadNotifications($this->getUser());
+        
+       
         return $this->render('user/tab/about.html.twig', [
             'user' => $user,
             'isFollowing' => $isFollowing,
             'isPrivate' => $isPrivate,
+            'notifications' => $notifications,
+            'unreadCount' => $unreadCount,
           
         ]);
     }
@@ -90,10 +97,10 @@ class UserController extends AbstractController
         $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
         $isFollowing = ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
         $allReviews= $user->getReviews();
-        if ($this->getUser()){
+        
             $notifications = $notificationRepo->getAllNotifications($this->getUser(),5);
             $unreadCount = $notificationRepo->countUnreadNotifications($this->getUser());
-        }
+        
        
         // Pagination avec KnpPaginator
         $reviews = $paginator->paginate(
@@ -119,7 +126,7 @@ class UserController extends AbstractController
         subject: new Expression('args["user"]'), // Assurez-vous que le sujet est l'utilisateur correct
         message: "Vous n'avez pas accès à cette page"
     )]
-    public function userLikes(User $user, Request $request, UserRepository $repo, PaginatorInterface $paginator,SubscriptionRepository $followingRepo, int $page = 1): Response
+    public function userLikes(User $user, Request $request, UserRepository $repo,NotificationRepository $notificationRepo, PaginatorInterface $paginator,SubscriptionRepository $followingRepo, int $page = 1): Response
     {
         // Récupérer toutes les reviews que l'utilisateur a aimée
 
@@ -138,24 +145,31 @@ class UserController extends AbstractController
             }
         }
 
+
         // Pagination avec KnpPaginator
         $likedReviews = $paginator->paginate(
             $likedReviews, // La requête
             $request->query->getInt('page', $page), // Numéro de la page
             9 // Nombre de résultats par page
         );
+
+        $notifications = $notificationRepo->getAllNotifications($this->getUser(),5);
+        $unreadCount = $notificationRepo->countUnreadNotifications($this->getUser());
     
         return $this->render('user/tab/likes.html.twig', [
             'user' => $user,
             'reviews' => $likedReviews,
             'isFollowing' => $isFollowing,
+            'isPrivate' => $isPrivate,
+            'unreadCount' => $unreadCount,
+            'notifications' => $notifications,
             
         ]);
     }
 
     #[Route('/user/{slug}/news/{page<\d+>?1}', name: 'user_news')]
     
-    public function userNews(User $user,Request $request, UserRepository $repo, PaginatorInterface $paginator, SubscriptionRepository $followingRepo, int $page = 1): Response
+    public function userNews(User $user,Request $request, UserRepository $repo, PaginatorInterface $paginator, SubscriptionRepository $followingRepo, NotificationRepository $notificationRepo, int $page = 1): Response
     {
         if (!in_array('ROLE_REDACTEUR', $user->getRoles())) {
             return $this->redirectToRoute('user_show', ['slug' => $user->getSlug()]);
@@ -164,6 +178,11 @@ class UserController extends AbstractController
         $allNews= $user->getNews();
         $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
         $isFollowing = ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
+
+        
+            $notifications = $notificationRepo->getAllNotifications($this->getUser(),5);
+            $unreadCount = $notificationRepo->countUnreadNotifications($this->getUser());
+        
        
         // Pagination avec KnpPaginator
         $news = $paginator->paginate(
@@ -177,6 +196,8 @@ class UserController extends AbstractController
             'articles' => $news,
             'isFollowing' => $isFollowing,
             'isPrivate' => $isPrivate,
+            'unreadCount' => $unreadCount,
+            'notifications' => $notifications,
           
         ]);
     }

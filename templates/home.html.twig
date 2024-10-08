@@ -18,14 +18,13 @@
 					<div class="slide" id="home" style="background-image: url('/uploads/{{ media.cover }}')">
 						<div class="shadow"></div>
 						<div class="wrapper">
-							<div
-								class="jumbotron sm:w-12/12 md:w-6/12 z-20">
+							<div class="jumbotron sm:w-12/12 md:w-6/12 z-20">
 								<!-- Item du dessus -->
-								<div
-									class="jumbotron_infos_secondary text-lg object uppercase color-secondary flex gap-4">
+								<div class="jumbotron_infos_secondary text-lg object uppercase color-secondary flex gap-4">
 									<!-- Note -->
 									<div class="items_info rating pr-4 flex items-center gap-1 color-tertiary">
 										<i class="fa-solid fa-star color-tertiary"></i>
+										<!-- Moyenne du média -->
 										<span class="text-xl object color-secondary">{{media.getAvgRatings()}}</span>
 									</div>
 									<!-- Durée -->
@@ -54,7 +53,7 @@
 										&
 										{% for genre in media.getGenres() %}
 										<span class="color-tertiary">{{ genre.name }}</span>
-											{% if not loop.last %} • {% endif %}
+											{% if not loop.last %} & {% endif %}
 										{% endfor %}
 									</div>
 								</div>
@@ -129,8 +128,6 @@
 						</div>
 					{% endfor %}
 					</div>
-
-				
 					<a href="{{path('about')}}"   class="text-xl urbanist flex items-center rounded-full border-purple-400 border-2 border-solid gap-1 color-tertiary">
 						Découvrez notre équipe 
 						<span class="material-symbols-outlined color-tertiary">
@@ -224,9 +221,9 @@
 		</div>
 
 	</div>
-
+	<!--Slider contenant les reviews -->
 	{% include "partials/_sliderReviews.html.twig" %}
-	
+	<!--Slider contenant les actualités -->
 	{% include "partials/_slider_news.html.twig" %}
 
 	{% set accordions = [
@@ -276,20 +273,16 @@
 								</svg>
 							</span>
 						</button>
+						{#Les réponses#}
 						<div id="content-{{ accordion.id }}" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
 							<div class="pb-5 text-lg urbanist text-slate-500">
 								{{ accordion.answer }}
 							</div>
 						</div>
-					
 					</div>
-				
 				</div>
 				{% endfor %}
-			
 			</div>
-
-
 		</div>
 		<img src="/images/accordpic.png" alt="image d'un film dans la section accordéon" class="max-md:w-full h-fit lg:w-5/12">
 	</div>
@@ -299,7 +292,7 @@
 {% endblock %}
 
 {% block javascripts %}
-{{ encore_entry_script_tags('sliderHomeJS') }}
+   {{ encore_entry_script_tags('sliderHomeJS') }}
 	<script>
 		//Fonction pour les compteurs
 		document.addEventListener('DOMContentLoaded', function () {

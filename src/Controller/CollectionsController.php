@@ -9,6 +9,7 @@ use App\Form\CollectionType;
 use App\Entity\CollectionsMedia;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CollectionsRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\SubscriptionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class CollectionsController extends AbstractController
 {
     #[Route('/user/{slug}/collections', name: 'user_collections')]
-    public function index(User $user, CollectionsRepository $repo, EntityManagerInterface $entityManager,SubscriptionRepository $followingRepo): Response
+    public function index(User $user, CollectionsRepository $repo, EntityManagerInterface $entityManager,SubscriptionRepository $followingRepo, NotificationRepository $notificationRepo): Response
     {
         $currentUser = $this->getUser();
     
@@ -33,6 +34,10 @@ class CollectionsController extends AbstractController
                 'isPrivate' => false,
             ]);
         }
+ 
+            $notifications = $notificationRepo->getAllNotifications($this->getUser(),5);
+            $unreadCount = $notificationRepo->countUnreadNotifications($this->getUser());
+        
 
         $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
         $isFollowing = !$isPrivate || ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
@@ -65,6 +70,8 @@ class CollectionsController extends AbstractController
             'randomMediaByCollection' => $randomMediaByCollection,
             'isPrivate' => $isPrivate,
             'isFollowing' => $isFollowing,
+            'notifications' => $notifications,
+            'unreadCount' => $unreadCount,
         ]);
     }
     

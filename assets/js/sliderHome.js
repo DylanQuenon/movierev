@@ -1,11 +1,10 @@
-import Swiper, { Navigation, EffectFade, Autoplay } from 'swiper/bundle';
+import Swiper from 'swiper/bundle';
 import 'swiper/css/bundle';
 
 const swiper = new Swiper('.swiper', {
     direction: 'horizontal',
     loop: true,
     speed: 700,
-   
 
     autoplay: {
         delay: 5000,
@@ -45,6 +44,3 @@ document.querySelectorAll('.swiper-slide').forEach(slide => {
     });
 });
 
-
-
-// Fonction pour ouvrir le trailer

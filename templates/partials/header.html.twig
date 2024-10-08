@@ -39,9 +39,7 @@
                         'Films & Séries': { 'route': 'medias', 'icon': 'slideshow' },
 						'Actualités': { 'route': 'news_index', 'icon': 'newspaper' },
 						'Reviews': { 'route': 'reviews_index', 'icon': 'reviews' },
-			
 						'Contact': { 'route': 'contact', 'icon': 'mail' },
-						
                     } %}
 
 					{% for label, data in navItems %}
@@ -92,8 +90,10 @@
             </button>
 			{% set menuItems = [
 				{'label': 'Mon compte', 'icon': 'account_circle', 'path': path("account_index")},
-				{'label': 'Mes reviews', 'icon': 'rate_review', 'path': '#'},
-				{'label': 'Ajouter une review', 'icon': 'add_circle', 'path': '#'},
+				{'label': 'Mes reviews', 'icon': 'rate_review', 'path': path("user_reviews", {'slug' : app.user.slug})},
+				{'label': 'Mes collections', 'icon': 'bookmark', 'path': path("user_collections",{'slug' : app.user.slug})},
+				{'label': 'Mes likes', 'icon': 'favorite', 'path': path("user_likes",{'slug':app.user.slug})},
+				{'label': 'Mes notifications', 'icon': 'notifications', 'path': path("notifications_index")},
 				{'label': 'Ajouter un film', 'icon': 'movie', 'path': path("medias_new")},
 			] %}
 
@@ -105,8 +105,8 @@
 				{% endfor %}
 				
 				{% if is_granted('ROLE_REDACTEUR') %}
-					<a href="#" class="text-lg px-3 font-semibold flex justify-between transition-all duration-50 hover:text-purple-500">
-						<span class="material-symbols-outlined">article</span>Gérer mes articles
+					<a href="{{path('user_news', {'slug': app.user.slug})}}" class="text-lg px-3 font-semibold flex justify-between transition-all duration-50 hover:text-purple-500">
+						<span class="material-symbols-outlined">article</span>Voir mes articles
 					</a>
 				{% endif %}
 				
@@ -145,7 +145,6 @@
 <div id="menuMobile">
 	<nav>
 		<ul>
-	
 			{% for label, data in navItems %}
 				<li class="{% if app.request.attributes.get('_route') == data.route %}active{% endif %}">
 					<a href="{{ path(data.route) }}" class="display-sm object uppercase flex items-center">
@@ -183,12 +182,7 @@
 					Connexion
 				</a>
 			</li>
-				
 			{% endif %}
-			
-
-		
-	
 		</ul>
 	</nav>
 

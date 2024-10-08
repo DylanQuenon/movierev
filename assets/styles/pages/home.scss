@@ -72,7 +72,7 @@ body{
 .shadowWhite{
     width: 119%;
     height: 30vh;
-    background-color: rgb(245, 245, 245);
+    background-color: $color-secondary;
     filter: blur(15px);
     position: absolute;
     left: -40px;
@@ -95,7 +95,7 @@ body{
        &::after{
         width: 119%;
     height: 30vh;
-    background-color: rgb(255, 255, 255);
+    background-color: $color-secondary;
     filter: blur(15px);
     position: absolute;
     left: -40px;
