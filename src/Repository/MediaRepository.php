@@ -48,4 +48,13 @@ class MediaRepository extends ServiceEntityRepository
             ->where('a.title LIKE :term')
             ->setParameter('term', '%' . $term . '%');
     }
+
+    public function searchMediabyName(string $query): array
+{
+    return $this->createQueryBuilder('t')
+                ->andWhere('t.title LIKE :query')
+                ->setParameter('query', '%' . $query . '%')
+                ->getQuery()
+                ->getResult();
+}
 }

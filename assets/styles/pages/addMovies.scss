@@ -58,3 +58,8 @@
     form{
         font-family: $font-family-urbanist;
     }
+
+    .choices__list.choices__list--dropdown.is-active{
+        z-index: 50;
+        position: relative;
+    }

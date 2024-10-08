@@ -23,15 +23,21 @@
         ul {
             gap: $spacing-5xl;
             li {
+                transition: border-color 0.3s;
+                border-bottom: solid 3px #d6d6d6;
                 a {
                     transition: color 0.3s;
                     height: 65px;
                     display: flex;
+                    width: 100%;
                     align-items: center;
                     padding: 0 10px;
                     &:hover {
                         color: $color-tertiary;
                     }
+                }
+                &:hover{
+                    border-bottom: solid 3px #a151de90;
                 }
                 &.active {
                     border-bottom: solid 3px $color-tertiary;

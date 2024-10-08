@@ -4,7 +4,7 @@
     @include flexGap(column,$spacing-sm);
     background-color: #FFFFFF;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
     position: relative;
     border-radius: $radius-4xl;

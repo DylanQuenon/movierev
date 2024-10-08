@@ -5,10 +5,10 @@
 {% block body %}
     <div class="slide">
         <div class="wrapper py-24 flex-col gap-10">
-            <div class="flex items-center justify-between mb-10">
+            <div class="flex items-center flex-wrap justify-between mb-10">
                 <h2 class="display-md object uppercase font-bold">Collection: <span class="color-tertiary"> {{ collection.name }}</span></h2>
                 {% if app.user and app.user.id == user.id %}
-                    <div class="flex gap-2">
+                    <div class="flex max-md:my-2  gap-2">
                         <button class="py-2 px-4 addCollection rounded-full text-white bg-purple-500 text-lg urbanist hover:bg-purple-700 transition-all">Modifier la collection</button>
                          <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('collection_delete', { 'id': collection.id }) }}', 'Supprimer', 'Annuler')" class="text-lg urbanist bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600">Supprimer</button>
                     </div>
@@ -26,7 +26,7 @@
                        
                                 <div class="flex flex-col gap-5 text-lg urbanist">
                                     <div class="flex flex-col gap-2">
-                                        <div class="flex items-center flex-wrap justify-between w-full">
+                                        <div class="flex items-center justify-between w-full">
                                             <h3 class="text-xl font-semibold">{{ collectionsMedia.medias.title }}</h3>
                                             {% if app.user and app.user.id == user.id  %}
                                                 <a href="{{path('remove_media_from_collection', {'collectionId': collection.id, 'mediaId':collectionsMedia.medias.id})}}" class="rounded-full bg-tertiary w-[40px] h-[40px] flex justify-center items-center text-lg color-secondary" data-tippy-content="Retirer de la collection"><i class="fa-solid fa-trash"></i></a>

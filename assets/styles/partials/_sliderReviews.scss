@@ -4,6 +4,7 @@
     .cardReviews{
         flex-direction: row;
         width: 100% ;
+        height: max-content;
         &_image{
             width: 40%;
         }

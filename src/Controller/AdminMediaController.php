@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Media;
 use App\Form\MediaType;
+use App\Form\SearchsType;
 use App\Form\ImgModifyType;
 use App\Form\MediaEditType;
 use App\Service\PaginationService;
@@ -25,13 +26,26 @@ class AdminMediaController extends AbstractController
      * @return Response
      */
     #[Route('/admin/medias/{page<\d+>?1}', name: 'admin_medias_index')]
-    public function index(MediaRepository $repo, PaginationService $pagination, int $page): Response
+    public function index(MediaRepository $repo, PaginationService $pagination, Request $request, int $page): Response
     {
-        $pagination->setDataSource(Media::class)->setPage($page)->setLimit(9)->setRoute('admin_medias_index');
-        $medias = $pagination->getData();
+        $form = $this->createForm(SearchsType::class);
+        $form->handleRequest($request);
+        $isSubmited=false;
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $query = $form->get('query')->getData();
+            $isSubmited=true;
+            $medias = $repo->searchMediabyName($query);
+        }else{
+            $pagination->setDataSource(Media::class)->setPage($page)->setLimit(9)->setRoute('admin_medias_index');
+            $medias = $pagination->getData();
+
+        }
         return $this->render('admin/media/index.html.twig', [
             'pagination' => $pagination,
             'medias' => $medias,
+            'searchForm' => $form->createView(),
+            'isSubmitted'=>$isSubmited
         ]);
     }
 

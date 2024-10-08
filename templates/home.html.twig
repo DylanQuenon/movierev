@@ -22,11 +22,14 @@
 								<!-- Item du dessus -->
 								<div class="jumbotron_infos_secondary text-lg object uppercase color-secondary flex gap-4">
 									<!-- Note -->
-									<div class="items_info rating pr-4 flex items-center gap-1 color-tertiary">
-										<i class="fa-solid fa-star color-tertiary"></i>
-										<!-- Moyenne du média -->
-										<span class="text-xl object color-secondary">{{media.getAvgRatings()}}</span>
-									</div>
+									{% if media.reviews is not empty %}
+										<div class="items_info rating pr-4 flex items-center gap-1 color-tertiary">
+											<i class="fa-solid fa-star color-tertiary"></i>
+											<!-- Moyenne du média -->
+											<span class="text-xl object color-secondary">{{media.getAvgRatings()}}</span>
+										</div>
+									
+									{% endif %}
 									<!-- Durée -->
 									<div class="items_info rating pr-4 flex items-center gap-1">
 										{% if media.duration matches '/^[0-9]+ saison(s)?$/' %}

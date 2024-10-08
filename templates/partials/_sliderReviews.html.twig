@@ -21,7 +21,7 @@
                 {% for review in latestReviews %}
                     <!-- Swiper Slide -->
                     <div class="swiper-slide w-full"data-aos="zoom-in" data-aos-delay="{{ loop.index * 200 }}" data-aos-duration="1000">
-                        {% include "partials/_card_reviews.html.twig" with {'review': review, 'maxLength': 220} %}
+                        {% include "partials/_card_reviews.html.twig" with {'review': review, 'maxLength': 200} %}
 
                     </div>
 
