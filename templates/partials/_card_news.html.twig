@@ -30,7 +30,12 @@
     </div>
     {#info sur l'auteur de la carte#}
     <div class="card_actus_content_author flex items-center gap-2">
-        <img src="/uploads/{{actu.author.avatar}}" alt="Avatar de {{actu.author.fullName}}" class="w-[40px] h-[40px] object-cover rounded-full">
+        {% if actu.author.avatar %}
+            <img src="/uploads/{{actu.author.avatar}}" alt="Avatar de {{actu.author.fullName}}" class="w-[40px] h-[40px] object-cover rounded-full">
+            {% else %}
+            <img src="http://placehold.it/64x64" class="w-[40px] h-[40px] object-cover rounded-full" alt="Avatar de {{actu.author.fullName}}">
+        
+        {% endif %}
         <div class="flex flex-col gap-2">
             <p class="text-sm urbanist font-semibold">{{actu.author.fullName}}</p>
             <p class="text-xs urbanist color-tertiary">{{actu.createdAt |date('d F Y', 'Europe/Paris')|format_datetime(pattern="d MMMM yyyy", locale='fr')}}</p>

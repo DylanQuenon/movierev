@@ -79,7 +79,7 @@ class AccountController extends AbstractController
    #[Route("/register", name:"account_register")]
    public function register(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher, FileUploaderService $fileUploader, MailerInterface $mailer): Response
    {
-       $user = new User();
+       $user = new User(); 
        $form = $this->createForm(RegistrationType::class, $user);
        $form->handleRequest($request);
 
@@ -123,7 +123,15 @@ class AccountController extends AbstractController
        ]);
    }
 
+   /**
+    * Permet de modifier son profil
+    *
+    * @param Request $request
+    * @param EntityManagerInterface $manager
+    * @return Response
+    */
    #[Route("/account/profile", name:"account_profile")]
+   #[IsGranted('ROLE_USER')]
    public function profile(Request $request, EntityManagerInterface $manager): Response
    {
        $user = $this->getUser(); // permet de récup l'utilisateur connecté
@@ -205,6 +213,12 @@ class AccountController extends AbstractController
 
    }
 
+   /**
+    * Permet dde supprimer l'image de profil
+    *
+    * @param EntityManagerInterface $manager
+    * @return Response
+    */
    #[Route("/account/delimg", name:"account_delimg")]
    #[IsGranted('ROLE_USER')]
    public function removeImg(EntityManagerInterface $manager): Response
@@ -226,6 +240,13 @@ class AccountController extends AbstractController
        return $this->redirectToRoute('account_index');
 
    }
+   /**
+    * Permet de modifier l'image de profil
+    *
+    * @param Request $request
+    * @param EntityManagerInterface $manager
+    * @return Response
+    */
    #[Route("/account/imgmodify", name:"account_modifimg")]
    #[IsGranted('ROLE_USER')]
    public function imgModify(Request $request, EntityManagerInterface $manager): Response
@@ -281,6 +302,15 @@ class AccountController extends AbstractController
        ]);
    }
 
+   /**
+    * Permet de supprimer le compte
+    *
+    * @param Request $request
+    * @param UserPasswordHasherInterface $hasher
+    * @param EntityManagerInterface $manager
+    * @param TokenStorageInterface $tokenStorage
+    * @return Response
+    */
    #[Route("/account/delete", name: "account_delete")]
    #[IsGranted('ROLE_USER')]
    public function deleteAccount(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $manager, TokenStorageInterface $tokenStorage): Response

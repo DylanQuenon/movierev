@@ -46,6 +46,9 @@
                                 a aimé votre commentaire.
                             {% elseif notification.type == 'newsComment' %}
                                 a commenté votre article.
+                 
+                            {% elseif notification.type == 'review' %}
+                                a sorti une review.
                             {% else %}
                                 a une nouvelle notification.
                             {% endif %}
@@ -88,7 +91,7 @@
                     </div>
                 </li>
             {% else %}
-                <li>Aucune notification récente.</li>
+                <li class="text-center text-lg urbanist ">Aucune notification récente.</li>
             {% endfor %}
 			   <li class="py-2">
         <a href="{{ path('notifications_index') }}" class=" text-lg urbanist  p-2 w-full flex justify-center bg-tertiary color-secondary hover:bg-[rgba(161,81,222,0.15)] transition-all hover:text-[#a051de] font-semibold hover:underline">Voir toutes les notifications</a>
@@ -98,7 +101,11 @@
 {% endif %}
 
 					<div class="accountBanneer max-md:order-3 h-fit max-md:w-full max-md:flex-wrap lg:w-1/2 flex gap-5 p-5 items-center rounded-3xl bg-white">
-						<img src="/uploads/{{user.avatar}}" alt="Image de l'utilisateur {{user.username}}" class=" max-md:mx-auto w-[200px] h-[200px] object-cover rounded-3xl">
+						{% if user.avatar %}
+							<img src="/uploads/{{user.avatar}}" alt="Image de l'utilisateur {{user.username}}" class=" max-md:mx-auto w-[200px] h-[200px] object-cover rounded-3xl">
+						{% else %}
+							<img src="http://placehold.it/200x200" class=" max-md:mx-auto w-[200px] h-[200px] object-cover rounded-3xl" alt="Image de l'utilisateur {{user.username}}">
+						{% endif %}
 						<div class="accountBanneer_info_user max-md:w-full lg:w-3/5 max-md:justify-center flex flex-col gap-5">
 							<div class="accountBanneer_info_user_content flex flex-col gap-3">
 								<div class="accountBanneer_info_user_content_heading flex justify-between">
@@ -161,7 +168,7 @@
 							<a href="{{path('medias_new')}}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">Ajouter un film
 								<i class="fa-solid fa-chevron-right"></i>
 							</a>
-							<a href="{{path('user_collections',{'slug':app.user.slug})}}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">Voir mes listes
+							<a href="{{path('user_collections',{'slug':app.user.slug})}}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">Voir mes collections
 								<i class="fa-solid fa-chevron-right"></i>
 							</a>
 							{% if app.user.id == user.id and 'ROLE_REDACTEUR' in user.getRoles() %}
@@ -171,7 +178,7 @@
 								</a>
 
 							{% endif %}
-							<a href="{{ path('medias_new') }}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">
+							<a href="{{ path('account_profile') }}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">
 								Paramètres
 								<i class="fa-solid fa-chevron-right"></i>
 							</a>

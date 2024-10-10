@@ -12,7 +12,11 @@
             <div class="flex w-full flex-wrap gap-5">
                 <div class="block_user h-fit flex flex-col gap-5 bg-white rounded-[20px] py-5  max-md:w-full lg:w-[250px] lg:sticky top-5">
                     <div class="high flex flex-col gap-2 items-center">
+                    {% if avatar %}
                         <img src="/uploads/{{avatar}}" alt="Avatar de {{app.user.fullName}}" class="w-[50px] h-[50px] border-2 border-[#a051de] rounded-full object-cover">
+                    {% else %}
+                    <img src="http://placehold.it/64x64" alt="Avatar de {{app.user.fullName}}" class="w-[50px] h-[50px] border-2 border-[#a051de] rounded-full object-cover">
+                    {% endif %}
                         <p class="text-lg urbanist font-semibold">{{app.user.fullName}}<br>@{{app.user.username}}</p>
                     </div>
                     <nav class="w-full">

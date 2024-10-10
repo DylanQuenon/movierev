@@ -358,7 +358,7 @@ class NewsController extends AbstractController
     )]
     public function delete(News $news, EntityManagerInterface $manager): Response
     {
-        if(!empty($news->getCover()))
+        if(!empty($news->getCover())) // on retire l'image
         {
             unlink($this->getParameter('uploads_directory').'/'.$news->getCover());
         }
@@ -367,7 +367,7 @@ class NewsController extends AbstractController
             "success",
             "L'actualité <strong>".$news->getTitle()."</strong> a bien été supprimée"
         );
-        $manager->remove($news);
+        $manager->remove($news); // on retire de la db
         $manager->flush();
         
         return $this->redirectToRoute('news_index');

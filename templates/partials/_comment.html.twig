@@ -3,8 +3,13 @@
     <div class="flex flex-col gap-3">
             <div class="commentsCard_heading flex justify-between">
                 <div class="flex gap-2">
-                    <img src="/uploads/{{comment.author.avatar}}" alt="Image de l'utilisateur {{comment.author.username}}" class="border-2 border-purple-500 w-[50px] h-[50px] rounded-full">
-                    <a href="#" class="flex flex-col transition-all hover:text-purple-500">
+                    {% if comment.author.avatar %}
+                        <img src="/uploads/{{comment.author.avatar}}" alt="Image de l'utilisateur {{comment.author.username}}" class="border-2 border-purple-500 w-[50px] h-[50px] rounded-full">
+                    {% else %}
+                        <img src="http://placehold.it/64x64" class="border-2 border-purple-500 w-[50px] h-[50px] rounded-full" alt="Image de l'utilisateur {{comment.author.username}}">
+                    
+                    {% endif %}
+                    <a href="{{path('user_show',{'slug':comment.author.slug})}}" class="flex flex-col transition-all hover:text-purple-500">
                         <p class="text-md urbanist leading-none font-semibold">{{comment.author.fullName}}</p>
                         <p class="text-sm urbanist leading-none">@{{comment.author.username}}</p>
                         <p class="text-xs urbanist mt-2 text-gray-400">{{ comment.createdAt|date('d/m/Y') }}</p>
@@ -63,8 +68,13 @@
                     {% for reply in comment.comments %}
                         <div class="list-group-item md:w-11/12 bg-purple-50 border-l-2 border-purple-500 flex flex-col gap-2 w-full bg-background-hover ml-auto p-3">
                         <div class="flex gap-2 items-center">
-                            <img src="/uploads/{{reply.author.avatar}}" alt="Image de l'utilisateur {{reply.author.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
-                            <a href="#" class="hover:text-purple-500 text-md urbanist">{{reply.author.fullName}}</a>
+                            {% if reply.author.avatar %}
+                                <img src="/uploads/{{reply.author.avatar}}" alt="Image de l'utilisateur {{reply.author.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
+                            {% else %}
+                                <img src="http://placehold.it/64x64" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full" alt="Image de l'utilisateur {{reply.author.username}}">
+                            
+                            {% endif %}
+                            <a href="{{path('user_show', {'slug': reply.author.slug})}}" class="hover:text-purple-500 text-md urbanist">{{reply.author.fullName}}</a>
                         </div>
                         <div class="flex flex-col gap-5">
                             <p class="text-md urbanist ">{{reply.content}}</p>

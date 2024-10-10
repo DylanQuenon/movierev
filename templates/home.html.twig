@@ -127,7 +127,7 @@
 					{#Notre équipe#}
 					{% for team in teams %}
 						<div class="roundPic p-relative overflow-hidden" data-aos="fade-left" data-aos-duration="300" data-aos-delay="{{ loop.index0 * 300 }}">
-							<img src="/uploads/{{team.avatar}}" class="w-full h-full object-cover" alt="Photo de profil de {{team.fullName}}">
+							<img src="/uploads/{{team.avatar}}" class="w-full h-full object-cover" alt="Photo de profil de {{team.fullName}}" data-tippy-content="{{team.username}}">
 						</div>
 					{% endfor %}
 					</div>

@@ -6,6 +6,7 @@ use App\Entity\Likes;
 use App\Entity\Review;
 use App\Entity\Comment;
 use App\Form\ReplyType;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,7 @@ class CommentController extends AbstractController
 
     #[Route('/comments/{id}/like', name: 'comments_like', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function like(Request $request, Comment $comment, EntityManagerInterface $manager): JsonResponse
+    public function like(Request $request, Comment $comment, EntityManagerInterface $manager, NotificationService $notifService): JsonResponse
     {
         $user = $this->getUser();
         if (!$user) {
@@ -39,6 +40,13 @@ class CommentController extends AbstractController
             $like->setComment($comment);
             $manager->persist($like);
             $action = 'liked';
+            $notifService->addNotification(
+                'likeComment', 
+                $user, 
+                $comment->getAuthor(), // Utilisateur qui a commenté la review
+                null, // Pas de review ici
+                $comment // Le commentaire lui-même
+            );
         }
     
         $manager->flush();
@@ -77,7 +85,7 @@ class CommentController extends AbstractController
     
     #[Route("/comments/reply/{id}", name: "comment_reply", methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function reply(Comment $comment, Request $request, EntityManagerInterface $manager): Response {
+    public function reply(Comment $comment, Request $request, EntityManagerInterface $manager, NotificationService $notifService): Response {
         $user = $this->getUser();
         $review = $comment->getReview();
         $news = $comment->getNews();
@@ -92,11 +100,29 @@ class CommentController extends AbstractController
             $reply->setReview($review)
                   ->setAuthor($user)
                   ->setParent($comment);
+                  if ($review) {
+                    $notifService->addNotification(
+                        'reply',
+                        $user,
+                        $comment->getAuthor(), // Utilisateur qui a commenté la review
+                        $review, // La review associée
+                        $comment // Le commentaire lui-même
+                    );
+                } elseif ($news) {
+                    $notifService->addNotification(
+                        'reply',
+                        $user,
+                        $comment->getAuthor(), // Utilisateur qui a commenté l'actualité
+                        null, // Pas de review ici
+                        $comment // Le commentaire lui-même
+                    );
+                }
+
     
             $manager->persist($reply);
             $manager->flush();
     
-            $this->addFlash('success', 'Reply posted');
+            $this->addFlash('success', 'Réponse postée');
             if ($review) {
                 return $this->redirectToRoute('reviews_show', ['slug' => $review->getSlug()]);
             } else {
@@ -113,6 +139,13 @@ class CommentController extends AbstractController
         }
     }
 
+    /**
+     * Effacer un commentaire
+     *
+     * @param Comment $comment
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route("/comment/{id}/delete", name: "comment_delete")]
     #[IsGranted(
         attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN") or is_granted("ROLE_MODERATEUR")'),

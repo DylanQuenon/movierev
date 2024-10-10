@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Notification;
 use App\Service\PaginationService;
 use App\Repository\ReviewRepository;
 use App\Repository\CommentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\NotificationRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +17,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class NotificationController extends AbstractController
 {
+    /**
+     * les notifs
+     *
+     * @param NotificationRepository $notificationRepo
+     * @param Request $request
+     * @param ReviewRepository $reviewRepo
+     * @param CommentRepository $commentRepo
+     * @param PaginatorInterface $paginator
+     * @param integer $page
+     * @return Response
+     */
     #[Route('account/notifications', name: 'notifications_index')]
     #[IsGranted('ROLE_USER')]
     public function index(NotificationRepository $notificationRepo, Request $request, ReviewRepository $reviewRepo, CommentRepository $commentRepo, PaginatorInterface $paginator, int $page=1 ): Response
@@ -53,6 +66,17 @@ class NotificationController extends AbstractController
         ]);
     }
 
+    /**
+     * notifs likes
+     *
+     * @param NotificationRepository $notificationRepo
+     * @param ReviewRepository $reviewRepo
+     * @param CommentRepository $commentRepo
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @param integer $page
+     * @return Response
+     */
     #[Route('/account/notifications/likes', name: 'notifications_likes')]
     #[IsGranted('ROLE_USER')]
     public function likes(NotificationRepository $notificationRepo, ReviewRepository $reviewRepo, CommentRepository $commentRepo, Request $request, PaginatorInterface $paginator, int $page=1): Response
@@ -87,6 +111,17 @@ class NotificationController extends AbstractController
         ]);
     }
 
+    /**
+     * Notifications commentaires
+     *
+     * @param NotificationRepository $notificationRepo
+     * @param CommentRepository $commentRepo
+     * @param ReviewRepository $reviewRepo
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @param integer $page
+     * @return Response
+     */
     #[Route('/account/notifications/comments', name: 'notifications_comments')]
     #[IsGranted('ROLE_USER')]
     public function comments(NotificationRepository $notificationRepo,  CommentRepository $commentRepo, ReviewRepository $reviewRepo, Request $request, PaginatorInterface $paginator, int $page=1): Response
@@ -122,6 +157,17 @@ class NotificationController extends AbstractController
         ]);
     }
 
+    /**
+     * Notifications follows
+     *
+     * @param NotificationRepository $notificationRepo
+     * @param CommentRepository $commentRepo
+     * @param ReviewRepository $reviewRepo
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @param integer $page
+     * @return Response
+     */
     #[Route('account/notifications/follows', name: 'notifications_follows')]
     #[IsGranted('ROLE_USER')]
     public function follows(NotificationRepository $notificationRepo,  CommentRepository $commentRepo, ReviewRepository $reviewRepo, Request $request, PaginatorInterface $paginator, int $page=1): Response
@@ -157,6 +203,17 @@ class NotificationController extends AbstractController
             'unreadCountReviews' => $unreadCountReviews,
         ]);
     }
+    /**
+     * Notifs reviews
+     *
+     * @param NotificationRepository $notificationRepo
+     * @param CommentRepository $commentRepo
+     * @param ReviewRepository $reviewRepo
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @param integer $page
+     * @return Response
+     */
     #[Route('account/notifications/reviews', name: 'notifications_reviews')]
     #[IsGranted('ROLE_USER')]
     public function reviews(NotificationRepository $notificationRepo,  CommentRepository $commentRepo, ReviewRepository $reviewRepo, Request $request, PaginatorInterface $paginator, int $page=1): Response
@@ -193,6 +250,13 @@ class NotificationController extends AbstractController
         ]);
     }
 
+    /**
+     * Marquer comme vu
+     *
+     * @param NotificationRepository $notificationRepo
+     * @param ReviewRepository $repo
+     * @return Response
+     */
     #[Route('/notifications/mark-read', name: 'mark_notifications_read')]
     #[IsGranted('ROLE_USER')]
     public function markRead(NotificationRepository $notificationRepo, ReviewRepository $repo): Response
@@ -202,7 +266,13 @@ class NotificationController extends AbstractController
 
         return $this->redirectToRoute('notifications_index');
     }
-
+    /**
+     * Marquer comme vu 
+     *
+     * @param NotificationRepository $notificationRepo
+     * @param ReviewRepository $reviewRepo
+     * @return Response
+     */
     #[Route('/notifications/mark-likes-read', name: 'mark_likes_read')]
     #[IsGranted('ROLE_USER')]
     public function markLikesRead(NotificationRepository $notificationRepo, ReviewRepository $reviewRepo): Response
@@ -213,6 +283,12 @@ class NotificationController extends AbstractController
         return $this->redirectToRoute('notifications_likes');
     }
 
+    /**
+     * Marquer comme vu
+     *
+     * @param NotificationRepository $notificationRepo
+     * @return Response
+     */
     #[Route('/notifications/mark-follows-read', name: 'mark_follows_read')]
     #[IsGranted('ROLE_USER')]
     public function markFollowsRead(NotificationRepository $notificationRepo): Response
@@ -223,6 +299,13 @@ class NotificationController extends AbstractController
 
         return $this->redirectToRoute('notifications_follows');
     }
+    /**
+     * Marquer comme vu
+     *
+     * @param NotificationRepository $notificationRepo
+     * @param ReviewRepository $reviewRepo
+     * @return Response
+     */
     #[Route('/notifications/mark-follows-read', name: 'mark_follows_read')]
     #[IsGranted('ROLE_USER')]
     public function markReviewsRead(NotificationRepository $notificationRepo, ReviewRepository $reviewRepo): Response
@@ -244,6 +327,55 @@ class NotificationController extends AbstractController
 
         return $this->redirectToRoute('notifications_comments');
     }
+
+    /**
+     * Effacer les notifs individuellements
+     *
+     * @param Notification $notification
+     * @param NotificationRepository $notificationRepo
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    #[Route('/notifications/delete/{id}', name: 'delete_notification')]
+    #[IsGranted('ROLE_USER')]
+    public function deleteNotification(Notification $notification, NotificationRepository $notificationRepo, EntityManagerInterface $manager): Response
+    {
+        $user = $this->getUser();
+
+        if (!$notification || $notification->getRelatedUser() !== $user) {
+            throw $this->createNotFoundException('Notification not found or not authorized');
+        }
+
+        $manager->remove($notification);
+    
+        // Enregistrer les changements dans la base de données
+        $manager->flush();
+    
+        // Ajouter un message flash pour l'utilisateur
+        $this->addFlash('success', 'Notification supprimée avec succès.');
+    
+        return $this->redirectToRoute('notifications_index');
+    }
+    /**
+     * Effacer toutes les notifs
+     *
+     * @param NotificationRepository $notificationRepo
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    #[Route('/notifications/delete-all', name: 'delete_all_notifications')]
+    #[IsGranted('ROLE_USER')]
+    public function deleteAllNotifications(NotificationRepository $notificationRepo, EntityManagerInterface $manager): Response
+    {
+        $user = $this->getUser();
+        $notifications = $notificationRepo->findBy(['relatedUser' => $user]);
+        foreach ($notifications as $notification) {
+            $manager->remove($notification);
+        }
+        $manager->flush();
+        $this->addFlash('success', 'Toutes les notifications ont été supprimées avec succès.');
+        return $this->redirectToRoute('notifications_index');
+        }
 
 
 }

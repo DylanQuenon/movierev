@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Likes;
 use App\Entity\Media;
 use App\Entity\Review;
@@ -87,6 +88,16 @@ class ReviewController extends AbstractController
     
         return new JsonResponse($jsonResults);
     }
+    /**
+     * Affiche les reviews
+     *
+     * @param ReviewRepository $repo
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @param string $filterType
+     * @param integer $page
+     * @return Response
+     */
     #[Route('/reviews/{filterType}/page/{page<\d+>?1}', name: 'reviews_index')]
     public function index( ReviewRepository $repo, Request $request, PaginatorInterface $paginator,string $filterType = 'general', int $page = 1): Response
     {
@@ -121,8 +132,19 @@ class ReviewController extends AbstractController
         ]);
     }
 
-    // src/Controller/ReviewController.php
-
+    /**
+     * Affiche les reviews indiv
+     *
+     * @param string $slug
+     * @param ReviewRepository $repo
+     * @param Review $reviews
+     * @param Request $request
+     * @param SubscriptionRepository $subrepo
+     * @param CommentRepository $commentRepo
+     * @param EntityManagerInterface $manager
+     * @param LikesRepository $repoLikes
+     * @return Response
+     */
     #[Route("/reviews/{slug}", name:"reviews_show")]
     public function show(string $slug, ReviewRepository $repo, Review $reviews, Request $request, SubscriptionRepository $subrepo, CommentRepository $commentRepo, EntityManagerInterface $manager,LikesRepository $repoLikes): Response
     {
@@ -203,7 +225,7 @@ class ReviewController extends AbstractController
      */
     #[Route('/reviews/add/{mediaSlug}', name: 'reviews_create')]
     #[IsGranted('ROLE_USER', message: "Vous devez être connecté pour poster un commentaire.")]
-    public function create($mediaSlug, Request $request, EntityManagerInterface $manager): Response
+    public function create($mediaSlug, Request $request, EntityManagerInterface $manager, NotificationService $notifService): Response
     {
         // Création d'une nouvelle instance de Review
         $review = new Review();
@@ -222,21 +244,29 @@ class ReviewController extends AbstractController
         {
             // Associer l'auteur et le média à la review
             $review->setAuthor($this->getUser())
-                   ->setMedia($media); // Utilisez $media pour définir le média
+                   ->setMedia($media); 
     
-            // Persist la review dans la base de données
-            $manager->persist($review);
-            $manager->flush();
-    
-            $this->addFlash(
-                'success', 
-                "Votre review a bien été publiée"
-            );
+                   $manager->persist($review);
+                   $manager->flush();
+                   $this->addFlash(
+                       'success', 
+                       "Votre review a bien été publiée"
+                    );
+                    $subscribers = $review->getAuthor()->getFolloweds();
+                        // Envoyer une notification à chaque abonné
+                        foreach ($subscribers as $subscriber) {
+                            $notifService->addNotification(
+                                'review',
+                                $review->getAuthor(),
+                                $subscriber->getFollower(), // L'abonné qui reçoit la notification
+                                $review // Passer la review elle-même
+                            );
+                        }
     
             // // Redirection vers une page pertinente après la soumission, par exemple la page du média
-            // return $this->redirectToRoute('media_show', [
-            //     'slug' => $media->getSlug() // Assurez-vous que la route 'media_show' existe
-            // ]);
+            return $this->redirectToRoute('reviews_show', [
+                'slug' => $review->getSlug() // Assurez-vous que la route 'media_show' existe
+            ]);
         }
     
         return $this->render("review/add.html.twig", [
@@ -244,8 +274,6 @@ class ReviewController extends AbstractController
             'media' => $media // Vous pouvez passer le média à la vue si nécessaire
         ]);
     }
-
-
     /**
      * Modification de la review
      *

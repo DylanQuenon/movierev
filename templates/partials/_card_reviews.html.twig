@@ -26,8 +26,13 @@
         
         </div>
         <div class="cardReviews_infos_author gap-5 flex justify-between">
-            <a href="#" class="flex text-md urbanist font-semibold gap-2 items-center">
+            <a href="{{path('user_show', {'slug': review.author.slug})}}" class="flex text-md urbanist font-semibold gap-2 items-center">
+            {% if review.author.avatar %}
                 <img src="/uploads/{{review.author.avatar}}" alt="Avatar de {{review.author.fullName}}" class="rounded-full border-2 border-purple-500 w-[40px] h-[40px] object-cover">
+                {% else %}
+                 <img src="http://placehold.it/64x64" alt="Avatar de {{review.author.fullName}}"  class="rounded-full border-2 border-purple-500 w-[40px] h-[40px] object-cover">
+            
+            {% endif %}
                 {{review.author.username}}
             </a>
             {% include "partials/_button.html.twig" with {"text":"Voir la review complète", "href":path('reviews_show',{"slug":review.slug}) }%}

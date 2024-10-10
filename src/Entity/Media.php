@@ -56,7 +56,6 @@ class Media
     private ?string $producer = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Url(message: "L'URL n'est pas valide")]
     private ?string $trailer = null;
 
     #[ORM\Column(length: 255)]

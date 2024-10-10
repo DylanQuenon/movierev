@@ -15,10 +15,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CollectionsController extends AbstractController
 {
+    /**
+     * Récupère les collections du suer
+     *
+     * @param User $user
+     * @param CollectionsRepository $repo
+     * @param EntityManagerInterface $entityManager
+     * @param SubscriptionRepository $followingRepo
+     * @param NotificationRepository $notificationRepo
+     * @return Response
+     */
     #[Route('/user/{slug}/collections', name: 'user_collections')]
     public function index(User $user, CollectionsRepository $repo, EntityManagerInterface $entityManager,SubscriptionRepository $followingRepo, NotificationRepository $notificationRepo): Response
     {
@@ -35,10 +46,9 @@ class CollectionsController extends AbstractController
             ]);
         }
  
-            $notifications = $notificationRepo->getAllNotifications($this->getUser(),5);
-            $unreadCount = $notificationRepo->countUnreadNotifications($this->getUser());
-        
-
+        $notifications = $notificationRepo->getAllNotifications($this->getUser(),5);
+        $unreadCount = $notificationRepo->countUnreadNotifications($this->getUser());
+    
         $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
         $isFollowing = !$isPrivate || ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
 
@@ -75,6 +85,15 @@ class CollectionsController extends AbstractController
         ]);
     }
     
+    /**
+     * Affiche la collection
+     *
+     * @param Request $request
+     * @param Collections $collection
+     * @param EntityManagerInterface $entityManager
+     * @param string $slug
+     * @return Response
+     */
     #[Route('/users/{slug}/collections/{id}', name: 'collection_show')]
     public function show(Request $request, Collections $collection, EntityManagerInterface $entityManager, string $slug ): Response
     {
@@ -93,6 +112,13 @@ class CollectionsController extends AbstractController
         ]);
 
     }
+    /**
+     * Créé une collection
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/collections/new', name: 'collection_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -125,6 +151,19 @@ class CollectionsController extends AbstractController
     }
 
     #[Route('/collections/edit/{id}', name: 'collection_edit')]
+    /**
+     * Modifie une collection
+     *
+     * @param Request $request
+     * @param Collections $collection
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    #[IsGranted(
+        attribute: new Expression('(user === subject and is_granted("ROLE_USER"))'),
+        subject: new Expression('args["collections"].getAuthor()'),
+        message: "Cette collection ne vous appartient pas, vous ne pouvez pas la modifier"
+    )]
     public function edit(Request $request, Collections $collection, EntityManagerInterface $entityManager): Response
     {
         // Vérifier si l'utilisateur a les droits de modifier cette collection
@@ -153,6 +192,19 @@ class CollectionsController extends AbstractController
             'collection' => $collection,
         ]);
     }
+    /**
+ * Efface une collection
+ *
+ * @param Request $request
+ * @param Collections $collection
+ * @param EntityManagerInterface $entityManager
+ * @return Response
+ */
+#[IsGranted(
+    attribute: new Expression('(user === subject and is_granted("ROLE_USER"))'),
+    subject: new Expression('args["collections"].getAuthor()'),
+    message: "Cette collection ne vous appartient pas, vous ne pouvez pas la modifier"
+)]
     #[Route('/collections/delete/{id}', name: 'collection_delete')]
     public function delete(Request $request, Collections $collection, EntityManagerInterface $entityManager): Response
     {
@@ -175,6 +227,16 @@ class CollectionsController extends AbstractController
 
 
     
+    /**
+     * Ajoute un média à une collection
+     *
+     * @param integer $collectionId
+     * @param integer $mediaId
+     * @param EntityManagerInterface $entityManager
+     * @param CollectionsRepository $repo
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/collections/add/{collectionId}/{mediaId}', name: 'add_media_to_collection', methods: ['POST'])]
     public function addMediaToCollection(int $collectionId, int $mediaId, EntityManagerInterface $entityManager, CollectionsRepository $repo, Request $request): Response
     {
@@ -226,6 +288,16 @@ class CollectionsController extends AbstractController
         return $this->redirect($request->headers->get('referer')); // Rediriger vers la page précédente
     }
 
+    /**
+     * Retire un média d'une collection
+     *
+     * @param integer $collectionId
+     * @param integer $mediaId
+     * @param EntityManagerInterface $entityManager
+     * @param CollectionsRepository $repo
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/collections/remove/{collectionId}/{mediaId}', name: 'remove_media_from_collection')]
     public function removeMediaFromCollection(int $collectionId, int $mediaId, EntityManagerInterface $entityManager, CollectionsRepository $repo, Request $request): Response
     {
@@ -269,8 +341,15 @@ class CollectionsController extends AbstractController
     }
 
 
-    // src/Controller/CollectionController.php
 
+    /**
+     * Modifie l'ordre des médias dans une collection
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param Collections $collection
+     * @return Response
+     */
 #[Route('/collections/{id}/update-order', name: 'collection_update_order', methods: ['POST'])]
 public function updateOrder(Request $request, EntityManagerInterface $entityManager, Collections $collection): Response
 {

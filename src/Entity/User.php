@@ -105,11 +105,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Likes::class, mappedBy: 'author')]
     private Collection $likes;
 
-    /**
-     * @var Collection<int, Media>
-     */
-    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'author')]
-    private Collection $media;
 
     /**
      * @var Collection<int, Collections>

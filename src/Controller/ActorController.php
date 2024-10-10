@@ -9,6 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ActorController extends AbstractController
 {
+    /**
+     * Page d'acteur
+     *
+     * @param Actor $actor
+     * @return Response
+     */
     #[Route('/actor/{slug}', name: 'actor_show')]
     public function show(Actor $actor): Response
     {

@@ -16,20 +16,30 @@
         %}
 
         {# Vérifier si la route est définie #}
+        <div class="flex gap-3 items-center flex-wrap my-2">
         {% if route %}
-            <form action="{{ path(route) }}" method="POST" class="mb-4">
-                <button type="submit" class="bg-purple-500 text-white px-3 py-1 text-lg urbanist rounded hover:bg-purple-600">Marquer toutes comme lues</button>
+            <form action="{{ path(route) }}" method="POST">
+                <button type="submit" class="bg-purple-500 text-white px-4 py-2 text-lg urbanist rounded hover:bg-purple-600">Marquer toutes comme lues</button>
             </form>
         {% endif %}
+       <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{path('delete_all_notifications')}}', 'Effacer', 'Annuler')" class="bg-red-500 text-lg urbanist  text-white py-2 px-4 rounded hover:bg-red-600">Effacer toutes les notifications</button>
+        
+        </div>
         <div class="grid  max-md:grid-cols-1 lg:grid-cols-2 gap-4 mt-8">
             {% for notification in notifications %}
+            
            
                 <div class="{% if not notification.isRead %}bg-[#a051de] bg-opacity-30 border-l-4 border-[#a051de]{% else %}bg-white{% endif %} shadow-md rounded-lg p-4 flex items-start">
                     <div class="flex-shrink-0">
-                        <img class="h-10 w-10 rounded-full" src="/uploads/{{ notification.user.avatar }}" alt="{{ notification.user.username }}">
+                        {% if notification.user.avatar %}
+                             <img class="h-10 w-10 rounded-full object-cover" src="/uploads/{{ notification.user.avatar }}" alt="{{ notification.user.username }}">
+                        {% else %}
+                            <img class="h-10 w-10 rounded-full" src="http://placehold.it/64x64" alt="{{ notification.user.username }}">
+                        
+                        {% endif %}
                     </div>
-                    <div class="ml-4 flex-grow">
-                        <p class="text-lg urbanist font-medium text-gray-900">
+                    <div class="ml-4 relative flex-grow">
+                        <p class="text-lg w-[85%] urbanist font-medium text-gray-900">
                             <a href="{{ path('user_show', {'slug': notification.user.slug}) }}" class="text-lg urbanist font-semibold color-tertiary">{{ notification.user.username }}</a>
                             {% if notification.type == 'follow' %}
                                 a commencé à vous suivre.
@@ -41,19 +51,29 @@
                             {% elseif notification.type == 'comment' %}
                                 a commenté votre review.
                             {% elseif notification.type == 'reply' and notification.review is not null %}
-                                a répondu à votre commentaire sur la review.
+                                a répondu à votre commentaire sur la review .
                                 <a href="{{ path('reviews_show', {'slug': notification.review.slug}) }}" class="text-blue-500 hover:underline">Voir la review</a>
                             {% elseif notification.type == 'reply' and notification.news is not null %}
-                                a répondu à votre commentaire sur l'actualité.
+                                a répondu à votre commentaire sur l'actualité
                                 <a href="{{ path('news_show', {'slug': notification.news.slug}) }}" class="text-blue-500 hover:underline">Voir l'actu</a>
                             {% elseif notification.type == 'newsLike' or notification.type == 'likeComment' %}
                                 a aimé votre commentaire.
                             {% elseif notification.type == 'newsComment' %}
                                 a commenté votre article.
+                            {% elseif notification.type == 'review' %}
+                                a sorti une review <br>
+                                <a href="{{ path('reviews_show', {'slug': notification.review.slug}) }}" class="text-blue-500 hover:underline">Voir la review</a>
                             {% else %}
                                 a une nouvelle notification.
                             {% endif %}
                         </p>
+                           <div class="ml-auto absolute top-0 right-2">
+                                   <a href="{{ path('delete_notification', {'id': notification.id}) }}" class="text-red-500 hover:text-red-700" data-tippy-content="Effacer cette notification">
+                                       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                       </svg>
+                                   </a>
+                               </div>
 
                         {% set now = "now"|date("U") %}
                         {% set notificationTime = notification.createdAt|date("U") %}
@@ -99,5 +119,15 @@
 
 
     {% endif %}
+
+    	{% include '/partials/_delete_modal.html.twig' with {
+		modal_id: 'deleteModal',
+		form_id: 'deleteForm',
+		title: 'Confirmation de suppression',
+		message: 'Êtes-vous sûr de vouloir supprimer toutes les notifications ? Cette action est irréversible.',
+		action_url: '#',  
+		confirm_text: 'Supprimer',
+		cancel_text: 'Annuler'
+	} %}
 
 {% endblock %}

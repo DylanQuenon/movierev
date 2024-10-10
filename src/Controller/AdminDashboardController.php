@@ -11,6 +11,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminDashboardController extends AbstractController
 {
+    /**
+     * Dashboard admin
+     *
+     * @param EntityManagerInterface $manager
+     * @param UserRepository $userRepo
+     * @param StatsService $stats
+     * @return Response
+     */
     #[Route('/admin', name: 'admin_dashboard_index')]
     public function index(EntityManagerInterface $manager, UserRepository $userRepo, StatsService $stats): Response
     {

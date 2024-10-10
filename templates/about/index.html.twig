@@ -24,7 +24,11 @@
 						<div class="our_team_presentation_card relative flex p-5" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
 							{#avatar des gens de l'équipe#}
 							<div class="our_team_presentation_card_img rounded-3xl relative">
-								<img src="/uploads/{{team.avatar}}" alt="Photo de profil de {{team.fullName}}" class="object-cover rounded-3xl">
+								{% if team.avatar %}
+									<img src="/uploads/{{team.avatar}}" alt="Photo de profil de {{team.fullName}}" class="object-cover rounded-3xl">
+								{% else %}
+									<img src="http://placehold.it/64x64" class="object-cover rounded-3xl" alt="Photo de profil de {{team.fullName}}">
+								{% endif %}
 							</div>
 							{#heading avec le nom #}
 							<div class="our_team_presentation_card_text flex flex-col justify-between">
@@ -96,7 +100,11 @@
 									<p class="text-lg font-semibold urbanist color-tertiary">{{team.username}}</p>
 								</div>
 								<div class="flex gap-2 items-center">
-									<img src="/uploads/{{team.avatar}}" alt="Avatar de {{team.fullName}}" class=" rounded-full w-[130px] h-[130px] object-cover">
+									{% if team.avatar %}
+										<img src="/uploads/{{team.avatar}}" alt="Avatar de {{team.fullName}}" class=" rounded-full w-[130px] h-[130px] object-cover">
+									{% else %}
+										<img src="http://placehold.it/64x64" class="rounded-full w-[130px] h-[130px] object-cover" alt="Avatar de {{team.fullName}}">
+									{% endif %}
 								</div>
 							</div>
 						{% endif %}
