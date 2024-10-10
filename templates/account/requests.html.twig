@@ -21,7 +21,7 @@
                 <div class="flex items-center gap-5 justify-between p-4 border border-gray-300 rounded-lg shadow-md">
                     <div class="flex gap-5 items-center">
                         {% if request.requester.avatar %}
-                            <img src="/uploads/{{ request.requester.avatar }}" alt="{{ request.requester.username }}" class="w-12 h-12 rounded-full mr-3">
+                            <img src="/uploads/{{ request.requester.avatar }}" alt="{{ request.requester.username }}" class="w-12 h-12 object-cover rounded-full mr-3">
                         {% else %}
                             <img src="http://placehold.it/64x64" class="w-12 h-12 rounded-full mr-3" alt="{{ request.requester.username }}">
                         

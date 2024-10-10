@@ -173,7 +173,8 @@ class NotificationController extends AbstractController
     public function follows(NotificationRepository $notificationRepo,  CommentRepository $commentRepo, ReviewRepository $reviewRepo, Request $request, PaginatorInterface $paginator, int $page=1): Response
     {
         $user = $this->getUser();
-        $notifications = $notificationRepo->getReviewsNotifications($user);
+        $notifications = $notificationRepo->getFollowsNotifications($user);
+        
                 
         // Pagination avec KnpPaginator
         $notifpagin = $paginator->paginate(
@@ -319,6 +320,7 @@ class NotificationController extends AbstractController
 
     #[Route('/notifications/mark-comments-read', name: 'mark_comments_read')]
     #[IsGranted('ROLE_USER')]
+    
     public function markCommentsRead(NotificationRepository $notificationRepo): Response
     {
         $user = $this->getUser();
@@ -337,7 +339,11 @@ class NotificationController extends AbstractController
      * @return Response
      */
     #[Route('/notifications/delete/{id}', name: 'delete_notification')]
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted(
+        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
+        subject: new Expression('args["notification"].getRelatedUser()'),
+        message: "Cette notification ne vous appartient pas, vous ne pouvez pas la modifier"
+    )]
     public function deleteNotification(Notification $notification, NotificationRepository $notificationRepo, EntityManagerInterface $manager): Response
     {
         $user = $this->getUser();

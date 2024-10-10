@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Subscription;
 use App\Entity\FollowRequest;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,7 @@ class FollowController extends AbstractController
 {
 
     #[Route('/follow/accept/{requestId}', name: 'app_accept_follow_request')]
-public function acceptFollowRequest(int $requestId, EntityManagerInterface $entityManager, Request $request): Response
+public function acceptFollowRequest(int $requestId, EntityManagerInterface $entityManager, Request $request, NotificationService $notifService): Response
 {
     // Récupérer la demande de suivi
     $followRequest = $entityManager->getRepository(FollowRequest::class)->find($requestId);
@@ -45,6 +46,11 @@ public function acceptFollowRequest(int $requestId, EntityManagerInterface $enti
     $entityManager->persist($subscription);
     $entityManager->remove($followRequest); // Supprimer la demande de suivi après l'acceptation
     $entityManager->flush();
+    $notifService->addNotification(
+        'follow',
+        $followRequest->getRequested(),
+        $followRequest->getRequester(),
+    );
 
     $this->addFlash('success', 'Demande acceptée.');
     return $this->redirectToRoute('user_show', ['slug' => $followRequest->getRequested()->getSlug()]);
@@ -78,7 +84,7 @@ public function declineFollowRequest(int $requestId, EntityManagerInterface $ent
 }
 
 #[Route('/follow/{followerId}/{followedId}', name: 'app_follow')]
-public function addSubscription(int $followerId, int $followedId, EntityManagerInterface $entityManager, Request $request): Response
+public function addSubscription(int $followerId, int $followedId, EntityManagerInterface $entityManager, Request $request, NotificationService $notifService): Response
 {
     // Récupérer les utilisateurs par ID
     $follower = $entityManager->getRepository(User::class)->find($followerId);
@@ -114,6 +120,11 @@ public function addSubscription(int $followerId, int $followedId, EntityManagerI
     
         $entityManager->persist($followRequest);
         $entityManager->flush();
+        $notifService->addNotification(
+            'follow_request',
+            $followRequest->getRequester(),
+            $followRequest->getRequested(),
+        );
     
         $this->addFlash('success', 'Demande de suivi envoyée.');
         return $this->redirect($request->headers->get('referer')); // Rediriger vers la page précédente
@@ -135,6 +146,12 @@ public function addSubscription(int $followerId, int $followedId, EntityManagerI
 
     $entityManager->persist($subscription);
     $entityManager->flush();
+
+    $notifService->addNotification(
+        'follow',
+        $subscription->getFollower(),
+        $subscription->getFollowed(),
+    );
 
     $this->addFlash('success', 'Vous suivez maintenant cet utilisateur.');
     return $this->redirect($request->headers->get('referer')); // Rediriger vers la page précédente

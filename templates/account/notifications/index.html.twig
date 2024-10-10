@@ -44,7 +44,7 @@
                             {% if notification.type == 'follow' %}
                                 a commencé à vous suivre.
                             {% elseif notification.type == 'follow_request' %}
-                                a demandé à vous suivre.
+                                  a demandé à vous suivre. <br> <a href="{{ path('follow_requests') }}" class="text-blue-500 hover:underline">Voir les demandes</a>
                      
                             {% elseif notification.type == 'like' %}
                                 a aimé votre review.
