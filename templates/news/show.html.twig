@@ -60,12 +60,12 @@
                         </div>
                      </div>
                      {#Note de l'article#}
-                     <div class="card_news_content_rating flex gap-2">
                       {% if news.comments is not empty %}
+                     <div class="card_news_content_rating flex gap-2">
                            {% include "partials/rating.html.twig" with {'rating': news.getAvgRatings()} %}
                             <span class="text-xl urbanist color-primary uppercase font-semibold">{{news.getAvgRatings()}}/5</span>
-                     {% endif %}
                      </div>
+                     {% endif %}
                      {#Titre de l'article et liens#}
                      <div class="card_news_content_info1 flex max-sm:flex-col justify-between">
                         {#Titre de l'article#}

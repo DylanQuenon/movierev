@@ -58,9 +58,6 @@ class ReviewController extends AbstractController
         );
         }
 
-  
-        
-
         $manager->flush();
 
         return new JsonResponse(['action' => $action, 'likesCount' => $review->getLikes()->count()]);
@@ -141,7 +138,7 @@ class ReviewController extends AbstractController
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
         
-        $latestReviews = $repo->findBy([], ['createdAt' => 'DESC'], 10);
+        $latestReviews = $repo->findPublicReviews(10);
  
     
 

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reviews
+{% block title %}{{review.title}}
 {% endblock %}
 
 {% block stylesheets %}
@@ -108,7 +108,7 @@
                           {% endif %}
 
                         {% if app.user and (app.user == review.author or is_granted('ROLE_ADMIN')) or is_granted('ROLE_MODERATEUR') %}
-                            <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('review_delete', { 'slug': review.slug }) }}', 'Supprimer', 'Annuler')" class="bg-red-500 text-white w-[40px] h-[40px] justify-center rounded hover:bg-red-600 text-lg urbanist items-center  flex"><i data-tippy-content="Supprimer l'article" class="fa-solid fa-trash"></i></button>
+                            <button onclick="openDeleteModal('deleteModalReview', 'deleteForm', '{{ path('review_delete', { 'slug': review.slug }) }}', 'Supprimer', 'Annuler')" class="bg-red-500 text-white w-[40px] h-[40px] justify-center rounded hover:bg-red-600 text-lg urbanist items-center  flex"><i data-tippy-content="Supprimer la review" class="fa-solid fa-trash"></i></button>
                         
                         {% endif %}
                           
@@ -224,7 +224,7 @@
     </div>
 </div>
    	{% include '/partials/_delete_modal.html.twig' with {
-         modal_id: 'deleteModal',
+         modal_id: 'deleteModalReview',
          form_id: 'deleteForm',
          title: 'Confirmation de suppression',
          message: 'Êtes-vous sûr de vouloir supprimer cette review ? Cette action est irréversible.',

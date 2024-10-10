@@ -124,29 +124,29 @@ class NewsController extends AbstractController
     )]
     public function create(Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploader): Response
     {
-        $news = new News();
-        $form = $this->createForm(NewsType::class, $news);     
+        $news = new News(); // nouvel object
+        $form = $this->createForm(NewsType::class, $news); // le formulaire 
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
         {
-            $file = $form['cover']->getData();
+            $file = $form['cover']->getData(); // on récupère la couverture
             if($file){
-                $imageName = $fileUploader->upload($file);
+                $imageName = $fileUploader->upload($file); // on appelle le service d'upload
                 $news->setCover($imageName);
             }
-            $news->setAuthor($this->getUser());
+            $news->setAuthor($this->getUser()); // l'auteur c'est le user connecté
             $manager->persist($news);
-            // j'envoie les persistances dans la bdd
+            // j'envoie les persistances dans la base de données
             $manager->flush();
 
             $this->addFlash(
                 'success', 
-                "L'actualité <strong>".$news->getTitle()."</strong> a bien été enregistrée"
+                "L'actualité <strong>".$news->getTitle()."</strong> a bien été enregistrée" // message de confirmation
             );
 
             return $this->redirectToRoute('news_show',[
-                'slug' => $news->getSlug()
+                'slug' => $news->getSlug() // redirection vers la news
             ]);
         }
 
@@ -365,7 +365,7 @@ class NewsController extends AbstractController
       
         $this->addFlash(
             "success",
-            "L'annonce <strong>".$news->getTitle()."</strong> a bien été supprimée"
+            "L'actualité <strong>".$news->getTitle()."</strong> a bien été supprimée"
         );
         $manager->remove($news);
         $manager->flush();
