@@ -90,8 +90,6 @@ class AdminMediaController extends AbstractController
             $manager->persist($media);
             $manager->flush();
           
-            
-
             $this->addFlash(
                 'success', 
                 "Le Media <strong>".$media->getTitle()."</strong> a bien été enregistré"
@@ -165,11 +163,8 @@ class AdminMediaController extends AbstractController
         return $this->render("admin/media/edit.html.twig",[
             "media" => $media,
             "myForm" => $form->createView(),
-            // "oldLogoPath" => $oldLogoPath,
-            // "oldLogoBackgroundPath" => $oldLogoBackgroundPath,
             "oldCoverPath" => $oldCoverPath,
             "oldPosterPath" => $oldPosterPath,
-            // "oldNewsPicturePath" => $oldNewsPicturePath,
         ]);
     }
     

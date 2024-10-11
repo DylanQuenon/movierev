@@ -189,6 +189,14 @@ class MovieController extends AbstractController
         ]);
     }
 
+    /**
+     * Nouvel acteur
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param FileUploaderService $fileUploader
+     * @return Response
+     */
     #[Route("/actors/new", name:"actors_new")]
     public function createActor(Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploader): Response
     {
@@ -217,46 +225,46 @@ class MovieController extends AbstractController
 
     }
 
+  
     /**
-     * Affichage individuel
+     * Affiche page individuelle
      *
      * @param Media $media
+     * @param MediaRepository $repo
+     * @param ReviewRepository $reviewRepository
      * @return void
      */
     #[Route('/medias/{slug}', name: 'medias_show')]
     public function show(Media $media, MediaRepository $repo, ReviewRepository $reviewRepository){
         $mostLikedReviews = $reviewRepository->findMostLikedReviews($media);
 
-                // Récupère les trois dernières actualités, excluant celle affichée
-                $latestMovies = $repo->createQueryBuilder('n')
-                ->where('n.id != :currentNewsId')
-                ->setParameter('currentNewsId', $media->getId())
-                ->orderBy('n.id', 'DESC')
-                ->setMaxResults(3)
-                ->getQuery()
-                ->getResult();
+        // Récupère les trois dernières actualités, excluant celle affichée
+        $latestMovies = $repo->createQueryBuilder('n')
+        ->where('n.id != :currentNewsId')
+        ->setParameter('currentNewsId', $media->getId())
+        ->orderBy('n.id', 'DESC')
+        ->setMaxResults(3)
+        ->getQuery()
+        ->getResult();
            // Initialisation d'un tableau pour stocker tous les médias
-    $allMedia = [];
-    $user=$this->getUser();
-    if ($user) {
-        // Récupère les collections de l'utilisateur
-        $collections = $user->getCollections(); // Assure-toi que cette méthode existe dans l'entité User
-        
-        // Parcours chaque collection pour récupérer les médias
-        foreach ($collections as $collection) {
-            $collectionMedias = $collection->getCollectionsMedia(); // Assure-toi que cette méthode existe dans l'entité Collection
+        $allMedia = [];
+        $user=$this->getUser();
+        if ($user) {
+            // Récupère les collections de l'utilisateur
+            $collections = $user->getCollections(); // 
             
-            foreach ($collectionMedias as $collectionMedia) {
-                $mediaContent = $collectionMedia->getMedias(); // Récupère le média associé
-                if ($mediaContent) {
-                    $allMedia[] = $mediaContent; // Ajoute le média au tableau
+            // Parcours chaque collection pour récupérer les médias
+            foreach ($collections as $collection) {
+                $collectionMedias = $collection->getCollectionsMedia();
+                
+                foreach ($collectionMedias as $collectionMedia) {
+                    $mediaContent = $collectionMedia->getMedias(); // Récupère le média associé
+                    if ($mediaContent) {
+                        $allMedia[] = $mediaContent; // Ajoute le média au tableau
+                    }
                 }
             }
         }
-    }
-        //
-        
-    
         return $this->render('media/show.html.twig', [
             'media' => $media,
             'topReview' => $mostLikedReviews,

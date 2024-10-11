@@ -23,8 +23,6 @@ class ActorController extends AbstractController
         foreach ($castings as $casting) {
             $films[] = $casting->getMedia();
         }
-    
-
         return $this->render('actor/show.html.twig', [
         'actor' => $actor,
         'films'=>$films

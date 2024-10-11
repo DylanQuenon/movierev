@@ -220,7 +220,7 @@ class NotificationController extends AbstractController
     public function reviews(NotificationRepository $notificationRepo,  CommentRepository $commentRepo, ReviewRepository $reviewRepo, Request $request, PaginatorInterface $paginator, int $page=1): Response
     {
         $user = $this->getUser();
-        $notifications = $notificationRepo->getFollowsNotifications($user);
+        $notifications = $notificationRepo->getReviewsNotifications($user);
                 
         // Pagination avec KnpPaginator
         $notifpagin = $paginator->paginate(
@@ -307,7 +307,7 @@ class NotificationController extends AbstractController
      * @param ReviewRepository $reviewRepo
      * @return Response
      */
-    #[Route('/notifications/mark-follows-read', name: 'mark_follows_read')]
+    #[Route('/notifications/mark-reviews-read', name: 'mark_reviews_read')]
     #[IsGranted('ROLE_USER')]
     public function markReviewsRead(NotificationRepository $notificationRepo, ReviewRepository $reviewRepo): Response
     {

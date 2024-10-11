@@ -56,6 +56,11 @@ class Actor
         $this->castings = new ArrayCollection();
     }
 
+    /**
+     * Initialise le slug
+     *
+     * @return void
+     */
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
     public function initializeSlug(): void

@@ -22,6 +22,7 @@ class CommentController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function like(Request $request, Comment $comment, EntityManagerInterface $manager, NotificationService $notifService): JsonResponse
     {
+        // récupère le user
         $user = $this->getUser();
         if (!$user) {
             return new JsonResponse(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
@@ -51,7 +52,7 @@ class CommentController extends AbstractController
     
         $manager->flush();
     
-        // Calculer le nouveau top commentaire
+        // Calcule le nouveau top commentaire
         $topComment = $this->getTopComment($manager);
     
         return new JsonResponse([
@@ -83,6 +84,15 @@ class CommentController extends AbstractController
         return $topComment;
     }
     
+    /**
+     * Répondre au commentaire
+     *
+     * @param Comment $comment
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param NotificationService $notifService
+     * @return Response
+     */
     #[Route("/comments/reply/{id}", name: "comment_reply", methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function reply(Comment $comment, Request $request, EntityManagerInterface $manager, NotificationService $notifService): Response {

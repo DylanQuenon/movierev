@@ -40,4 +40,18 @@ class ActorRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    /**
+     * Rechercher les actors par leur nom
+     *
+     * @param string $query
+     * @return array
+     */
+    public function searchActorByName(string $query): array
+    {
+        return $this->createQueryBuilder('t')
+                    ->andWhere('CONCAT(t.firstName, \' \', t.name) LIKE :query')
+                    ->setParameter('query', '%' . $query . '%')
+                    ->getQuery()
+                    ->getResult();
+    }
 }

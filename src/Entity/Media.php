@@ -94,7 +94,11 @@ class Media
         $this->reviews = new ArrayCollection();
         $this->collectionsMedia = new ArrayCollection();
     }
-
+    /**
+     * Moyenne des notes
+     *
+     * @return integer
+     */
     public function getAvgRatings(): int
     {
         // calculer la somme des notations

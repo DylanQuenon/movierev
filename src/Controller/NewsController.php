@@ -259,7 +259,7 @@ class NewsController extends AbstractController
      */
     #[Route("/news/{slug}/edit", name: "news_edit")]
     #[IsGranted(
-        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
+        attribute: new Expression('(user === subject and is_granted("ROLE_REDACTEUR")) or is_granted("ROLE_ADMIN")'),
         subject: new Expression('args["news"].getAuthor()'),
         message: "Cette actualité ne vous appartient pas, vous ne pouvez pas la modifier"
     )]
@@ -301,9 +301,9 @@ class NewsController extends AbstractController
      */
     #[Route("/news/{slug}/imgmodify", name:"news_img")]
     #[IsGranted(
-        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
+        attribute: new Expression('(user === subject and is_granted("ROLE_REDACTEUR")) or is_granted("ROLE_ADMIN")'),
         subject: new Expression('args["news"].getAuthor()'),
-        message: "Cette actualité ne vous appartient pas, vous ne pouvez pas la modifier"
+        message: "Vous ne pouvez pas modifier l'actualité"
     )]
     public function imgModify(Request $request, EntityManagerInterface $manager, News $news, FileUploaderService $fileUploader): Response
     {
@@ -352,7 +352,7 @@ class NewsController extends AbstractController
      */
     #[Route("/news/{slug}/delete", name: "news_delete")]
     #[IsGranted(
-        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
+        attribute: new Expression('(user === subject and is_granted("ROLE_REDACTEUR")) or is_granted("ROLE_ADMIN")'),
         subject: new Expression('args["news"].getAuthor()'),
         message: "Cette actualité ne vous appartient pas, vous ne pouvez pas la supprimer"
     )]

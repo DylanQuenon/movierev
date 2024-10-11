@@ -42,7 +42,12 @@ class NewsRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    
+    /**
+     * Rechercher par titre
+     *
+     * @param string $term
+     * @return QueryBuilder
+     */
     public function findByNewsTitle(string $term): QueryBuilder
     {
         return $this->createQueryBuilder('a')

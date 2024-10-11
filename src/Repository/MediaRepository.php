@@ -42,6 +42,12 @@ class MediaRepository extends ServiceEntityRepository
     //        ;
     //    }
 
+    /**
+     * trouver par titre
+     *
+     * @param string $term
+     * @return QueryBuilder
+     */
     public function findByTitle(string $term): QueryBuilder
     {
         return $this->createQueryBuilder('a')
@@ -49,12 +55,18 @@ class MediaRepository extends ServiceEntityRepository
             ->setParameter('term', '%' . $term . '%');
     }
 
+    /**
+     * Rechercher par titre dans l'admin
+     *
+     * @param string $query
+     * @return array
+     */
     public function searchMediabyName(string $query): array
-{
-    return $this->createQueryBuilder('t')
-                ->andWhere('t.title LIKE :query')
-                ->setParameter('query', '%' . $query . '%')
-                ->getQuery()
-                ->getResult();
-}
+    {
+        return $this->createQueryBuilder('t')
+                    ->andWhere('t.title LIKE :query')
+                    ->setParameter('query', '%' . $query . '%')
+                    ->getQuery()
+                    ->getResult();
+    }
 }

@@ -50,6 +50,14 @@ class UserController extends AbstractController
 
         return new JsonResponse($jsonResults);
     }
+    /**
+     * Affiche le profil utilisateur
+     *
+     * @param User $user
+     * @param UserRepository $repo
+     * @param SubscriptionRepository $followingRepo
+     * @return Response
+     */
     #[Route('/user/{slug}', name: 'user_show')]
     public function index(User $user, UserRepository $repo, SubscriptionRepository $followingRepo): Response
     {
@@ -72,6 +80,15 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * A propos
+     *
+     * @param User $user
+     * @param UserRepository $repo
+     * @param SubscriptionRepository $followingRepo
+     * @param NotificationRepository $notificationRepo
+     * @return Response
+     */
     #[Route('/user/{slug}/about', name: 'user_about')]
     public function about(User $user, UserRepository $repo, SubscriptionRepository $followingRepo,NotificationRepository $notificationRepo,): Response
     {
@@ -91,6 +108,18 @@ class UserController extends AbstractController
           
         ]);
     }
+    /**
+     * Reviews de l'utilisateur
+     *
+     * @param User $user
+     * @param Request $request
+     * @param UserRepository $repo
+     * @param PaginatorInterface $paginator
+     * @param NotificationRepository $notificationRepo
+     * @param SubscriptionRepository $followingRepo
+     * @param integer $page
+     * @return Response
+     */
     #[Route('/user/{slug}/reviews/{page<\d+>?1}', name: 'user_reviews')]
     public function userReviews(User $user,Request $request, UserRepository $repo, PaginatorInterface $paginator, NotificationRepository $notificationRepo, SubscriptionRepository $followingRepo, int $page = 1): Response
     {
@@ -120,6 +149,18 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * Likes de l'utilisateur
+     *
+     * @param User $user
+     * @param Request $request
+     * @param UserRepository $repo
+     * @param NotificationRepository $notificationRepo
+     * @param PaginatorInterface $paginator
+     * @param SubscriptionRepository $followingRepo
+     * @param integer $page
+     * @return Response
+     */
     #[Route('/user/{slug}/likes/{page<\d+>?1}', name: 'user_likes')]
     #[IsGranted(
         attribute: new Expression('user === subject and is_granted("ROLE_USER")'),
@@ -167,8 +208,19 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * Actu écrite par le user
+     *
+     * @param User $user
+     * @param Request $request
+     * @param UserRepository $repo
+     * @param PaginatorInterface $paginator
+     * @param SubscriptionRepository $followingRepo
+     * @param NotificationRepository $notificationRepo
+     * @param integer $page
+     * @return Response
+     */
     #[Route('/user/{slug}/news/{page<\d+>?1}', name: 'user_news')]
-    
     public function userNews(User $user,Request $request, UserRepository $repo, PaginatorInterface $paginator, SubscriptionRepository $followingRepo, NotificationRepository $notificationRepo, int $page = 1): Response
     {
         if (!in_array('ROLE_REDACTEUR', $user->getRoles())) {
@@ -204,6 +256,12 @@ class UserController extends AbstractController
 
     
 
+    /**
+     * Mon compte
+     *
+     * @param UserRepository $repo
+     * @return Response
+     */
     #[Route('/my-account', name: 'account_index')]
     #[IsGranted('ROLE_USER')]
     public function account(UserRepository $repo): Response

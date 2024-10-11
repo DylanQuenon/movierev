@@ -100,7 +100,7 @@ class AccountController extends AbstractController
            $user->setPassword($hash);
 
             $email = (new Email())
-            ->from('contact@laligzz.dylanquenon.com')  
+            ->from('contact@movierev.dylanquenon.com')  
             ->to($user->getEmail()) 
             ->replyTo($user->getEmail())
             ->subject("Bienvenue chez Movierev")
@@ -150,7 +150,7 @@ class AccountController extends AbstractController
        {
 
            $user->setSlug('')
-               ->setAvatar($fileName);
+                ->setAvatar($fileName);
 
            $manager->persist($user);
            $manager->flush();
@@ -318,7 +318,7 @@ class AccountController extends AbstractController
        $user = $this->getUser();
        $form = $this->createForm(DeleteType::class);
 
-       //if user not logged in -> redirect to login page
+       //si pas d'user redierction vers login
        if (!$user) {
 
            $this->addFlash(
@@ -335,11 +335,11 @@ class AccountController extends AbstractController
            $submittedEmail = $data['email'];
            $submittedPassword = $data['password'];
 
-           //email address in db?
+           //adresse mail dans db?
            if ($user->getEmail() === $submittedEmail) {
                $isPasswordValid = $hasher->isPasswordValid($user, $submittedPassword);
 
-               //password verify
+               //password valide ? 
                if ($isPasswordValid) {
 
                    $avatarFilename = $user->getAvatar();
@@ -352,9 +352,9 @@ class AccountController extends AbstractController
                        }
                    }
 
-                   //set connexion token to null
+                   //effacer la connexion
                    $tokenStorage->setToken(null);
-                   //remove
+                   //retirer
                    $manager->remove($user);
                    $manager->flush();
 

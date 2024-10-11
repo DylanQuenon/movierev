@@ -7,7 +7,25 @@
     <div class="container mx-auto px-4">
         <h1 class="text-2xl font-bold my-4">Gestion des utilisateurs</h1>
 
-        <div class="overflow-x-auto">
+        <div class="flex justify-center my-6">
+			<div class="w-full max-w-md">
+				{{ form_start(searchForm, {'attr': {'class': 'bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'}}) }}
+				<div class="mb-4">
+					{{ form_widget(searchForm.query, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline', 'placeholder': 'Rechercher...'}}) }}
+				</div>
+				<div class="flex items-center justify-between">
+					<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+						Rechercher
+					</button>
+				</div>
+				{{ form_end(searchForm) }}
+				<div class="mt-4 text-center text-gray-700">
+					{{ users|length }} résultat(s)
+				</div>
+			</div>
+		</div>
+
+        <div class="overflow-x-auto my-4">
             <table class="w-full table-auto">
                 <thead>
                     <tr class="bg-gray-200">
@@ -41,9 +59,12 @@
         </div>
         
         {# pagination #}
-        <div class="mt-4">
-            {{ pagination.display() }}
-        </div>
+        {% if isSubmitted %}
+            <div class="mt-4">
+                {{ pagination.display() }}
+            </div>
+        
+        {% endif %}
     </div>
 
 {% endblock %}

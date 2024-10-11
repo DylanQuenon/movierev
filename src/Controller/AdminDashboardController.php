@@ -35,7 +35,7 @@ class AdminDashboardController extends AbstractController
     ")->getResult();
 
        
-        // Regrouper les inscriptions par mois/année côté PHP
+        // Regroupe les inscriptions par mois/année côté PHP
         $registrationStats = [];
         foreach ($users as $user) {
             $date = $user['createdAt']->format('Y-m'); // Format YYYY-MM

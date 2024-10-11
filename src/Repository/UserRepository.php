@@ -63,6 +63,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->where('a.username LIKE :term')
             ->setParameter('term', '%' . $term . '%');
     }
+    /**
+     * Rechercher par le nom d'utilisateur
+     *
+     * @param string $query
+     * @return array
+     */
+    public function searchUserByUsername(string $query): array
+    {
+        return $this->createQueryBuilder('t')
+                    ->andWhere('t.username LIKE :query')
+                    ->setParameter('query', '%' . $query . '%')
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    
 
 
 

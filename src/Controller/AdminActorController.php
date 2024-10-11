@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Actor;
 use App\Form\ActorType;
 use App\Entity\ImgModify;
+use App\Form\SearchsType;
 use App\Form\ActorEditType;
 use App\Form\ImgModifyMainType;
 use App\Service\PaginationService;
@@ -28,13 +29,25 @@ class AdminActorController extends AbstractController
      * @return Response
      */
     #[Route('/admin/actors/{page<\d+>?1}', name: 'admin_actors_index')]
-    public function index(ActorRepository $repo, PaginationService $pagination, int $page): Response
+    public function index(ActorRepository $repo, PaginationService $pagination, Request $request, int $page): Response
     {
+        $form = $this->createForm(SearchsType::class);
+        $form->handleRequest($request);
+        $isSubmitted=false;
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $query = $form->get('query')->getData();
+            $isSubmited=true;
+            $actors = $repo->searchActorByName($query);
+        }else{
         $pagination->setDataSource(Actor::class)->setPage($page)->setLimit(9)->setRoute('admin_actors_index');
         $actors = $pagination->getData();
+        }
         return $this->render('admin/actor/index.html.twig', [
             'pagination' => $pagination,
             'actors' => $actors,
+            'searchForm' => $form->createView(),
+            'isSubmitted'=>$isSubmitted
         ]);
     }
 
@@ -125,7 +138,7 @@ class AdminActorController extends AbstractController
     }
 
     /**
-     * Modifier l'acteur
+     * Modifier l'image de l'acteur
      *
      * @param Request $request
      * @param EntityManagerInterface $manager

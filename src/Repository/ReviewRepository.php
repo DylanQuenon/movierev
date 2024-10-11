@@ -43,6 +43,12 @@ class ReviewRepository extends ServiceEntityRepository
     //        ;
     //    }
 
+    /**
+     * Trouver les reviews associées à un média
+     *
+     * @param string $title
+     * @return void
+     */
     public function findReviewsByMediaTitle(string $title)
     {
         return $this->createQueryBuilder('r')
@@ -57,7 +63,12 @@ class ReviewRepository extends ServiceEntityRepository
             ->getResult();
     }
     
-
+    /**
+     * Trouver les reviews les plus likées pour un médoa
+     *
+     * @param Media $media
+     * @return void
+     */
     public function findMostLikedReviews(Media $media)
     {
         // Récupérer les reviews associées au média, en excluant les auteurs avec un compte privé
@@ -80,6 +91,12 @@ class ReviewRepository extends ServiceEntityRepository
     }
     
 
+    /**
+     * -Trouver les reviews publiques
+     *
+     * @param integer|null $limit
+     * @return void
+     */
     public function findPublicReviews(?int $limit = null)
     {
         $queryBuilder = $this->createQueryBuilder('r')
@@ -95,7 +112,12 @@ class ReviewRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
+    /**
+     * reviews des followers
+     *
+     * @param User $currentUser
+     * @return void
+     */
     public function findReviewsFromFollowedUsers(User $currentUser)
     {
         return $this->createQueryBuilder('r')

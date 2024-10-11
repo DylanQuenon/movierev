@@ -41,6 +41,13 @@ class NotificationRepository extends ServiceEntityRepository
     //        ;
     //    }
 
+    /**
+     * Récupère toutes les notifs
+     *
+     * @param [type] $user
+     * @param [type] $limit
+     * @return void
+     */
     public function getAllNotifications($user, $limit = null)
     {
         $qb = $this->createQueryBuilder('n')
@@ -54,6 +61,13 @@ class NotificationRepository extends ServiceEntityRepository
     
         return $qb->getQuery()->getResult();
     }
+    /**
+     * 
+     *
+     * @param array $reviews
+     * @param array $comments
+     * @return void
+     */
     public function getLikesNotifications(array $reviews, array $comments)
     {
         return $this->createQueryBuilder('n')
@@ -68,6 +82,12 @@ class NotificationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * récupère les notifs de reviews
+     *
+     * @param [type] $user
+     * @return void
+     */
     public function getReviewsNotifications($user)
     {
         return $this->createQueryBuilder('n')
@@ -81,6 +101,12 @@ class NotificationRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * récupère les notifs
+     *
+     * @param [type] $user
+     * @return void
+     */
     public function getFollowsNotifications($user)
     {
         return $this->createQueryBuilder('n')
@@ -93,6 +119,12 @@ class NotificationRepository extends ServiceEntityRepository
         ->getResult();
     }
 
+    /**
+     * récupère les commentaires
+     *
+     * @param [type] $user
+     * @return void
+     */
     public function getCommentsNotifications($user)
     {
         return $this->createQueryBuilder('n')
@@ -105,6 +137,12 @@ class NotificationRepository extends ServiceEntityRepository
         ->getResult();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $user
+     * @return void
+     */
     public function countUnreadFollowsNotifications($user)
     {
         return $this->createQueryBuilder('n')
@@ -118,6 +156,12 @@ class NotificationRepository extends ServiceEntityRepository
         ->getSingleScalarResult();
     }
 
+    /**
+     * Compte les notifs des reviews non lues
+     *
+     * @param [type] $user
+     * @return void
+     */
     public function countUnreadReviewsNotifications($user)
     {
         return $this->createQueryBuilder('n')
@@ -132,7 +176,12 @@ class NotificationRepository extends ServiceEntityRepository
 
     }
 
-
+    /**
+     * Compte les notifs des commentaires
+     *
+     * @param [type] $user
+     * @return void
+     */
     public function countUnreadCommentsNotifications($user)
     {
         return $this->createQueryBuilder('n')
@@ -146,7 +195,12 @@ class NotificationRepository extends ServiceEntityRepository
         ->getSingleScalarResult();
     }
 
-
+    /**
+     * Compte les notifs pas lues
+     *
+     * @param [type] $user
+     * @return void
+     */
     public function countUnreadNotifications($user)
     {
         return $this->createQueryBuilder('n')
@@ -157,6 +211,14 @@ class NotificationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+    /**
+     * Compte les notifs non lues pr les likes
+     *
+     * @param [type] $user
+     * @param array $reviews
+     * @param array $comments
+     * @return void
+     */
     public function countUnreadLikesNotifications($user, array $reviews, array $comments)
     {
         return $this->createQueryBuilder('n')
@@ -176,6 +238,12 @@ class NotificationRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    /**
+     * marquer ls likes comme lu
+     *
+     * @param [type] $user
+     * @return void
+     */
     public function markLikesAsRead($user): void
     {
         $this->createQueryBuilder('n')
@@ -191,6 +259,12 @@ class NotificationRepository extends ServiceEntityRepository
             ->execute();
     }    
 
+    /**
+     * Marquer les follows comme lues
+     *
+     * @param [type] $user
+     * @return void
+     */
     public function markFollowsAsRead($user)
     {
         $this->createQueryBuilder('n')
@@ -204,6 +278,12 @@ class NotificationRepository extends ServiceEntityRepository
         ->getQuery()
         ->execute();
     }
+    /**
+     * Marque les reviews comme lu
+     *
+     * @param [type] $user
+     * @return void
+     */
     public function markReviewsAsRead($user)
     {
         $this->createQueryBuilder('n')
@@ -218,6 +298,12 @@ class NotificationRepository extends ServiceEntityRepository
         ->execute();
     }
 
+    /**
+     * marquer les commentaires comme lues
+     *
+     * @param [type] $user
+     * @return void
+     */
     public function markCommentsAsRead($user)
     {
         $this->createQueryBuilder('n')
@@ -232,18 +318,23 @@ class NotificationRepository extends ServiceEntityRepository
             ->execute();
     }
 
-
-public function markAllNotificationsAsRead($user)
-{
-    $this->createQueryBuilder('n')
-        ->update()
-        ->set('n.isRead', ':isRead')
-        ->where('n.relatedUser = :user')
-        ->setParameter('user', $user)
-        ->setParameter('isRead', true)
-        ->getQuery()
-        ->execute();
-}
+    /**
+     * Marquer toutes les notifs comme
+     *
+     * @param [type] $user
+     * @return void
+     */
+    public function markAllNotificationsAsRead($user)
+    {
+        $this->createQueryBuilder('n')
+            ->update()
+            ->set('n.isRead', ':isRead')
+            ->where('n.relatedUser = :user')
+            ->setParameter('user', $user)
+            ->setParameter('isRead', true)
+            ->getQuery()
+            ->execute();
+    }
 
 
 

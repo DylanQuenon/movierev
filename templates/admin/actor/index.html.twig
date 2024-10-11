@@ -5,7 +5,24 @@
 {% block body %}
 <div class="container mx-auto p-6">
     <h1 class="text-2xl font-bold mb-4">Liste des Acteurs</h1>
-
+        	{# Formulaire de recherche #}
+		<div class="flex justify-center my-6">
+			<div class="w-full max-w-md">
+				{{ form_start(searchForm, {'attr': {'class': 'bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'}}) }}
+				<div class="mb-4">
+					{{ form_widget(searchForm.query, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline', 'placeholder': 'Rechercher...'}}) }}
+				</div>
+				<div class="flex items-center justify-between">
+					<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+						Rechercher
+					</button>
+				</div>
+				{{ form_end(searchForm) }}
+				<div class="mt-4 text-center text-gray-700">
+					{{ actors|length }} résultat(s)
+				</div>
+			</div>
+		</div>
     <div class="mb-4">
         <a href="{{path('admin_actors_new')}}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Ajouter un acteur</a>
     </div>
@@ -39,8 +56,10 @@
                 {% endfor %}
             </tbody>
         </table>
-
-        {{ pagination.display() }}
+        {% if isSubmitted %}
+            {{ pagination.display() }}
+        
+        {% endif %}
     </div>
 
     

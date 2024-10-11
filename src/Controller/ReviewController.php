@@ -282,63 +282,63 @@ class ReviewController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return Response
      */
-#[Route('/reviews/edit/{slug}', name: 'reviews_edit')]
-#[IsGranted(
-    attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
-    subject: new Expression('args["review"].getAuthor()'),
-    message: "La review ne vous appartient pas, vous ne pouvez pas la modifier"
-)]
-public function edit(Review $review, Request $request, EntityManagerInterface $manager): Response
-{
-    $form = $this->createForm(ReviewsType::class, $review);
-    $form->handleRequest($request);
+    #[Route('/reviews/edit/{slug}', name: 'reviews_edit')]
+    #[IsGranted(
+        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
+        subject: new Expression('args["review"].getAuthor()'),
+        message: "La review ne vous appartient pas, vous ne pouvez pas la modifier"
+    )]
+    public function edit(Review $review, Request $request, EntityManagerInterface $manager): Response
+    {
+        $form = $this->createForm(ReviewsType::class, $review);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $review->setSlug('');
-        $manager->persist($review);
-        $manager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $review->setSlug('');
+            $manager->persist($review);
+            $manager->flush();
 
-        $this->addFlash(
-            'success',
-            "Votre review <strong>".$review->getTitle()."</strong> a bien été modifiée"
-        );
+            $this->addFlash(
+                'success',
+                "Votre review <strong>".$review->getTitle()."</strong> a bien été modifiée"
+            );
 
-        // return $this->redirectToRoute('news_show',[
-        //     'slug' => $news->getSlug()
-        // ]);
+            // return $this->redirectToRoute('news_show',[
+            //     'slug' => $news->getSlug()
+            // ]);
+        }
+
+        return $this->render("review/edit.html.twig",[
+            "review" => $review,
+            "myForm" => $form->createView()
+        ]);
     }
 
-    return $this->render("review/edit.html.twig",[
-        "review" => $review,
-        "myForm" => $form->createView()
-    ]);
-}
+    /**
+     * Effacer une review
+     *
+     * @param Review $review
+     * @param EntityManagerInterface $manager
+     * @param Request $request
+     * @return Response
+     */
+    #[Route('/reviews/{slug}/delete', name: 'review_delete')]
+    #[IsGranted(
+        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
+        subject: new Expression('args["review"].getAuthor()'),
+        message: "La review ne vous appartient pas, vous ne pouvez pas l'effacer"
+    )]
+    public function delete(Review $review, EntityManagerInterface $manager, Request $request): Response
+    {
+        
+            $manager->remove($review);
+            $manager->flush();
 
-/**
- * Effacer une review
- *
- * @param Review $review
- * @param EntityManagerInterface $manager
- * @param Request $request
- * @return Response
- */
-#[Route('/reviews/{slug}/delete', name: 'review_delete')]
-#[IsGranted(
-    attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
-    subject: new Expression('args["review"].getAuthor()'),
-    message: "La review ne vous appartient pas, vous ne pouvez pas l'effacer"
-)]
-public function delete(Review $review, EntityManagerInterface $manager, Request $request): Response
-{
-    
-        $manager->remove($review);
-        $manager->flush();
+            $this->addFlash('success', 'La review a été supprimée avec succès.');
+        
 
-        $this->addFlash('success', 'La review a été supprimée avec succès.');
-    
-
-    return $this->redirectToRoute('home');
-}
+        return $this->redirectToRoute('home');
+    }
 
     
     

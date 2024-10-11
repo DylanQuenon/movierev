@@ -15,7 +15,7 @@
                     <p class="text-lg urbanist color-primary font-semibold"><span class='color-tertiary font-semibold'>Age :</span> {{age}} ans ({{actor.birthdate|date('d/m/Y')}})  </p>
                     <p class="text-lg urbanist color-primary"><span class="font-semibold color-tertiary">Biographie:</span> {{actor.biography|nl2br|raw}}</p>
                     <p class="text-lg urbanist color-primary">
-                        Rôles : 
+                        Médias : 
                     {% for item in films %}
                         <a href="{{ path('medias_show', { slug: item.slug }) }}" class="text-lg urbanist color-tertiary hover:underline-offset-4 hover:underline hover:text-purple-500">
                             {{ item.title }}{% if not loop.last %}, {% endif %}
