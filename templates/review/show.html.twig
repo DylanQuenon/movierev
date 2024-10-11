@@ -40,9 +40,9 @@
 							<div class="reviewIndiv_card_content_heading_author flex justify-between">
 								<div class="reviewIndiv_card_content_heading_author_info flex items-center gap-3">
                                 {% if review.author.avatar %}
-									<img src="/uploads/{{review.author.avatar}}" alt="Image de l'utilisateur {{review.author.username}}" class="w-[50px] h-[50px] rounded-full">
+									<img src="/uploads/{{review.author.avatar}}" alt="Image de l'utilisateur {{review.author.username}}" class="w-[50px] h-[50px] object-cover rounded-full">
                                 {% else %}
-                                    <img src="http://placehold.it/64x64" class="w-[50px] h-[50px] rounded-full" alt="Image de l'utilisateur {{review.author.username}}">
+                                    <img src="/images/nopp.png" class="w-[50px] h-[50px] rounded-full object-cover overflow-hidden" alt="Image de l'utilisateur {{review.author.username}}">
                                 
                                 {% endif %}
 									<a href="{{path('user_show', {'slug': review.author.slug})}}" class="flex flex-col transition-all hover:text-purple-500">
@@ -87,7 +87,8 @@
 							</div>
 						</div>
                         {#la review#}
-						<div class="reviewIndiv_card_content_body w-full">
+						<div class="reviewIndiv_card_content_body flex flex-col gap-1 w-full">
+                        <h4 class="text-lg urbanist color-tertiary font-semibold">{{review.title}}</h4>
 							<p class="text-lg urbanist">
 								{{review.content|raw|nl2br}}
 							</p>
@@ -145,9 +146,9 @@
                                                     {{ form_start(replyForms[comment.id]) }}
                                                     <div class="flex items-center gap-2">
                                                         {% if app.user.avatar %}
-                                                            <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
+                                                            <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] object-cover rounded-full">
                                                         {% else %}
-                                                            <img src="http://placehold.it/64x64" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
+                                                            <img src="/images/nopp.png" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
                                                         
                                                         {% endif %}
                                                         {{ form_widget(replyForms[comment.id].content) }}
@@ -181,7 +182,7 @@
                 <div class="form_comments flex gap-5">
                         {% if app.user %}
                         {% if app.user.avatar %}
-                        <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[40px] h-[40px] rounded-full">
+                        <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[40px] h-[40px] object-cover rounded-full">
                         {% else %}
                         <img src="http://placehold.it/64x64" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[40px] h-[40px] rounded-full">
                         
@@ -199,7 +200,7 @@
                         {% else %}
                         <div>
                         
-                            <p class="flex text-md urbanist font-semibold ">Vous devez être connecté pour commenter <a href="#"class="color-tertiary">Connectez-vous</a></p>
+                            <p class="flex text-md urbanist font-semibold ">Vous devez être connecté pour commenter <a href="{{path('account_login')}}"class="color-tertiary">Connectez-vous</a></p>
                         </div>
                         
                         {% endif %}

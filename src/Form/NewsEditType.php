@@ -20,16 +20,16 @@ class NewsEditType extends ApplicationType
         $builder
             ->add('title', TextType::class, $this->getConfiguration('Titre', 'Entrez le titre de la news'))
             ->add('content', TextareaType::class, $this->getConfiguration('Contenu', 'Entrez le contenu de l\'actualité'))
-                    ->add('status', ChoiceType::class, [
-                        'choices' => [
-                            'Officiel' => 'officiel',
-                            'Rumeur' => 'rumeur',
-                            'Recommandations' => 'recommandations',
-                            'Box Office' => 'box office'
-                        ],
-                        'label' => 'Statut',
-                        'placeholder' => 'Choisissez un statut'
-                    ])
+            ->add('status', ChoiceType::class, [
+                'choices' => [
+                    'Officiel' => 'officiel',
+                    'Rumeur' => 'rumeur',
+                    'Recommandations' => 'recommandations',
+                    'Box Office' => 'box office'
+                ],
+                'label' => 'Statut',
+                'placeholder' => 'Choisissez un statut'
+            ])
         ;
     }
 

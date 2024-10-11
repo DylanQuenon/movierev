@@ -14,11 +14,11 @@ class FollowRequest
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'followRequests')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete:'CASCADE')]
     private ?User $requester = null;
 
     #[ORM\ManyToOne(inversedBy: 'followRequests')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete:'CASCADE')]
     private ?User $requested = null;
 
     #[ORM\Column]

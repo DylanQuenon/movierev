@@ -14,6 +14,7 @@ class Likes
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
@@ -21,6 +22,7 @@ class Likes
     private ?Comment $comment = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Review $review = null;
 
     public function getId(): ?int

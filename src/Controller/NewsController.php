@@ -13,6 +13,7 @@ use App\Form\ImgModifyMainType;
 use App\Repository\NewsRepository;
 use App\Service\PaginationService;
 use App\Service\FileUploaderService;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -166,7 +167,7 @@ class NewsController extends AbstractController
      * @return Response
      */
     #[Route("/news/{slug}", name:"news_show")]
-    public function show(string $slug, News $news, NewsRepository $newsRepository, Request $request, EntityManagerInterface $manager): Response
+    public function show(string $slug, News $news, NewsRepository $newsRepository, Request $request, NotificationService $notifService, EntityManagerInterface $manager): Response
     {
         $news->setViewsCount($news->getViewsCount() + 1); // augmente le nombre de vues de 1
         $manager->flush();
@@ -181,6 +182,14 @@ class NewsController extends AbstractController
             $comment->setNews($news)  // Associe la review au commentaire
                     ->setAuthor($this->getUser());  // Associe l'auteur
 
+                    $notifService->addNotification(
+                        'newsComment',
+                        $this->getUser(),
+                        $news->getAuthor(), // Utilisateur qui a commenté la review
+                        null,
+                        $comment,// Le commentaire lui-même
+                        $news,
+                    );
                  
 
             // Persiste le commentaire
@@ -212,7 +221,7 @@ class NewsController extends AbstractController
         ->where('n.id != :currentNewsId')
         ->setParameter('currentNewsId', $news->getId())
         ->orderBy('n.createdAt', 'DESC')
-        ->setMaxResults(3)
+        ->setMaxResults(2)
         ->getQuery()
         ->getResult();
 
@@ -265,11 +274,20 @@ class NewsController extends AbstractController
     )]
     public function edit(News $news, Request $request, EntityManagerInterface $manager): Response
     {
+        $cover = $news->getCover();
+        if(!empty($cover)){
+            $news->setCover(
+                new File($this->getParameter('uploads_directory').'/'.$news->getCover())
+            );
+        }
         $form = $this->createForm(NewsEditType::class, $news);
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            $news->setSlug('');
+   
+
+            $news->setSlug('')
+                ->setCover($cover);
             $manager->persist($news);
             $manager->flush();
     

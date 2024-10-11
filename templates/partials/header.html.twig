@@ -105,6 +105,9 @@
 				{% endfor %}
 				
 				{% if is_granted('ROLE_REDACTEUR') %}
+					<a href="{{path('news_create')}}" class="text-lg px-3 font-semibold flex justify-between transition-all duration-50 hover:text-purple-500">
+						<span class="material-symbols-outlined">newspaper</span>Ajouter un article
+					</a>
 					<a href="{{path('user_news', {'slug': app.user.slug})}}" class="text-lg px-3 font-semibold flex justify-between transition-all duration-50 hover:text-purple-500">
 						<span class="material-symbols-outlined">article</span>Voir mes articles
 					</a>
@@ -159,7 +162,7 @@
 						{% if app.user.avatar %}
 							<img src="/uploads/{{ app.user.avatar }}" class="w-10 h-10 border-purple-500 rounded-full mr-2 border-2" alt="">
 						{% else %}
-							<img src="http://placehold.it/64x64" class="w-8 h-8 rounded-full mr-2 border border-gray-300" alt="">
+							<img src="/images/nopp.png" class="w-8 h-8 rounded-full mr-2 border border-gray-300" alt="">
 						{% endif %}
 						<div class="flex flex-col">
 							<span class="text-lg urbanist font-semibold color-secondary">{{ app.user.fullName }}</span>
@@ -241,12 +244,13 @@
 							if (data.length > 0) {
 								searchResults.style.display = 'block';
 								data.forEach((result) => {
+									console.log(result.avatar)
 									const item = document.createElement('li');
 									const link = document.createElement('a');
 									link.href = `/user/${result.slug}`;
 										link.innerHTML = `
 										<div class="flex gap-2 border-b border-[#a051de] my-2 pb-4 items-center">
-											<img src="${result.avatar ? `/uploads/${result.avatar}` : 'https://via.placeholder.com/50'}" alt="${result.fullName}" class="search-result-poster" style="height:50px; width:50px; border-radius:100%; object-fit:cover;">
+											<img src="${result.avatar ? `/uploads/${result.avatar}` : '/images/nopp.png'}" alt="${result.fullName}" class="search-result-poster" style="height:50px; width:50px; border-radius:100%; object-fit:cover;">
 											<div class="search-result-info">
 												<h4 class="search-result-title text-lg urbanist font-semibold color-tertiary ">${result.username}</h4>
 												<h4 class="search-result-title text-md">${result.fullName}</h4>

@@ -14,10 +14,11 @@ class Subscription
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'followers')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete:'CASCADE')]
     private ?User $follower = null;
 
     #[ORM\ManyToOne(inversedBy: 'followeds')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?User $followed = null;
 
     public function getId(): ?int

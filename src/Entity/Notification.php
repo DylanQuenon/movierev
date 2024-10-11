@@ -16,20 +16,23 @@ class Notification
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'notifications')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete:'CASCADE')]
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]
+
     private ?string $type = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete:'CASCADE')]
     private ?Review $review = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete:'CASCADE')]
     private ?Comment $comment = null;
 
     #[ORM\ManyToOne(inversedBy: 'notifications')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete:'CASCADE')]
     private ?User $relatedUser = null;
 
     #[ORM\Column]

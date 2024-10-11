@@ -4,9 +4,9 @@
             <div class="commentsCard_heading flex justify-between">
                 <div class="flex gap-2">
                     {% if comment.author.avatar %}
-                        <img src="/uploads/{{comment.author.avatar}}" alt="Image de l'utilisateur {{comment.author.username}}" class="border-2 border-purple-500 w-[50px] h-[50px] rounded-full">
+                        <img src="/uploads/{{comment.author.avatar}}" alt="Image de l'utilisateur {{comment.author.username}}" class="border-2 border-purple-500 w-[50px] h-[50px] object-cover rounded-full">
                     {% else %}
-                        <img src="http://placehold.it/64x64" class="border-2 border-purple-500 w-[50px] h-[50px] rounded-full" alt="Image de l'utilisateur {{comment.author.username}}">
+                        <img src="images/nopp.png" class="border-2 border-purple-500 w-[50px] h-[50px] object-cover rounded-full" alt="Image de l'utilisateur {{comment.author.username}}">
                     
                     {% endif %}
                     <a href="{{path('user_show',{'slug':comment.author.slug})}}" class="flex flex-col transition-all hover:text-purple-500">

@@ -104,7 +104,7 @@
 						{% if user.avatar %}
 							<img src="/uploads/{{user.avatar}}" alt="Image de l'utilisateur {{user.username}}" class=" max-md:mx-auto w-[200px] h-[200px] object-cover rounded-3xl">
 						{% else %}
-							<img src="http://placehold.it/200x200" class=" max-md:mx-auto w-[200px] h-[200px] object-cover rounded-3xl" alt="Image de l'utilisateur {{user.username}}">
+							<img src="/images/nopp.png" class=" max-md:mx-auto w-[200px] h-[200px] object-cover rounded-3xl" alt="Image de l'utilisateur {{user.username}}">
 						{% endif %}
 						<div class="accountBanneer_info_user max-md:w-full lg:w-3/5 max-md:justify-center flex flex-col gap-5">
 							<div class="accountBanneer_info_user_content flex flex-col gap-3">
@@ -275,7 +275,7 @@
 
 
 function showFollowedOverlay() {
-	if ({% if app.user == user or user.isPrivate==false %}true{% else %}false{% endif %}) {
+	if ({% if app.user == user or user.isPrivate==false or isFollowing %}true{% else %}false{% endif %}) {
 		// Create and show overlay for followeds
 		let overlay = document.createElement('div');
 		overlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
@@ -283,8 +283,6 @@ function showFollowedOverlay() {
 			<div class="bg-white p-5 rounded-lg max-w-md w-full">
 				<h2 class="text-2xl font-bold mb-4">Abonné(e)s</h2>
 				<ul>
-				
-
 
 					{% for followed in user.followeds %}
 						<li class="mb-2">
@@ -307,7 +305,7 @@ function showFollowedOverlay() {
 	}
 }
 function showFollowersOverlay() {
-	if ({% if app.user == user or user.isPrivate == false %}true{% else %}false{% endif %}) {
+	if ({% if app.user == user or user.isPrivate == false or isFollowing %}true{% else %}false{% endif %}) {
 		// Create and show overlay for followers
 		let overlay = document.createElement('div');
 		overlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';

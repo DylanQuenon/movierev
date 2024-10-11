@@ -303,9 +303,10 @@ class ReviewController extends AbstractController
                 "Votre review <strong>".$review->getTitle()."</strong> a bien été modifiée"
             );
 
-            // return $this->redirectToRoute('news_show',[
-            //     'slug' => $news->getSlug()
-            // ]);
+            // // Redirection vers une page pertinente après la soumission, par exemple la page du média
+            return $this->redirectToRoute('reviews_show', [
+                'slug' => $review->getSlug() // Assurez-vous que la route 'media_show' existe
+            ]);
         }
 
         return $this->render("review/edit.html.twig",[

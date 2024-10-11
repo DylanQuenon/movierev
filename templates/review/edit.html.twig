@@ -42,7 +42,7 @@
             <div class="flex justify-between items-center my-4">
                 <button type="submit" class="text-lg urbanist py-2 px-4 rounded-md bg-tertiary color-secondary">Modifier</button>
             {{ form_end(myForm) }}
-                <a onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('review_delete', { 'id': review.id }) }}', 'Supprimer', 'Annuler')" class=" cursor-pointer text-lg urbanist rounded-md bg-red-500 text-white py-2 px-4  hover:bg-red-600">Supprimer</a>
+                <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('review_delete', { 'slug': review.slug }) }}', 'Supprimer', 'Annuler')" class=" cursor-pointer text-lg urbanist rounded-md bg-red-500 text-white py-2 px-4  hover:bg-red-600">Supprimer</button>
             </div>
         </div>
     </div>

@@ -1,7 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Collection {{ collection.name }}{% endblock %}
-
+{% block stylesheets %}
+<style>
+form{
+    display:flex;
+    flex-direction: column;
+    gap: 4px;
+}
+</style>
+{% endblock %}
 {% block body %}
     <div class="slide">
         <div class="wrapper py-24 flex-col gap-10">
@@ -89,11 +97,11 @@
     {% if app.user and app.user.id == user.id %}
         <div id="collectionOverlay" class="fixed inset-0 hidden bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div class="bg-white p-8 rounded-lg w-96">
-                <h2 class="text-lg font-bold mb-4">Modification d'une collection</h2>
+                <h2 class="text-lg font-bold mb-5">Modification d'une collection</h2>
                     {{ form_start(myForm, {'action': path('collection_edit',{"id": collection.id}), 'method': 'POST'}) }}
             {{form_widget(myForm.name)}}
-            {{ form_label(myForm.isPrivate, 'Confidentialité de la collection', {'label_attr': {'class': 'text-sm font-medium text-gray-900 dark:text-gray-300'}}) }}
-                    <div class="flex gap-3 items-center">
+            {{ form_label(myForm.isPrivate, 'Confidentialité de la collection', {'label_attr': {'class': 'mb-5 text-sm font-medium text-gray-900 dark:text-gray-300'}}) }}
+                    <div class="flex gap-3 items-center mb-5 ">
                         <label class="inline-flex items-center cursor-pointer">
                             {{ form_widget(myForm.isPrivate, {'attr': {'class': 'sr-only peer', 'id': 'privacyToggle'}}) }}
                             <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
@@ -104,7 +112,7 @@
                             <span id="privacyText" class="ml-2">Privé</span>
                         </div>
                     </div>
-                <button type="submit" class="py-2 px-4 rounded-md bg-tertiary">
+                <button type="submit" class="py-2 mt-2 text-lg urbanist color-secondary px-4 rounded-md bg-tertiary">
                         Modifier
                 </button>
 
@@ -152,7 +160,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-Token': '{{ csrf_token("your_intention") }}', // Inclure le token CSRF si nécessaire
+             
             },
             body: JSON.stringify({ order: order })
         })

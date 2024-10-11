@@ -7,11 +7,19 @@
 {% block profile_content %}
     <div class="w-1/2">
         {% if collections is empty %}
-                    <p class="text-center flex justify-center">Pas de collections</p>
+            <div class="flex flex-col gap-2 justify-center items-center">
+                <div class="w-[50px] h-[50px] rounded-full border-2 border-[#a051de] flex justify-center items-center color-tertiary">
+                        <span class="material-symbols-outlined">
+                        bookmark
+                        </span>
+                </div>
+                <p class="text-center text-lg urbanist flex justify-center">Pas de collections</p>
+            
+            </div>
         {% endif %}
         <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 place-items-center w-full">
         {% if app.user and app.user.id == user.id %}
-             <button class="w-[200px] h-[200px] addCollection bg-tertiary rounded-[20px] display-2xl color-secondary justify-center flex items-center">+</button>
+             <button class="w-[200px] h-[200px] addCollection bg-tertiary rounded-[20px] display-2xl color-secondary justify-center flex items-center" data-tippy-content="Créer une collection">+</button>
         {% endif %}
             {% if app.user and app.user.id == user.id or not user.isPrivate  %}
                 {% for collection in collections %}

@@ -19,7 +19,7 @@ class Comment
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete:'CASCADE')]
     private ?User $author = null;
 
     #[ORM\Column(type: Types::TEXT)]

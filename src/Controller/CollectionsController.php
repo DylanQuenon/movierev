@@ -102,7 +102,7 @@ class CollectionsController extends AbstractController
         $form = $this->getUser() && $this->getUser()->getId() === $user->getId()
         ? $this->createForm(CollectionType::class, $collection)
         : null;
-
+   
         $collectionsMedia = $entityManager->getRepository(CollectionsMedia::class)
         ->findBy(['collection' => $collection], ['position' => 'ASC']); // Trie par position
         return $this->render('collections/show.html.twig', [
@@ -158,21 +158,29 @@ class CollectionsController extends AbstractController
     #[Route('/collections/edit/{id}', name: 'collection_edit')]
     #[IsGranted(
         attribute: new Expression('(user === subject and is_granted("ROLE_USER"))'),
-        subject: new Expression('args["collections"].getAuthor()'),
+        subject: new Expression('args["collection"].getUser()'),
         message: "Cette collection ne vous appartient pas, vous ne pouvez pas la modifier"
     )]
     public function edit(Request $request, Collections $collection, EntityManagerInterface $entityManager): Response
     {
+
+
         // Vérifier si l'utilisateur a les droits de modifier cette collection
         if ($collection->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cette collection.');
         }
+        $userCollections = $entityManager->getRepository(Collections::class)->findBy(['user' => $this->getUser()]);
+
+
 
         $form = $this->createForm(CollectionType::class, $collection);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // dd($collection);
+            $entityManager->persist($collection);
             $entityManager->flush();
+
 
             $this->addFlash(
                 'success', 
@@ -187,6 +195,7 @@ class CollectionsController extends AbstractController
         return $this->render('collection/edit.html.twig', [
             'myForm' => $form->createView(),
             'collection' => $collection,
+            
         ]);
     }
 
@@ -200,7 +209,7 @@ class CollectionsController extends AbstractController
      */
     #[IsGranted(
         attribute: new Expression('(user === subject and is_granted("ROLE_USER"))'),
-        subject: new Expression('args["collections"].getAuthor()'),
+        subject: new Expression('args["collection"].getUser()'),
         message: "Cette collection ne vous appartient pas, vous ne pouvez pas la modifier"
     )]
     #[Route('/collections/delete/{id}', name: 'collection_delete')]
@@ -234,20 +243,21 @@ class CollectionsController extends AbstractController
      * @return Response
      */
     #[Route('/collections/add/{collectionId}/{mediaId}', name: 'add_media_to_collection', methods: ['POST'])]
-    #[IsGranted(
-        attribute: new Expression('(user === subject and is_granted("ROLE_USER"))'),
-        subject: new Expression('args["collections"].getAuthor()'),
-        message: "Cette collection ne vous appartient pas, vous ne pouvez pas la modifier"
-    )]
-    public function addMediaToCollection(int $collectionId, int $mediaId, EntityManagerInterface $entityManager, CollectionsRepository $repo, Request $request): Response
+    #[IsGranted('ROLE_USER')]
+    public function addMediaToCollection(int $collectionId, int $mediaId,EntityManagerInterface $entityManager, CollectionsRepository $repo, Request $request): Response
     {
         // Trouve la collection par ID
         $collection = $repo->find($collectionId);
     
         if (!$collection) {
             // Redirige avec un message d'erreur si la collection n'est pas trouvée
-            $this->addFlash('error', 'Collection not found');
+            $this->addFlash('error', 'Collection introuvable');
             return $this->redirect($request->headers->get('referer')); // Rediriger vers la page précédente
+        }
+        // vérifie si la collection lui appartient
+        if ($collection->getUser() !== $this->getUser()) {
+            $this->addFlash('error', 'Cette collection ne vous appartient pas');
+            return $this->redirect($request->headers->get('referer')); // Redirige vers la page précédente
         }
     
         // Récupère le média à ajouter
@@ -255,7 +265,7 @@ class CollectionsController extends AbstractController
     
         if (!$media) {
             // Redirige avec un message d'erreur si le média n'est pas trouvé
-            $this->addFlash('error', 'Media not found');
+            $this->addFlash('error', 'Media introuvable');
             return $this->redirect($request->headers->get('referer')); // Redirige vers la page précédente
         }
     
@@ -267,7 +277,7 @@ class CollectionsController extends AbstractController
     
         if ($existingEntry) {
             // Redirige avec un message d'erreur si le média est déjà dans la collection
-            $this->addFlash('error', 'Media already in collection');
+            $this->addFlash('error', 'Media déjà dans la collection');
             return $this->redirect($request->headers->get('referer')); // Redirige vers la page précédente
         }
     
@@ -285,7 +295,8 @@ class CollectionsController extends AbstractController
         $entityManager->flush();
     
         // Redirige avec un message de succès après l'ajout
-        $this->addFlash('success', 'Media added to collection');
+
+        $this->addFlash('success', 'Media ajouté à la collection "' . $collection->getName() . '"');
         return $this->redirect($request->headers->get('referer')); // Rediriger vers la page précédente
     }
 
@@ -300,11 +311,7 @@ class CollectionsController extends AbstractController
      * @return Response
      */
     #[Route('/collections/remove/{collectionId}/{mediaId}', name: 'remove_media_from_collection')]
-    #[IsGranted(
-        attribute: new Expression('(user === subject and is_granted("ROLE_USER"))'),
-        subject: new Expression('args["collections"].getAuthor()'),
-        message: "Cette collection ne vous appartient pas, vous ne pouvez pas la modifier"
-    )]
+    #[IsGranted('ROLE_USER')]
     public function removeMediaFromCollection(int $collectionId, int $mediaId, EntityManagerInterface $entityManager, CollectionsRepository $repo, Request $request): Response
     {
         // Trouver la collection par ID
@@ -315,6 +322,12 @@ class CollectionsController extends AbstractController
             $this->addFlash('error', 'Collection Introuvable');
             return $this->redirect($request->headers->get('referer')); // Rediriger vers la page précédente
         }
+
+            // vérifie si la collection lui appartient
+            if ($collection->getUser() !== $this->getUser()) {
+                $this->addFlash('error', 'Cette collection ne vous appartient pas');
+                return $this->redirect($request->headers->get('referer')); // Redirige vers la page précédente
+            }
 
         // Récupérer le média à supprimer
         $media = $entityManager->getRepository(Media::class)->find($mediaId);

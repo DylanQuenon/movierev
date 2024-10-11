@@ -83,8 +83,9 @@ class ReviewRepository extends ServiceEntityRepository
         
         // Trier les reviews par le nombre de likes en utilisant la méthode getLikes()
         usort($reviews, function ($a, $b) {
-            return $b->getLikes() - $a->getLikes();
+            return count($b->getLikes()) - count($a->getLikes()); // Comparez le nombre de likes
         });
+        
     
         // Retourner les 3 reviews avec le plus de likes
         return array_slice($reviews, 0, 3);

@@ -131,7 +131,7 @@ class NotificationRepository extends ServiceEntityRepository
         ->where('n.relatedUser = :user')
         ->andWhere('n.type IN (:types)')
         ->setParameter('user', $user)
-        ->setParameter('types', ['comment', 'reply'])
+        ->setParameter('types', ['comment', 'reply','newsComment'])
         ->orderBy('n.id', 'DESC')
         ->getQuery()
         ->getResult();
@@ -190,7 +190,7 @@ class NotificationRepository extends ServiceEntityRepository
         ->andWhere('n.type IN (:types)')
         ->andWhere('n.isRead = false')
         ->setParameter('user', $user)
-        ->setParameter('types', ['comment', 'reply'])
+        ->setParameter('types', ['comment', 'reply','newsComment'])
         ->getQuery()
         ->getSingleScalarResult();
     }
