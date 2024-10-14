@@ -1,0 +1,22 @@
+{% extends "admin/base.html.twig" %}
+
+{% block title %}Ajout d'une question{% endblock %}
+
+{% form_theme myForm 'admin/quizz/_collection.html.twig' %}
+
+
+{% block body %}
+    <div class="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg">
+        <h1 class="text-2xl font-bold mb-6">Ajout d'une question au quizz {{quizz.title}} </h1>
+
+        {{ form_start(myForm) }}
+        {{ form_widget(myForm) }}
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Ajouter une question</button>
+        {{ form_end(myForm) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{{encore_entry_script_tags('answer')}}
+{% endblock %}
+

@@ -1,0 +1,49 @@
+{% extends "admin/base.html.twig" %}
+
+{% block title %}Quizz - {{quizz.title}}{% endblock %}
+
+{% block body %}
+<div class="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    
+
+    <div class="mb-4">
+        <a href="{{path('admin_question_new', {'slug':quizz.slug})}}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Ajouter une nouvelle question</a>
+    </div>
+
+
+    <h1 class="text-2xl font-bold mb-6">Quizz : {{ quizz.title }}</h1>
+
+    <!-- Section pour afficher les questions -->
+    <div class="space-y-6">
+        {% for question in quizz.questions %}
+            <div class="p-4 bg-gray-100 rounded-lg shadow">
+                <div class="flex gap-5 items-center">
+                    <a href="{{ path('admin_question_edit', {'slug': quizz.slug, 'id':question.id}) }}" data-tippy-content="Modifier la question" class="bg-purple-500 text-white my-5 w-[50px] h-[50px] flex justify-center items-center rounded hover:bg-purple-600">
+                        <i class="fas fa-edit"></i> 
+                    </a>
+                     <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('admin_question_delete', { 'slug': quizz.slug, 'id':question.id }) }}', 'Supprimer', 'Annuler')" data-tippy-content="Effacer une question"class=" w-[50px] h-[50px] flex justify-center items-center bg-red-500 text-white p-3 rounded hover:bg-red-600"> <i class="fas fa-trash"></i> </button>
+                
+                </div>
+                <h2 class="text-xl font-semibold mb-3">{{ question.title }}</h2>
+                <ul class="space-y-2">
+                    {% for answer in question.answers %}
+                        <li class="{% if answer.isCorrect %}border-2 border-green-500 bg-green-100{% else %}border-2 border-gray-300{% endif %} p-3 rounded-md">
+                            {{ answer.content }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% include '/partials/_delete_modal.html.twig' with {
+    modal_id: 'deleteModal',
+    form_id: 'deleteForm',
+    title: 'Confirmation de suppression',
+    message: 'Êtes-vous sûr de vouloir supprimer cette question ? Cette action est irréversible.',
+    action_url: '#',  
+    confirm_text: 'Supprimer',
+    cancel_text: 'Annuler'
+} %}
+{% endblock %}

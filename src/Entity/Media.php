@@ -102,7 +102,7 @@ class Media
     public function getAvgRatings(): int
     {
         // calculer la somme des notations
-        // la fonction array_reduce permet de réduire le tableau à une seule valeur (attention il faut un tableau pas une array Collection)1er param c'est le tableau à reduire et en 2ème paramètre de la fonction c'est la fonction à faire pour chaque valeur, 3ème c'est la valeur par défaut
+        // la fonction array_reduce permet de réduire le tableau à une seule valeur 1er param c'est le tableau à reduire et en 2ème paramètre de la fonction c'est la fonction à faire pour chaque valeur, 3ème c'est la valeur par défaut
         $sum = array_reduce($this->reviews->toArray(),function($total,$reviews){
             return $total + $reviews->getRating();
         },0);

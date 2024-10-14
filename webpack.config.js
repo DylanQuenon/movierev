@@ -44,6 +44,7 @@ Encore
     .addEntry('burgerJS', './assets/js/burger.js')
     .addEntry('sliderHomeJS', './assets/js/sliderHome.js')
     .addEntry('casting', './assets/js/casting.js')
+    .addEntry('answer', './assets/js/answer.js')
     .addEntry('sliderNews', './assets/js/sliderNews.js')
     .addEntry('sliderReview', './assets/js/sliderReview.js')
     .addEntry('sliderLog', './assets/js/sliderLog.js')

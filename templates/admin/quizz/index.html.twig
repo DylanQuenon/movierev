@@ -1,0 +1,54 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Liste des Quizz{% endblock %}
+
+{% block body %}
+<div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">Liste des Quizz</h1>
+
+    <div class="mb-4">
+        <a href="{{path('admin_quizz_create')}}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Ajouter un quizz</a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead class="bg-gray-100 border-b border-gray-200">
+                <tr>
+                    <th class="py-3 px-6 text-left text-gray-600">Titre</th>
+                    <th class="py-3 px-6 text-left text-gray-600">Date début</th>
+                    <th class="py-3 px-6 text-left text-gray-600">Date de fin</th>
+                    <th class="py-3 px-6 text-center text-gray-600">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for quizz in quizz %}
+                <tr class="border-b border-gray-200">
+                    <td class="py-4 px-6">{{ quizz.title }}</td>
+                    <td class="py-4 px-6">{{ quizz.createdAt|date('d-m-Y') }}</td>
+                    <td class="py-4 px-6">{{ quizz.endDate|date('d-m-Y') }}</td>
+                    <td class="py-4 px-6 flex justify-center space-x-2">
+                        <a href="{{ path('admin_quizz_edit', { 'slug': quizz.slug }) }}" class="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600">Modifier</a>
+                        <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('admin_quizz_delete', { 'slug': quizz.slug }) }}', 'Supprimer', 'Annuler')" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">Supprimer</button>
+                        <a href="{{ path('admin_quizz_show', { 'slug': quizz.slug }) }}" class="bg-purple-500 text-white py-1 px-3 rounded hover:bg-purple-600">Afficher</a>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {{ pagination.display() }}
+    </div>
+</div>
+
+{% include '/partials/_delete_modal.html.twig' with {
+    modal_id: 'deleteModal',
+    form_id: 'deleteForm',
+    title: 'Confirmation de suppression',
+    message: 'Êtes-vous sûr de vouloir supprimer ce quizz ? Cette action est irréversible.',
+    action_url: '#',  
+    confirm_text: 'Supprimer',
+    cancel_text: 'Annuler'
+} %}
+
+{% endblock %}

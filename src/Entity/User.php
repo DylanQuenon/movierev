@@ -136,6 +136,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $notifications;
 
+    /**
+     * @var Collection<int, UserScore>
+     */
+    #[ORM\OneToMany(targetEntity: UserScore::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $userScores;
+
     public function __construct()
     {
         $this->news = new ArrayCollection();
@@ -148,6 +154,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->followeds = new ArrayCollection();
         $this->followRequests = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->userScores = new ArrayCollection();
     }
 
       /**
@@ -668,6 +675,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($notification->getUser() === $this) {
                 $notification->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserScore>
+     */
+    public function getUserScores(): Collection
+    {
+        return $this->userScores;
+    }
+
+    public function addUserScore(UserScore $userScore): static
+    {
+        if (!$this->userScores->contains($userScore)) {
+            $this->userScores->add($userScore);
+            $userScore->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserScore(UserScore $userScore): static
+    {
+        if ($this->userScores->removeElement($userScore)) {
+            // set the owning side to null (unless already changed)
+            if ($userScore->getUser() === $this) {
+                $userScore->setUser(null);
             }
         }
 

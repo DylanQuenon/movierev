@@ -1,0 +1,34 @@
+{% block _question_answers_widget %}
+    <p class="text-lg font-semibold mb-4 urbanist">Ici, vous pouvez ajouter vos réponses</p>
+    {{ form_widget(form, {'attr': {'class': 'mb-4'}}) }}
+    <input type="hidden" id="widgets-counter" value="0">
+    <div class="mb-6">
+        <button type="button" id="add-answers" class="bg-purple-500 text-white text-md urbanist py-2 px-6 rounded hover:bg-purple-600 transition duration-300">Ajouter une réponse</button>
+    </div> 
+{% endblock %}
+
+{% block _question_answers_entry_row %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block _question_answers_entry_widget %}
+    <div class="my-6 border border-gray-300 rounded-lg p-6 shadow-sm" id="block_{{ id }}">
+        <div class="flex flex-col md:flex-row items-start md:items-center">
+            <div class="flex-1 w-full md:w-auto mb-4 md:mb-0 md:mr-4">
+                <div class="flex flex-col md:flex-row">
+                    <div class="flex-1 mb-4 md:mb-0 md:mr-4">
+                        {{ form_widget(form.content, {'attr': {'class': 'w-full'}}) }}
+                        {{ form_errors(form.content) }}
+                    </div>
+                    <div class="flex items-center mb-4 md:mb-0">
+                        {{ form_widget(form.isCorrect) }}
+                        {{ form_label(form.isCorrect, 'Correct ?', {'label_attr': {'class': 'ml-2'}}) }}
+                        {{ form_errors(form.isCorrect) }}
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300" data-action="delete" data-target="#block_{{ id }}">Supprimer</button>
+        </div>
+
+    </div>
+{% endblock %}
