@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\News;
 use App\Entity\User;
+use App\Entity\Quizz;
 use App\Entity\Review;
 use App\Entity\Comment;
 use App\Entity\Notification;
@@ -18,7 +19,7 @@ class NotificationService
         $this->entityManager = $entityManager;
     }
 
-    public function addNotification(string $type, User $user, ?User $relatedUser, ?Review $review = null, ?Comment $comment = null, ?News $news = null): void
+    public function addNotification(string $type, User $user, ?User $relatedUser, ?Review $review = null, ?Comment $comment = null, ?News $news = null, ?Quizz $quizz = null): void
     {
         $notification = new Notification();
         $notification->setType($type)
@@ -38,6 +39,7 @@ class NotificationService
                              ? $news 
                              : null
                      )
+                     ->setQuizz($type === 'new_quizz'? $quizz : null)  // Ajoute le quizz ici
                      ->setRelatedUser($relatedUser)
                      ->setRead(false);
         

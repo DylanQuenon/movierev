@@ -44,6 +44,9 @@ class Notification
     #[ORM\ManyToOne]
     private ?News $news = null;
 
+    #[ORM\ManyToOne(inversedBy: 'notifications')]
+    private ?Quizz $quizz = null;
+
            /**
      * Permet de mettre directement à jour la date à laquelle le user s'est inscrit
      *
@@ -156,6 +159,18 @@ class Notification
     public function setNews(?News $news): static
     {
         $this->news = $news;
+
+        return $this;
+    }
+
+    public function getQuizz(): ?Quizz
+    {
+        return $this->quizz;
+    }
+
+    public function setQuizz(?Quizz $quizz): static
+    {
+        $this->quizz = $quizz;
 
         return $this;
     }

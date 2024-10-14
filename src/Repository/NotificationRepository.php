@@ -100,6 +100,24 @@ class NotificationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Récupère les notifs de quizz
+     *
+     * @param [type] $user
+     * @return void
+     */
+    public function getQuizzNotifications($user)
+    {
+        return $this->createQueryBuilder('n')
+        ->where('n.relatedUser = :user')
+        ->andWhere('n.type IN (:type)')
+        ->setParameter('user', $user)
+        ->setParameter('type', 'new_quizz')
+        ->orderBy('n.id', 'DESC')
+        ->getQuery()
+        ->getResult();
+    }
+
 
     /**
      * récupère les notifs
@@ -152,6 +170,19 @@ class NotificationRepository extends ServiceEntityRepository
         ->andWhere('n.isRead = false')
         ->setParameter('user', $user)
         ->setParameter('types', ['follow', 'follow_request'])
+        ->getQuery()
+        ->getSingleScalarResult();
+    }
+
+    public function countUnreadQuizzNotifications($user)
+    {
+        return $this->createQueryBuilder('n')
+        ->select('COUNT(n.id)')
+        ->where('n.relatedUser = :user')
+        ->andWhere('n.type IN (:types)')
+        ->andWhere('n.isRead = false')
+        ->setParameter('user', $user)
+        ->setParameter('types', ['new_quizz'])
         ->getQuery()
         ->getSingleScalarResult();
     }
@@ -293,6 +324,20 @@ class NotificationRepository extends ServiceEntityRepository
         ->andWhere('n.type IN (:types)')
         ->setParameter('user', $user)
         ->setParameter('types', ['review'])
+        ->setParameter('isRead', true)
+        ->getQuery()
+        ->execute();
+    }
+
+    public function markQuizzAsRead($user)
+    {
+        $this->createQueryBuilder('n')
+        ->update()
+        ->set('n.isRead', ':isRead')
+        ->where('n.relatedUser = :user')
+        ->andWhere('n.type IN (:types)')
+        ->setParameter('user', $user)
+        ->setParameter('types', ['new_quizz'])
         ->setParameter('isRead', true)
         ->getQuery()
         ->execute();

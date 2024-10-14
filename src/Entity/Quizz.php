@@ -45,10 +45,17 @@ class Quizz
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    /**
+     * @var Collection<int, Notification>
+     */
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'quizz')]
+    private Collection $notifications;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
         $this->userScores = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     /**
@@ -198,6 +205,36 @@ class Quizz
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setQuizz($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getQuizz() === $this) {
+                $notification->setQuizz(null);
+            }
+        }
 
         return $this;
     }

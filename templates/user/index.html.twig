@@ -21,39 +21,49 @@
             {% for notification in notifications %}
                 <li class="flex items-center w-full py-2 border-l border-spacing-2 bg-[rgba(207,199,213,0.15)] border-l-[#a051de]">
                     <div class="flex-shrink-0 mr-3 pl-2">
+					{% if notification.type != "new_quizz" %}
+					{% if notification.user.avatar %}
                         <img class="h-8 w-8 rounded-full object-cover" src="/uploads/{{ notification.user.avatar }}" alt="{{ notification.user.username }}">
+						{% else %}
+						<img class="h-8 w-8 rounded-full object-cover" src="/images/nopp.png" alt="{{ notification.user.username }}">
+					
+					{% endif %}
+					
+					{% endif %}
                     </div>
                     <div>
                         <p class="text-md urbanist font-medium">
-                            <a href="{{ path('user_show', {'slug': notification.user.slug}) }}" class="font-semibold text-color-tertiary">
-                                {{ notification.user.username }}
-                            </a>
-                            {% if notification.type == 'follow' %}
-                                a commencé à vous suivre.
-                            {% elseif notification.type == 'follow_request' %}
-                                a demandé à vous suivre. <a href="{{ path('follow_requests') }}" class="text-blue-500 hover:underline">Voir les demandes</a>
-                            {% elseif notification.type == 'like' %}
-                                a aimé votre review.
-                            {% elseif notification.type == 'comment' %}
-                                a commenté votre review.
-                            {% elseif notification.type == 'reply' and notification.review is not null %}
-                                a répondu à votre commentaire sur la review.
-                                <a href="{{ path('reviews_show', {'slug': notification.review.slug}) }}" class="text-blue-500 text-md urbanist hover:underline">Voir la review</a>
-                            {% elseif notification.type == 'reply' and notification.news is not null %}
-                                a répondu à votre commentaire sur l'actualité.
-                                <a href="{{ path('news_show', {'slug': notification.news.slug}) }}" class="text-blue-500 text-md urbanist hover:underline">Voir l'actu</a>
-                            {% elseif notification.type == 'newsLike' or notification.type == 'likeComment' %}
-                                a aimé votre commentaire.
-                            {% elseif notification.type == 'newsComment' %}
-                                a commenté votre article.
-                 
-                            {% elseif notification.type == 'review' %}
-                                a sorti une review.
+                            {% if notification.type == 'new_quizz' %}
+                                Un nouveau quizz est sorti : {{ notification.quizz.title }}
                             {% else %}
-                                a une nouvelle notification.
+                                <a href="{{ path('user_show', {'slug': notification.user.slug}) }}" class="font-semibold text-color-tertiary">
+                                    {{ notification.user.username }}
+                                </a>
+                                {% if notification.type == 'follow' %}
+                                    a commencé à vous suivre.
+                                {% elseif notification.type == 'follow_request' %}
+                                    a demandé à vous suivre. <a href="{{ path('follow_requests') }}" class="text-blue-500 hover:underline">Voir les demandes</a>
+                                {% elseif notification.type == 'like' %}
+                                    a aimé votre review.
+                                {% elseif notification.type == 'comment' %}
+                                    a commenté votre review.
+                                {% elseif notification.type == 'reply' and notification.review is not null %}
+                                    a répondu à votre commentaire sur la review.
+                                    <a href="{{ path('reviews_show', {'slug': notification.review.slug}) }}" class="text-blue-500 text-md urbanist hover:underline">Voir la review</a>
+                                {% elseif notification.type == 'reply' and notification.news is not null %}
+                                    a répondu à votre commentaire sur l'actualité.
+                                    <a href="{{ path('news_show', {'slug': notification.news.slug}) }}" class="text-blue-500 text-md urbanist hover:underline">Voir l'actu</a>
+                                {% elseif notification.type == 'newsLike' or notification.type == 'likeComment' %}
+                                    a aimé votre commentaire.
+                                {% elseif notification.type == 'newsComment' %}
+                                    a commenté votre article.
+                                {% elseif notification.type == 'review' %}
+                                    a sorti une review.
+                                {% else %}
+                                    a une nouvelle notification.
+                                {% endif %}
                             {% endif %}
                         </p>
-
                         {# Affichage du temps écoulé comme dans ton code précédent #}
                         {% set now = "now"|date("U") %}
                         {% set notificationTime = notification.createdAt|date("U") %}
@@ -290,7 +300,7 @@ function showFollowedOverlay() {
 								{% if followed.follower.avatar %}
 									<img src="{{ asset('uploads/' ~ followed.follower.avatar) }}" alt="{{ followed.follower.username }}" class=" object-cover w-10 h-10 rounded-full mr-3">
 								{% else %}
-									<img src="http://placehold.it/200x200" alt="{{ followed.follower.username }}" class="w-10 h-10 rounded-full mr-3">
+									<img src="/images/nopp.png" alt="{{ followed.follower.username }}" class="w-10 h-10 rounded-full mr-3">
 								{% endif %}
 								
 								<span>{{ followed.follower.username }}</span>
@@ -319,7 +329,7 @@ function showFollowersOverlay() {
 								{% if follower.followed.avatar %}
 									<img src="{{ asset('uploads/' ~ follower.followed.avatar) }}" alt="{{ follower.followed.username }}" class=" object-cover w-10 h-10 rounded-full mr-3">
 								{% else %}
-									<img src="http://placehold.it/200x200" alt="{{ follower.followed.username }}" class="w-10 h-10 rounded-full mr-3">
+									<img src="/images/nopp.png" alt="{{ follower.followed.username }}" class="w-10 h-10 rounded-full mr-3">
 								{% endif %}
 								<span>{{ follower.followed.username }}</span>
 							</a>

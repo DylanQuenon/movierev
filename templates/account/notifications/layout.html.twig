@@ -20,6 +20,7 @@
                 {'text': 'Commentaires', 'route': 'notifications_comments', 'count': unreadCountComments},
                 {'text': 'Likes', 'route': 'notifications_likes', 'count': unreadCountLikes},
                 {'text': 'Reviews', 'route': 'notifications_reviews', 'count': unreadCountReviews},
+                {'text': 'Quizz', 'route': 'notifications_quizz', 'count': unreadCountQuizz},
             ] %}
 
             <nav class="headerNotifications w-full flex justify-center items-center py-5 px-4 bg-white rounded-[20px]">
@@ -30,7 +31,7 @@
                         {% set isArticle = item.text == 'Articles' %}
                         {% set isAuthor = 'ROLE_REDACTEUR' in app.user.roles %}
 
-                        <li class="w-[150px] py-2 rounded-[20px] flex hover:bg-purple-100 justify-center items-center
+                        <li class="w-[150px] py-2 my-2 rounded-[20px] flex hover:bg-purple-100 justify-center items-center
                             {% if currentRoute == item.route %}
                                 bg-[#a051de] text-[#f5f5f5] hover:text-black
                             {% else %}

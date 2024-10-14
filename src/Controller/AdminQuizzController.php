@@ -6,8 +6,10 @@ use App\Entity\Quizz;
 use App\Form\QuizzType;
 use App\Entity\Question;
 use App\Form\QuestionType;
+use App\Repository\UserRepository;
 use App\Service\PaginationService;
 use App\Repository\QuizzRepository;
+use App\Service\NotificationService;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -93,6 +95,14 @@ class AdminQuizzController extends AbstractController
         ]);
     }
 
+    /**
+     * Effacer le quizz
+     *
+     * @param Quizz $quizz
+     * @param EntityManagerInterface $manager
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/admin/quizz/{slug}/delete', name: 'admin_quizz_delete')]
     public function delete(Quizz $quizz, EntityManagerInterface $manager, Request $request): Response
     {
@@ -295,6 +305,20 @@ class AdminQuizzController extends AbstractController
         );
     
         // Rediriger vers la page du quizz
+        return $this->redirectToRoute('admin_quizz_show', ['slug' => $quizz->getSlug()]);
+    }
+
+    #[Route('/admin/quizz/{slug}/finish', name: 'admin_quiz_finish')]
+    public function finishQuiz(Quizz $quizz, UserRepository $userRepo, EntityManagerInterface $manager, NotificationService $notificationService): Response
+    {
+        
+        $users = $userRepo->findAll();
+
+        foreach ($users as $user) {
+            $notificationService->addNotification('new_quizz', $this->getUser(), $user, null, null, null, $quizz);
+        }
+
+        $this->addFlash('success', "Les utilisateurs ont été notifiés que le quiz <strong>{$quizz->getTitle()}</strong> est maintenant disponible !");
         return $this->redirectToRoute('admin_quizz_show', ['slug' => $quizz->getSlug()]);
     }
     

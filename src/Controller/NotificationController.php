@@ -44,6 +44,7 @@ class NotificationController extends AbstractController
         $unreadCountComments = $notificationRepo->countUnreadCommentsNotifications($user);
         $unreadCountFollows = $notificationRepo->countUnreadFollowsNotifications($user);
         $unreadCountReviews = $notificationRepo->countUnreadReviewsNotifications($user);
+        $unreadCountQuizz = $notificationRepo->countUnreadQuizzNotifications($user);
 
         // Récupérer les notifications
         $notifications = $notificationRepo->getAllNotifications($user);
@@ -63,6 +64,7 @@ class NotificationController extends AbstractController
             'unreadCountComments' => $unreadCountComments,
             'unreadCountFollows' => $unreadCountFollows,
             'unreadCountReviews' => $unreadCountReviews,
+            'unreadCountQuizz' => $unreadCountQuizz,
         ]);
     }
 
@@ -99,6 +101,7 @@ class NotificationController extends AbstractController
         $unreadCountComments = $notificationRepo->countUnreadCommentsNotifications($user);
         $unreadCountFollows = $notificationRepo->countUnreadFollowsNotifications($user);
         $unreadCountReviews = $notificationRepo->countUnreadReviewsNotifications($user);
+        $unreadCountQuizz = $notificationRepo->countUnreadQuizzNotifications($user);
 
 
         return $this->render('account/notifications/index.html.twig', [
@@ -108,6 +111,7 @@ class NotificationController extends AbstractController
             'unreadCountFollows' => $unreadCountFollows,
             'unreadCount'=>$unreadCount,
             'unreadCountReviews' => $unreadCountReviews,
+            'unreadCountQuizz' => $unreadCountQuizz,
         ]);
     }
 
@@ -154,6 +158,7 @@ class NotificationController extends AbstractController
             'unreadCountFollows' => $unreadCountFollows,
             'unreadCount'=>$unreadCount,
             'unreadCountReviews' => $unreadCountReviews,
+            'unreadCountQuizz' => $unreadCountQuizz,
         ]);
     }
 
@@ -202,6 +207,7 @@ class NotificationController extends AbstractController
             'unreadCountComments' => $unreadCountComments,
             'unreadCount'=>$unreadCount,
             'unreadCountReviews' => $unreadCountReviews,
+            'unreadCountQuizz' => $unreadCountQuizz,
         ]);
     }
     /**
@@ -248,6 +254,42 @@ class NotificationController extends AbstractController
             'unreadCountComments' => $unreadCountComments,
             'unreadCount'=>$unreadCount,
             'unreadCountReviews' => $unreadCountReviews,
+            'unreadCountQuizz' => $unreadCountQuizz,
+        ]);
+    }
+    #[Route('account/notifications/quizz', name: 'notifications_quizz')]
+    #[IsGranted('ROLE_USER')]
+    public function quizz(NotificationRepository $notificationRepo, CommentRepository $commentRepo, ReviewRepository $reviewRepo, Request $request, PaginatorInterface $paginator, int $page=1): Response
+    {
+        $user = $this->getUser();
+        $notifications = $notificationRepo->getQuizzNotifications($user);
+                
+        // Pagination avec KnpPaginator
+        $notifpagin = $paginator->paginate(
+            $notifications,
+            $request->query->getInt('page', $page),
+            10
+        );
+        
+        // Récupérer tous les quizz de l'utilisateur
+        $quizzes = $reviewRepo->findBy(['author' => $user, 'type' => 'quizz']);
+        $comments = $commentRepo->findBy(['author' => $user]);
+
+        // Compter les notifications non lues
+        $unreadCount = $notificationRepo->countUnreadNotifications($user);
+        $unreadCountFollows = $notificationRepo->countUnreadFollowsNotifications($user);
+       
+        $unreadCountLikes = $notificationRepo->countUnreadLikesNotifications($user, $quizzes, $comments);
+        $unreadCountComments = $notificationRepo->countUnreadCommentsNotifications($user);
+        $unreadCountQuizz = $notificationRepo->countUnreadQuizzNotifications($user);
+
+        return $this->render('account/notifications/index.html.twig', [
+            'notifications' => $notifpagin,
+            'unreadCountFollows' => $unreadCountFollows,
+            'unreadCountLikes' => $unreadCountLikes,
+            'unreadCountComments' => $unreadCountComments,
+            'unreadCount' => $unreadCount,
+            'unreadCountQuizz' => $unreadCountQuizz,
         ]);
     }
 
@@ -282,6 +324,15 @@ class NotificationController extends AbstractController
         $notificationRepo->markLikesAsRead($user);
 
         return $this->redirectToRoute('notifications_likes');
+    }
+    #[Route('/notifications/mark-quizz-read', name: 'mark_quizz_read')]
+    #[IsGranted('ROLE_USER')]
+    public function markQuizzAsRead(NotificationRepository $notificationRepo, ReviewRepository $reviewRepo): Response
+    {
+        $user = $this->getUser();
+        $notificationRepo->markQuizzAsRead($user);
+
+        return $this->redirectToRoute('notifications_quizz');
     }
 
     /**
