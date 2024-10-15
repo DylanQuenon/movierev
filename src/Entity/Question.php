@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\QuestionRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Answer;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\QuestionRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
@@ -34,6 +35,16 @@ class Question
     public function __construct()
     {
         $this->answers = new ArrayCollection();
+    }
+
+    public function getCorrectAnswer(): ?int
+    {
+        foreach ($this->answers as $answer) {
+            if ($answer->isCorrect()) {
+                return $answer->getId();
+            }
+        }
+        return null;
     }
 
     public function getId(): ?int

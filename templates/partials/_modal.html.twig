@@ -1,0 +1,72 @@
+
+
+<!-- Modal pour signaler un commentaire ou un utilisateur -->
+<div class="fixed inset-0 z-50 text-lg urbanist  bg-black bg-opacity-75  flex hidden items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none reportmodal" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="relative w-auto max-w-lg mx-auto my-6">
+        <div class="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+            <div class="flex items-start justify-between p-5 border-b border-solid rounded-t border-blueGray-200">
+                <h5 class="text-2xl font-semibold" id="reportModalLabel">Signaler un problème</h5>
+                <button class="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none" type="button" data-dismiss="modal" aria-label="Close" onclick="toggleModal()">
+                    <span class="text-black h-6 w-6 text-2xl block outline-none focus:outline-none">×</span>
+                </button>
+            </div>
+            <div class="relative p-6 flex-auto">
+                <form id="reportForm" action="{{ path('app_report', { type: type, id: id }) }}" method="POST">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Raison du signalement</label>
+                        <div class="mt-2">
+                            <div class="flex items-center mb-2">
+                                <input class="form-radio h-4 w-4 text-indigo-600" type="radio" name="reason" id="spam" value="spam" required>
+                                <label class="ml-2 text-gray-700" for="spam">Spam</label>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <input class="form-radio h-4 w-4 text-indigo-600" type="radio" name="reason" id="harcelement" value="harcelement" required>
+                                <label class="ml-2 text-gray-700" for="harcelement">Harcèlement</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input class="form-radio h-4 w-4 text-indigo-600" type="radio" name="reason" id="autre" value="autre" required>
+                                <label class="ml-2 text-gray-700" for="autre">Autre</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4" id="autreRaison" style="display: none;">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="autreRaisonText">Précisez la raison</label>
+                        <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="autreRaisonText" name="autreRaisonText" required>
+                    </div>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Envoyer</button>
+                </form>
+                <script>
+                    document.querySelectorAll('input[name="reason"]').forEach((elem) => {
+                        elem.addEventListener("change", function(event) {
+                            var autreRaison = document.getElementById("autreRaison");
+                            var autreRaisonText = document.getElementById("autreRaisonText");
+                            if (event.target.value === "autre") {
+                                autreRaison.style.display = "block";
+                                autreRaisonText.required = true;
+                            } else {
+                                autreRaison.style.display = "none";
+                                autreRaisonText.required = false;
+                            }
+                        });
+                    });
+
+                    document.getElementById("reportForm").addEventListener("submit", function(event) {
+                        var autreRadio = document.getElementById("autre");
+                        var autreRaisonText = document.getElementById("autreRaisonText");
+                        if (autreRadio.checked) {
+                            autreRadio.value = autreRaisonText.value; // Affecte la valeur du champ texte à la radio "Autre"
+                        }
+                    });
+
+                    // Fonction pour afficher ou cacher le modal
+                    function toggleModal() {
+                        var modal = document.getElementById("reportModal");
+             
+                        modal.classList.toggle("hidden");
+                    
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</div>

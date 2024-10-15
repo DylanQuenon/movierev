@@ -14,101 +14,116 @@
 		<div class="wrapper py-24 flex flex-col gap-10 items-center">
 			<div class="w-full items-center flex flex-col gap-5">
 				<div class="flex flex-wrap justify-evenly w-full relative">
-{% if app.user and app.user.id == user.id %}
-    <div class="block-notif h-[300px] rounded-[20px] relative max-md:w-full max-md:my-5 lg:w-[20%] bg-white py-4 overflow-y-auto">
-        <h3 class="mb-3 text-lg urbanist font-semibold text-center color-tertiary justify-center flex gap-2 items-center"><i class="fa-regular fa-bell"></i> Nouvelles notifications ({{unreadCount}})</h3>
-        <ul class="list-disc space-y-3">
-            {% for notification in notifications %}
-                <li class="flex items-center w-full py-2 border-l border-spacing-2 bg-[rgba(207,199,213,0.15)] border-l-[#a051de]">
-                    <div class="flex-shrink-0 mr-3 pl-2">
-					{% if notification.type != "new_quizz" %}
-					{% if notification.user.avatar %}
-                        <img class="h-8 w-8 rounded-full object-cover" src="/uploads/{{ notification.user.avatar }}" alt="{{ notification.user.username }}">
-						{% else %}
-						<img class="h-8 w-8 rounded-full object-cover" src="/images/nopp.png" alt="{{ notification.user.username }}">
-					
-					{% endif %}
-					
-					{% endif %}
-                    </div>
-                    <div>
-                        <p class="text-md urbanist font-medium">
-                            {% if notification.type == 'new_quizz' %}
-                                Un nouveau quizz est sorti : {{ notification.quizz.title }}
-                            {% else %}
-                                <a href="{{ path('user_show', {'slug': notification.user.slug}) }}" class="font-semibold text-color-tertiary">
-                                    {{ notification.user.username }}
-                                </a>
-                                {% if notification.type == 'follow' %}
-                                    a commencé à vous suivre.
-                                {% elseif notification.type == 'follow_request' %}
-                                    a demandé à vous suivre. <a href="{{ path('follow_requests') }}" class="text-blue-500 hover:underline">Voir les demandes</a>
-                                {% elseif notification.type == 'like' %}
-                                    a aimé votre review.
-                                {% elseif notification.type == 'comment' %}
-                                    a commenté votre review.
-                                {% elseif notification.type == 'reply' and notification.review is not null %}
-                                    a répondu à votre commentaire sur la review.
-                                    <a href="{{ path('reviews_show', {'slug': notification.review.slug}) }}" class="text-blue-500 text-md urbanist hover:underline">Voir la review</a>
-                                {% elseif notification.type == 'reply' and notification.news is not null %}
-                                    a répondu à votre commentaire sur l'actualité.
-                                    <a href="{{ path('news_show', {'slug': notification.news.slug}) }}" class="text-blue-500 text-md urbanist hover:underline">Voir l'actu</a>
-                                {% elseif notification.type == 'newsLike' or notification.type == 'likeComment' %}
-                                    a aimé votre commentaire.
-                                {% elseif notification.type == 'newsComment' %}
-                                    a commenté votre article.
-                                {% elseif notification.type == 'review' %}
-                                    a sorti une review.
-                                {% else %}
-                                    a une nouvelle notification.
-                                {% endif %}
-                            {% endif %}
-                        </p>
-                        {# Affichage du temps écoulé comme dans ton code précédent #}
-                        {% set now = "now"|date("U") %}
-                        {% set notificationTime = notification.createdAt|date("U") %}
-                        {% set diff = now - notificationTime %}
+					{% if app.user and app.user.id == user.id %}
+						<div class="block-notif h-[300px] rounded-[20px] relative max-md:w-full max-md:my-5 lg:w-[20%] bg-white py-4 overflow-y-auto">
+							<h3 class="mb-3 text-lg urbanist font-semibold text-center color-tertiary justify-center flex gap-2 items-center">
+								<i class="fa-regular fa-bell"></i>
+								Nouvelles notifications ({{unreadCount}})</h3>
+							<ul class="list-disc space-y-3">
+								{% for notification in notifications %}
+									<li class="flex items-center w-full py-2 border-l border-spacing-2 bg-[rgba(207,199,213,0.15)] border-l-[#a051de]">
+										<div class="flex-shrink-0 mr-3 pl-2">
+											{% if notification.type != "new_quizz" %}
+												{% if notification.user.avatar %}
+													<img class="h-8 w-8 rounded-full object-cover" src="/uploads/{{ notification.user.avatar }}" alt="{{ notification.user.username }}">
+												{% else %}
+													<img class="h-8 w-8 rounded-full object-cover" src="/images/nopp.png" alt="{{ notification.user.username }}">
 
-                        <p class="text-sm text-gray-500">
-                            {% if diff < 60 %}
-                                {{ diff }} seconde{{ diff > 1 ? 's' : '' }} 
-                            {% elseif diff < 3600 %}
-                                {% set minutes = (diff / 60)|round(0, 'floor') %}
-                                {{ minutes }} minute{{ minutes > 1 ? 's' : '' }} 
-                            {% elseif diff < 86400 %}
-                                {% set hours = (diff / 3600)|round(0, 'floor') %}
-                                {{ hours }} heure{{ hours > 1 ? 's' : '' }} 
-                            {% elseif diff < 604800 %}
-                                {% set days = (diff / 86400)|round(0, 'floor') %}
-                                {{ days }} jour{{ days > 1 ? 's' : '' }} 
-                            {% elseif diff < 2419200 %}
-                                {% set weeks = (diff / 604800)|round(0, 'floor') %}
-                                {{ weeks }} semaine{{ weeks > 1 ? 's' : '' }} 
-                            {% elseif diff < 29030400 %}
-                                {% set months = (diff / 2419200)|round(0, 'floor') %}
-                                {{ months }} mois 
-                            {% else %}
-                                {{ notification.createdAt|date('d M Y H:i') }}
-                            {% endif %}
-                        </p>
+												{% endif %}
 
-                        {# Lien vers la review ou l'article si nécessaire #}
-                        {% if notification.type in ['like', 'comment'] %}
-                            <a href="{{ path('reviews_show', {'slug': notification.review.slug}) }}" class="text-blue-500 text-md urbanist hover:underline urbanist ">Voir la review</a>
-                        {% elseif notification.type in ['newsLike', 'newsComment'] %}
-                            <a href="{{ path('news_show', {'slug': notification.news.slug}) }}" class="text-blue-500 text-md urbanist hover:underline">Voir l'article</a>
-                        {% endif %}
-                    </div>
-                </li>
-            {% else %}
-                <li class="text-center text-lg urbanist ">Aucune notification récente.</li>
-            {% endfor %}
-			   <li class="py-2">
-        <a href="{{ path('notifications_index') }}" class=" text-lg urbanist  p-2 w-full flex justify-center bg-tertiary color-secondary hover:bg-[rgba(161,81,222,0.15)] transition-all hover:text-[#a051de] font-semibold hover:underline">Voir toutes les notifications</a>
-    </li>
-        </ul>
-    </div>
-{% endif %}
+											{% endif %}
+										</div>
+										<div>
+											<p class="text-md urbanist font-medium">
+												{% if notification.type == 'new_quizz' %}
+													Un nouveau quiz est sorti :
+													{{ notification.quizz.title }}
+													<a href="{{ path('quizz_show', {'slug': notification.quizz.slug}) }}" class="text-blue-500 text-md urbanist hover:underline">Voir le quiz</a>
+
+												{% else %}
+													<a href="{{ path('user_show', {'slug': notification.user.slug}) }}" class="font-semibold text-color-tertiary">
+														{{ notification.user.username }}
+													</a>
+													{% if notification.type == 'follow' %}
+														a commencé à vous suivre.
+													{% elseif notification.type == 'follow_request' %}
+														a demandé à vous suivre.
+														<a href="{{ path('follow_requests') }}" class="text-blue-500 hover:underline">Voir les demandes</a>
+													{% elseif notification.type == 'like' %}
+														a aimé votre review.
+													{% elseif notification.type == 'comment' %}
+														a commenté votre review.
+													{% elseif notification.type == 'reply' and notification.review is not null %}
+														a répondu à votre commentaire sur la review.
+														<a href="{{ path('reviews_show', {'slug': notification.review.slug}) }}" class="text-blue-500 text-md urbanist hover:underline">Voir la review</a>
+													{% elseif notification.type == 'reply' and notification.news is not null %}
+														a répondu à votre commentaire sur l'actualité.
+														<a href="{{ path('news_show', {'slug': notification.news.slug}) }}" class="text-blue-500 text-md urbanist hover:underline">Voir l'actu</a>
+													{% elseif notification.type == 'newsLike' or notification.type == 'likeComment' %}
+														a aimé votre commentaire.
+													{% elseif notification.type == 'newsComment' %}
+														a commenté votre article.
+													{% elseif notification.type == 'review' %}
+														a sorti une review.
+													{% else %}
+														a une nouvelle notification.
+													{% endif %}
+												{% endif %}
+											</p>
+											{# Affichage du temps écoulé comme dans ton code précédent #}
+											{% set now = "now"|date("U") %}
+											{% set notificationTime = notification.createdAt|date("U") %}
+											{% set diff = now - notificationTime %}
+
+											<p class="text-sm text-gray-500">
+												{% if diff < 60 %}
+													{{ diff }}
+													seconde{{ diff > 1 ? 's' : '' }}
+												{% elseif diff < 3600 %}
+													{% set minutes = (diff / 60)|round(0, 'floor') %}
+													{{ minutes }}
+													minute{{ minutes > 1 ? 's' : '' }}
+												{% elseif diff < 86400 %}
+													{% set hours = (diff / 3600)|round(0, 'floor') %}
+													{{ hours }}
+													heure{{ hours > 1 ? 's' : '' }}
+												{% elseif diff < 604800 %}
+													{% set days = (diff / 86400)|round(0, 'floor') %}
+													{{ days }}
+													jour{{ days > 1 ? 's' : '' }}
+												{% elseif diff < 2419200 %}
+													{% set weeks = (diff / 604800)|round(0, 'floor') %}
+													{{ weeks }}
+													semaine{{ weeks > 1 ? 's' : '' }}
+												{% elseif diff < 29030400 %}
+													{% set months = (diff / 2419200)|round(0, 'floor') %}
+													{{ months }}
+													mois
+												{% else %}
+													{{ notification.createdAt|date('d M Y H:i') }}
+												{% endif %}
+											</p>
+
+											{# Lien vers la review ou l'article si nécessaire #}
+											{% if notification.type in ['like', 'comment'] %}
+												<a href="{{ path('reviews_show', {'slug': notification.review.slug}) }}" class="text-blue-500 text-md urbanist hover:underline urbanist ">Voir la review</a>
+											{% elseif notification.type in ['newsLike', 'newsComment'] %}
+												<a href="{{ path('news_show', {'slug': notification.news.slug}) }}" class="text-blue-500 text-md urbanist hover:underline">Voir l'article</a>
+											{% endif %}
+										</div>
+									</li>
+								{% else %}
+									<li class="text-center text-lg urbanist ">Aucune notification récente.</li>
+								{% endfor %}
+
+							</ul>
+							<li class="py-2">
+								<a href="{{ path('notifications_index') }}" data-tippy-content="Voir toutes les notifications" class=" text-lg urbanist  p-3 flex justify-center bg-tertiary color-secondary hover:bg-[#e2bdfe] transition-all hover:text-[#a051de] font-semibold hover:underline absolute right-1 bottom-2 rounded-full">
+									<i class="fa-regular fa-envelope-open" style="font-size:22px;"></i>
+								</a>
+							</li>
+						</div>
+					{% endif %}
 
 					<div class="accountBanneer max-md:order-3 h-fit max-md:w-full max-md:flex-wrap lg:w-1/2 flex gap-5 p-5 items-center rounded-3xl bg-white">
 						{% if user.avatar %}
@@ -146,16 +161,16 @@
 												Modifier le profil
 											</a>
 										{% else %}
-								{% if isFollowing %}
-                                  		<a href="{{ path('app_unfollow', { 'followerId': app.user.id, 'followedId': user.id }) }}" class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
-                                            Ne plus suivre
-                                        </a>
-                                    {% else %}
-                                    <a href="{{ path('app_follow', { 'followerId': app.user.id, 'followedId': user.id }) }}" class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
-                                            Suivre
-                                        </a>
-                                        
-                                {% endif %}
+											{% if isFollowing %}
+												<a href="{{ path('app_unfollow', { 'followerId': app.user.id, 'followedId': user.id }) }}" class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+													Ne plus suivre
+												</a>
+											{% else %}
+												<a href="{{ path('app_follow', { 'followerId': app.user.id, 'followedId': user.id }) }}" class="py-2 w-2/5 h-fit transition-all ease-in-out border border-[#A051DE] hover:bg-[rgba(161,81,222,0.3)] hover:text-[#A051DE] bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
+													Suivre
+												</a>
+
+											{% endif %}
 
 										{% endif %}
 									{% else %}
@@ -187,17 +202,28 @@
 								</a>
 
 							{% endif %}
+							{% if 'ROLE_MODERATEUR' in user.getRoles() or 'ROLE_ADMIN' in user.getRoles() %}
+								<a href="{{ path('reports_index') }}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">
+									Voir les signalements
+									<i class="fa-solid fa-chevron-right"></i>
+								</a>
+							{% endif %}
+       
 							<a href="{{ path('account_profile') }}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">
 								Paramètres
 								<i class="fa-solid fa-chevron-right"></i>
 							</a>
+							<a href="{{ path('quizz') }}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">
+								Voir le classement des quizz
+								<i class="fa-solid fa-chevron-right"></i>
+							</a>
 
-							       {% if user.isPrivate %}
-										<a href="{{ path('follow_requests')}}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">
-											Voir les demandes d'abonnement ({{user.followRequests|length}})
-											<i class="fa-solid fa-chevron-right"></i>
-										</a>
-									{% endif %}
+							{% if user.isPrivate %}
+								<a href="{{ path('follow_requests')}}" class="flex items-center justify-between py-2 px-4 bg-[rgba(161,81,222,0.15)] color-tertiary font-semibold rounded-xl text-lg urbanist">
+									Voir les demandes d'abonnement ({{user.followRequests|length}})
+									<i class="fa-solid fa-chevron-right"></i>
+								</a>
+							{% endif %}
 						</div>
 					{% endif %}
 
@@ -269,27 +295,26 @@
 {% block javascripts %}
 	<script>
 		const copyLinkButton = document.querySelector('.copyLink')
-        copyLinkButton.addEventListener('click', function (event) {
-            event.preventDefault();
-            navigator.clipboard.writeText(window.location.href).then(function () {
-            copyLinkButton.innerHTML = 'Lien copié';
-                setTimeout(function () {
-                    copyLinkButton.innerHTML = 'Copier l\'url du profil';
-                }, 3000);
-            }, function (err) {
-                console.error('Erreur lors de la copie du lien : ', err);
-            });
-        });
-
-		
+copyLinkButton.addEventListener('click', function (event) {
+event.preventDefault();
+navigator.clipboard.writeText(window.location.href).then(function () {
+copyLinkButton.innerHTML = 'Lien copié';
+setTimeout(function () {
+copyLinkButton.innerHTML = 'Copier l\'url du profil';
+}, 3000);
+}, function (err) {
+console.error('Erreur lors de la copie du lien : ', err);
+});
+});
 
 
 function showFollowedOverlay() {
-	if ({% if app.user == user or user.isPrivate==false or isFollowing %}true{% else %}false{% endif %}) {
-		// Create and show overlay for followeds
-		let overlay = document.createElement('div');
-		overlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-		overlay.innerHTML = `
+if ({% if app.user == user or user.isPrivate==false or isFollowing %}true
+{% else %}
+false{% endif %}) { // Create and show overlay for followeds
+let overlay = document.createElement('div');
+overlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+overlay.innerHTML = `
 			<div class="bg-white p-5 rounded-lg max-w-md w-full">
 				<h2 class="text-2xl font-bold mb-4">Abonné(e)s</h2>
 				<ul>
@@ -311,15 +336,16 @@ function showFollowedOverlay() {
 				<button onclick="this.closest('.fixed').remove()" class="mt-4 bg-[#a051de] text-white text-lg urbanist px-4 py-2 rounded">Fermer</button>
 			</div>
 		`;
-		document.body.appendChild(overlay);
-	}
+document.body.appendChild(overlay);
+}
 }
 function showFollowersOverlay() {
-	if ({% if app.user == user or user.isPrivate == false or isFollowing %}true{% else %}false{% endif %}) {
-		// Create and show overlay for followers
-		let overlay = document.createElement('div');
-		overlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-		overlay.innerHTML = `
+if ({% if app.user == user or user.isPrivate == false or isFollowing %}true
+{% else %}
+false{% endif %}) { // Create and show overlay for followers
+let overlay = document.createElement('div');
+overlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+overlay.innerHTML = `
 			<div class="bg-white p-5 rounded-lg max-w-md w-full">
 				<h2 class="text-2xl font-bold mb-4">Suivis</h2>
 				<ul>
@@ -339,10 +365,9 @@ function showFollowersOverlay() {
 				<button onclick="this.closest('.fixed').remove()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded bg-[#a051de] text-lg urbanist">Fermer</button>
 			</div>
 		`;
-		document.body.appendChild(overlay);
-	}
+document.body.appendChild(overlay);
 }
-
+}
 	</script>
 
 {% endblock %}

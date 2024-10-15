@@ -325,7 +325,7 @@ class ReviewController extends AbstractController
      */
     #[Route('/reviews/{slug}/delete', name: 'review_delete')]
     #[IsGranted(
-        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_ADMIN")'),
+        attribute: new Expression('(user === subject and is_granted("ROLE_USER")) or is_granted("ROLE_MODERATEUR") or is_granted("ROLE_ADMIN")'),
         subject: new Expression('args["review"].getAuthor()'),
         message: "La review ne vous appartient pas, vous ne pouvez pas l'effacer"
     )]

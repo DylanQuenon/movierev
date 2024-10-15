@@ -1,104 +1,112 @@
-  <div class="commentsCard flex flex-col gap-2">
+<div class="commentsCard flex flex-col gap-2">
     {#dessus du commentaire#}
     <div class="flex flex-col gap-3">
-            <div class="commentsCard_heading flex justify-between">
-                <div class="flex gap-2">
-                    {% if comment.author.avatar %}
-                        <img src="/uploads/{{comment.author.avatar}}" alt="Image de l'utilisateur {{comment.author.username}}" class="border-2 border-purple-500 w-[50px] h-[50px] object-cover rounded-full">
-                    {% else %}
-                        <img src="images/nopp.png" class="border-2 border-purple-500 w-[50px] h-[50px] object-cover rounded-full" alt="Image de l'utilisateur {{comment.author.username}}">
-                    
-                    {% endif %}
-                    <a href="{{path('user_show',{'slug':comment.author.slug})}}" class="flex flex-col transition-all hover:text-purple-500">
-                        <p class="text-md urbanist leading-none font-semibold">{{comment.author.fullName}}</p>
-                        <p class="text-sm urbanist leading-none">@{{comment.author.username}}</p>
-                        <p class="text-xs urbanist mt-2 text-gray-400">{{ comment.createdAt|date('d/m/Y') }}</p>
-    
-                    </a>
-                </div>
-                <div class="flex flex-col gap-2 items-end">
+        <div class="commentsCard_heading flex justify-between">
+            <div class="flex gap-2">
+                {% if comment.author.avatar %}
+                    <img src="/uploads/{{ comment.author.avatar }}" alt="Image de l'utilisateur {{ comment.author.username }}" class="border-2 border-purple-500 w-[50px] h-[50px] object-cover rounded-full">
+                {% else %}
+                    <img src="images/nopp.png" class="border-2 border-purple-500 w-[50px] h-[50px] object-cover rounded-full" alt="Image de l'utilisateur {{ comment.author.username }}">
+                {% endif %}
+                <a href="{{ path('user_show', {'slug': comment.author.slug}) }}" class="flex flex-col transition-all hover:text-purple-500">
+                    <p class="text-md urbanist leading-none font-semibold">{{ comment.author.fullName }}</p>
+                    <p class="text-sm urbanist leading-none">@{{ comment.author.username }}</p>
+                    <p class="text-xs urbanist mt-2 text-gray-400">{{ comment.createdAt|date('d/m/Y') }}</p>
+                </a>
+            </div>
+            <div class="flex flex-col gap-2 items-end relative">
                 {% if comment.id == topComment.id %}
                     <span class="flex gap-2 bg-[rgba(255,219,30,0.15)] text-[#FFDB1E] items-center text-sm  h-fit urbanist font-semibold px-2 py-1 rounded-full"><i class="fa-solid fa-star"></i> Top Commentaire</span>
                 {% endif %}
-                    
-                    {% if comment.rating %}
-                        {% include "partials/rating.html.twig" with {'rating':comment.rating} %}
-                    {% endif %}
-                    
-                
-                </div>
-                
+
+                {% if comment.rating %}
+                    {% include "partials/rating.html.twig" with {'rating': comment.rating} %}
+                {% endif %}
+                   {% if app.user and ( app.user != comment.author)%}
+            <div class="absolute top-[55%] right-2 commentsCard_actions report transition-all flex gap-2 items-center text-lg font">
+                <button data-tippy-content="Signaler le commentaire" class="bg-tertiary color-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center text-md urbanist hover:underline-offset-4" onclick="openReportModal('reportModal')">
+                  <i class="fa-regular fa-flag"></i>
+                </button>
             </div>
-            <div class="commentsCard_content">
-                <p class="text-lg urbanist">{{comment.content}}</p>
+        
+        {% endif %}
             </div>
+        </div>
+        <div class="commentsCard_content">
+            <p class="text-lg urbanist">{{ comment.content }}</p>
+        </div>
     </div>
     <div class="commentsCard_actions flex gap-3">
         <div class="commentsCard_actions likes pr-3 border-purple-500 border-r-2 flex gap-2 items-center text-lg font color-tertiary">
             <i data-tippy-content="Liker/disliker le commentaire" class="fa-thumbs-up thumb-icon cursor-pointer {{ app.user ? (comment.isLikedByUser(app.user) ? 'fa-solid' : 'fa-regular') : 'fa-regular' }}" data-comment-id="{{ comment.id }}"></i>
-                    <span class="comments likes-count" data-comment-id="{{ comment.id }}">{{ comment.likes|length }}</span>
+            <span class="comments likes-count" data-comment-id="{{ comment.id }}">{{ comment.likes|length }}</span>
         </div>
         <div class="commentsCard_actions comments text-gray-500 pr-3 border-purple-500 border-r-2 flex gap-2 items-center text-lg font">
             <i class="fa-regular fa-comment"></i>
             {% if comment.comments is not empty %}
                 <button class="text-md urbanist text-tertiary-dark toggle-replies" data-comment-id="{{ comment.id }}">
                     {% if comment.comments|length == 1 %}
-                            Voir la réponse
-                        {% else %}
-                            Voir {{ comment.comments|length }} réponses
-                        {% endif %}
+                        Voir la réponse
+                    {% else %}
+                        Voir {{ comment.comments|length }} réponses
+                    {% endif %}
                 </button>
-
             {% endif %}
         </div>
-        <div class="commentsCard_actions answer   transition-all flex gap-2 items-center text-lg font">
+        <div class="commentsCard_actions  answer transition-all flex gap-2 items-center text-lg font">
             <button class="color-tertiary text-md urbanist hover:underline-offset-4 reply-button" data-comment-id="{{ comment.id }}">
                 Répondre
             </button>
         </div>
         {% if app.user and (app.user == comment.author or is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATEUR')) %}
-            <div class="commentsCard_actions answer transition-all border-purple-500 border-l-2  pl-3 flex gap-2 items-center text-lg font">
-            <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('comment_delete', { 'id': comment.id }) }}', 'Supprimer', 'Annuler')"  class="fa-solid fa-trash color-secondary rounded-md py-2 px-2 bg-tertiary"></button>
+            <div class="commentsCard_actions answer transition-all border-purple-500 border-l-2 pl-3 flex gap-2 items-center text-lg font">
+                <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('comment_delete', { 'id': comment.id }) }}', 'Supprimer', 'Annuler')" class="fa-solid fa-trash color-secondary rounded-md py-2 px-2 bg-tertiary"></button>
             </div>
-        
         {% endif %}
+     
     </div>
-        {% if comment.comments is not empty %}
-                <div class="replies hidden fadeIn" id="replies-{{ comment.id }}">
-                    {% for reply in comment.comments %}
-                        <div class="list-group-item md:w-11/12 bg-purple-50 border-l-2 border-purple-500 flex flex-col gap-2 w-full bg-background-hover ml-auto p-3">
-                        <div class="flex gap-2 items-center">
-                            {% if reply.author.avatar %}
-                                <img src="/uploads/{{reply.author.avatar}}" alt="Image de l'utilisateur {{reply.author.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
-                            {% else %}
-                                <img src="http://placehold.it/64x64" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full" alt="Image de l'utilisateur {{reply.author.username}}">
-                            
-                            {% endif %}
-                            <a href="{{path('user_show', {'slug': reply.author.slug})}}" class="hover:text-purple-500 text-md urbanist">{{reply.author.fullName}}</a>
-                        </div>
-                        <div class="flex flex-col gap-5">
-                            <p class="text-md urbanist ">{{reply.content}}</p>
-                            {% if app.user and (app.user == reply.author or is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATEUR')) %}
-                      
-                                <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('comment_delete', { 'id': reply.id }) }}', 'Supprimer', 'Annuler')" data-tippy-content="Supprimer le commentaire" class="w-fit fa-solid fa-trash color-secondary rounded-md py-2 px-2 bg-tertiary"></button>
-                          
-                            
-                            {% endif %}
-                        
-                        </div>
-                        </div>
-                    {% endfor %}
+    {% if comment.comments is not empty %}
+        <div class="replies hidden fadeIn" id="replies-{{ comment.id }}">
+            {% for reply in comment.comments %}
+                <div class="list-group-item md:w-11/12 bg-purple-50 border-l-2 border-purple-500 flex flex-col gap-2 w-full bg-background-hover ml-auto p-3">
+                    <div class="flex gap-2 items-center">
+                        {% if reply.author.avatar %}
+                            <img src="/uploads/{{ reply.author.avatar }}" alt="Image de l'utilisateur {{ reply.author.username }}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
+                        {% else %}
+                            <img src="http://placehold.it/64x64" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full" alt="Image de l'utilisateur {{ reply.author.username }}">
+                        {% endif %}
+                        <a href="{{ path('user_show', {'slug': reply.author.slug}) }}" class="hover:text-purple-500 text-md urbanist">{{ reply.author.fullName }}</a>
+                    </div>
+                    <div class="flex flex-col gap-5">
+                        <p class="text-md urbanist">{{ reply.content }}</p>
+                        {% if app.user and (app.user == reply.author or is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATEUR')) %}
+                            <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('comment_delete', { 'id': reply.id }) }}', 'Supprimer', 'Annuler')" data-tippy-content="Supprimer le commentaire" class="w-fit fa-solid fa-trash color-secondary rounded-md py-2 px-2 bg-tertiary"></button>
+                        {% endif %}
+                    </div>
                 </div>
-            {% endif %}
-    
-    </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
 
-    	{% include '/partials/_delete_modal.html.twig' with {
-		modal_id: 'deleteModal',
-		form_id: 'deleteForm',
-		title: 'Confirmation de suppression',
-		message: 'Êtes-vous sûr de vouloir supprimer ce commentaire ? Cette action est irréversible.',
-		action_url: '#',  
-		confirm_text: 'Supprimer',
-		cancel_text: 'Annuler'
-	} %}
+{% include '/partials/_delete_modal.html.twig' with {
+    modal_id: 'deleteModal',
+    form_id: 'deleteForm',
+    title: 'Confirmation de suppression',
+    message: 'Êtes-vous sûr de vouloir supprimer ce commentaire ? Cette action est irréversible.',
+    action_url: '#',  
+    confirm_text: 'Supprimer',
+    cancel_text: 'Annuler'
+} %}
+
+{# Inclure le modal de signalement #}
+{% include 'partials/_modal.html.twig' with { 'type': 'review_comment', 'id': comment.id } %}
+
+<script>
+function openReportModal(modalId) {
+    var modal = document.getElementById(modalId);
+
+        modal.classList.remove('hidden');
+    
+}
+</script>

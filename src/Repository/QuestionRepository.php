@@ -16,6 +16,18 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
+    public function getCorrectAnswerId($questionId)
+    {
+        $question = $this->find($questionId);
+
+        if ($question) {
+            // Supposons que $question a une méthode getCorrectAnswer() qui retourne l'ID de la bonne réponse
+            return $question->getCorrectAnswer();
+        }
+
+        return null; // Ou une valeur par défaut appropriée
+    }
+
 //    /**
 //     * @return Question[] Returns an array of Question objects
 //     */

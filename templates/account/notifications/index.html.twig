@@ -44,6 +44,7 @@
                         <p class="text-lg w-[85%] urbanist font-medium text-gray-900">
                             {% if notification.type == 'new_quizz' %}
                                 Un nouveau quizz est sorti : {{ notification.quizz.title }} <br>
+                                <a href="{{ path('quizz_show', {'slug': notification.quizz.slug}) }}" class="text-blue-500 hover:underline">Voir le quizz</a>
                             {% else %}
                                 <a href="{{ path('user_show', {'slug': notification.user.slug}) }}" class="text-lg urbanist font-semibold color-tertiary">{{ notification.user.username }}</a>
                                 {% if notification.type == 'follow' %}

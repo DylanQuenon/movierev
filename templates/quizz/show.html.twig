@@ -1,0 +1,195 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ quizz.title }}{% endblock %}
+
+{% block body %}
+<div class="slide bg-secondary mx-auto h-fit py-24">
+    <div class="wrapper wrapperQuizz">
+        <h1 class="display-md object uppercase color-tertiary font-bold text-center mb-8">{{ quizz.title }}</h1>
+
+        <!-- Ajoutez un bouton Commencer -->
+        <div class="w-full flex justify-center">
+        <button id="start-quiz" class="py-2 px-4 bg-purple-500 text-white rounded-lg text-lg urbanist mb-8 transition-colors duration-200 hover:bg-purple-600" onclick="startQuiz()">
+            Commencer le Quiz
+        </button>
+        
+        </div>
+
+        <div class="flex flex-col gap-5 items-center">
+            {% for question in questions %}
+                <div id="question-{{ loop.index }}" class="question-step bg-white p-6 w-[70%] max-md:w-full rounded-lg relative shadow-md {% if loop.first == false %}hidden{% endif %}">
+                    <h2 class="text-xl font-semibold mb-4">{{ question.title }}</h2>
+                    <p class="display-md object uppercase color-tertiary absolute right-4 top-2">{{loop.index}}</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {% for answer in question.answers %}
+                            <button 
+                                id="answer-{{ answer.id }}" 
+                                class="p-4 bg-purple-100 hover:bg-purple-200 rounded-lg text-lg urbanist w-full transition-colors duration-200"
+                                onclick="checkAnswer({{ question.id }}, {{ answer.id }})">
+                                {{ answer.content }}
+                            </button>
+                        {% endfor %}
+                    </div>
+
+                    <div id="timer-{{ loop.index }}" class="text-center text-lg font-semibold mt-4">15</div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div id="score-display" class="hidden text-2xl font-semibold mt-10">
+            Votre score: <span id="final-score"></span>/10
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentStep = 1; // Garde la trace de l'étape actuelle
+    const totalSteps = {{ questions|length }}; // Nombre total de questions
+    let timer; // Variable pour le minuteur
+    let score = 0; // Score de l'utilisateur
+
+    function startQuiz() {
+        document.getElementById('start-quiz').classList.add('hidden'); // Cacher le bouton Commencer
+        startTimer(currentStep); // Démarrer le timer pour la première question
+        document.getElementById('question-' + currentStep).classList.remove('hidden'); // Afficher la première question
+    }
+
+    function startTimer(step) {
+        let timeLeft = 15; // 15 secondes pour chaque question
+        const timerDisplay = document.getElementById('timer-' + step);
+
+        timer = setInterval(function() {
+            if (timeLeft <= 0) {
+                clearInterval(timer); // Stopper le minuteur
+                checkAnswer(); // Vérifier la réponse par défaut si le temps est écoulé
+                nextQuestion(); // Passer à la question suivante
+            } else {
+                timerDisplay.textContent = timeLeft; // Mettre à jour l'affichage du timer
+            }
+            timeLeft -= 1; // Décrémenter le temps restant
+        }, 1000);
+    }
+
+    function checkAnswer(questionId, answerId) {
+        // Vérifier la réponse en envoyant une requête AJAX
+        fetch('/check-answer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ questionId: questionId, answerId: answerId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const correctAnswerId = data.correctAnswerId;
+            const isCorrect = data.isCorrect;
+
+            // Récupérer les boutons de réponse
+            const answerButton = document.getElementById('answer-' + answerId);
+            const correctButton = document.getElementById('answer-' + correctAnswerId);
+
+            // Arrêter le timer
+            clearInterval(timer);
+
+            // Appliquer la classe de couleur correcte
+            if (isCorrect) {
+                answerButton.classList.remove('bg-purple-100', 'hover:bg-purple-200');
+                answerButton.classList.add('bg-green-500', 'text-white'); // Ajouter une couleur verte pour la bonne réponse
+                score++; // Augmenter le score si la réponse est correcte
+            } else {
+                answerButton.classList.remove('bg-purple-100', 'hover:bg-purple-200');
+                answerButton.classList.add('bg-red-500', 'text-white'); // Ajouter une couleur rouge pour la mauvaise réponse
+            }
+
+            // Toujours afficher la bonne réponse en vert
+            correctButton.classList.remove('bg-purple-100', 'hover:bg-purple-200');
+            correctButton.classList.add('bg-green-500', 'text-white');
+
+            // Désactiver tous les boutons pour empêcher d'autres clics
+            const buttons = document.querySelectorAll(`#question-${currentStep} button`);
+            buttons.forEach(button => {
+                button.disabled = true;
+                button.classList.remove('hover:bg-purple-200');
+            });
+
+            // Masquer les boutons après 2 secondes et passer à la question suivante
+            setTimeout(() => {
+                nextQuestion(); // Passer à la question suivante
+            }, 2000);
+        })
+        .catch(error => console.error('Erreur:', error));
+    }
+
+    function nextQuestion() {
+        if (currentStep < totalSteps) {
+            // Masquer la question actuelle
+            document.getElementById('question-' + currentStep).classList.add('hidden');
+            currentStep++; // Incrémenter l'étape
+            // Afficher la nouvelle question
+            document.getElementById('question-' + currentStep).classList.remove('hidden');
+            startTimer(currentStep); // Démarrer le chronomètre pour la nouvelle question
+        } else {
+            displayFinalScore(); // Afficher le score final
+        }
+    }
+
+    function displayFinalScore() {
+        const totalSteps = {{ questions|length }}; // Le nombre total de questions est dynamique
+
+        // Cache tout le contenu du quiz
+        const quizWrapper = document.querySelector('.wrapperQuizz');
+        quizWrapper.innerHTML = ''; // Vide tout le contenu du quiz
+
+        // Crée une nouvelle section pour afficher le score
+        const scoreSection = document.createElement('div');
+        scoreSection.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'text-center'); // Stylise pour centrer le score
+        scoreSection.innerHTML = `
+            <div class="display-md urbanist color-tertiary font-bold mb-6">Votre score: <span>${score}</span>/${totalSteps}</div>
+        `;
+
+        // Détermine le message et le GIF en fonction du score
+        let message, gif;
+        if (score <= totalSteps * 0.3) {
+            message = "Oups, il semble que tu puisses mieux faire !";
+            gif = "/images/low_score.gif"; // GIF pour un score faible
+        } else if (score <= totalSteps * 0.6) {
+            message = "Pas mal, mais tu peux encore t'améliorer !";
+            gif = "/images/medium_score.gif"; // GIF pour un score moyen
+        } else if (score <= totalSteps * 0.9) {
+            message = "Super ! Tu es presque un expert !";
+            gif = "/images/high_score.gif"; // GIF pour un bon score
+        } else {
+            message = "Parfait ! Tu es un vrai champion !";
+            gif = "/images/perfect_score.gif"; // GIF pour un score parfait
+        }
+
+        // Ajoute le message et le GIF dans le DOM
+        scoreSection.innerHTML += `
+            <div class="text-xl urbanist font-bold mt-5">${message}</div>
+            <img src="${gif}" alt="GIF correspondant au score" class="mx-auto mt-5 w-48">
+        `;
+
+        // Ajoute cette section au DOM
+        quizWrapper.appendChild(scoreSection);
+
+        // Sauvegarder le score dans la base de données
+        saveScore();
+    }
+
+    function saveScore() {
+        fetch('/save-score', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ score: score, quizzId: {{ quizz.id }}, userId: {{ app.user.id }} })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Score sauvegardé avec succès:', data);
+        })
+        .catch(error => console.error('Erreur lors de la sauvegarde du score:', error));
+    }
+</script>
+{% endblock %}

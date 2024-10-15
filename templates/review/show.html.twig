@@ -24,7 +24,7 @@
                         {#review card#}
 						<div class="reviewIndiv_card_content_heading flex flex-col gap-5">
                             {#heading#}
-							<div class="reviewIndiv_card_content_heading_info2 flex flex-wrap justify-between">
+							<div class="reviewIndiv_card_content_heading_info2 relative flex flex-wrap justify-between">
 								<a href="{{path('medias_show', {"slug":review.media.slug})}}" class="flex gap-1 items-center text-md  text-font-semibold  urbanist color-tertiary font-semibold transition hover:text-black">
 									<span class="underline">{{review.media.title}}</span>
 									<span class="material-symbols-outlined">chevron_right</span>
@@ -35,6 +35,8 @@
 										link</span>
 									<span class="textCopyLink">Copier le lien</span>
 								</button>
+
+                             
 							</div>
                             {#author de la review#}
 							<div class="reviewIndiv_card_content_heading_author flex justify-between">
@@ -107,6 +109,15 @@
                                 </span>
                                 {{review.comments|length}}
                             </div>
+                               {% if app.user and ( app.user != review.author)%}
+                                <div class="report transition-all flex gap-2 items-center text-lg font">
+                                    <button data-tippy-content="Signaler la review" class="bg-tertiary color-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center text-md urbanist hover:underline-offset-4" onclick="openReportModal('reportModal')">
+                                    <i class="fa-regular fa-flag"></i>
+                                    </button>
+                                </div>
+                            
+                            {% endif %}
+                            
 					    </div>
                         <div class="flex gap-5 items-center">
                           {% if app.user and (app.user == review.author or is_granted('ROLE_ADMIN')) %}
@@ -250,9 +261,18 @@
       } %}
 
 {% include "partials/_sliderReviews.html.twig" %}
+
+{% include 'partials/_modal.html.twig' with { 'type': 'review', 'id': review.id } %}
+
 {% endblock %}
 {% block javascripts %}
 <script>
+function openReportModal(modalId) {
+    var modal = document.getElementById(modalId);
+
+        modal.classList.remove('hidden');
+    
+}
 	const copyLinkButton = document.getElementById("copyLink")
         copyLinkButton.addEventListener('click', function (event) {
             event.preventDefault();
@@ -268,6 +288,7 @@
 
     document.querySelector('.likes-count').addEventListener('click', function() {
     document.getElementById('likesModal').classList.remove('hidden');
+    
 });
 
 

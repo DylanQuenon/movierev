@@ -45,6 +45,7 @@ class Notification
     private ?News $news = null;
 
     #[ORM\ManyToOne(inversedBy: 'notifications')]
+    #[ORM\JoinColumn(onDelete:'CASCADE')]
     private ?Quizz $quizz = null;
 
            /**

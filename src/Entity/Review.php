@@ -57,10 +57,17 @@ class Review
     #[ORM\OneToMany(targetEntity: Likes::class, mappedBy: 'review')]
     private Collection $likes;
 
+    /**
+     * @var Collection<int, Report>
+     */
+    #[ORM\OneToMany(targetEntity: Report::class, mappedBy: 'review')]
+    private Collection $reports;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->likes = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
 
       /**
@@ -247,6 +254,36 @@ class Review
             // set the owning side to null (unless already changed)
             if ($like->getReview() === $this) {
                 $like->setReview(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): static
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setReview($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): static
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getReview() === $this) {
+                $report->setReview(null);
             }
         }
 

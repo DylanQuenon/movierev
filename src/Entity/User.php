@@ -142,6 +142,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: UserScore::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $userScores;
 
+    /**
+     * @var Collection<int, Report>
+     */
+    #[ORM\OneToMany(targetEntity: Report::class, mappedBy: 'reportedBy', orphanRemoval: true)]
+    private Collection $reports;
+
+    /**
+     * @var Collection<int, Report>
+     */
+    #[ORM\OneToMany(targetEntity: Report::class, mappedBy: 'reportedUser')]
+    private Collection $reported;
+
     public function __construct()
     {
         $this->news = new ArrayCollection();
@@ -155,6 +167,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->followRequests = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->userScores = new ArrayCollection();
+        $this->reports = new ArrayCollection();
+        $this->reported = new ArrayCollection();
     }
 
       /**
@@ -705,6 +719,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userScore->getUser() === $this) {
                 $userScore->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): static
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setReportedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): static
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getReportedBy() === $this) {
+                $report->setReportedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReported(): Collection
+    {
+        return $this->reported;
+    }
+
+    public function addReported(Report $reported): static
+    {
+        if (!$this->reported->contains($reported)) {
+            $this->reported->add($reported);
+            $reported->setReportedUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReported(Report $reported): static
+    {
+        if ($this->reported->removeElement($reported)) {
+            // set the owning side to null (unless already changed)
+            if ($reported->getReportedUser() === $this) {
+                $reported->setReportedUser(null);
             }
         }
 

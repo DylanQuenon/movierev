@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Classement global{% endblock %}
+
+{% block body %}
+<div class="mx-auto bg-[rgba(161,81,222,0.3)] py-24 text-center">
+    <h1 class="display-md object uppercase font-bold mb-8">Classement global <span class="color-tertiary">des quizzs</span></h1>
+
+    {# Section du podium pour les trois premiers #}
+    <div class="flex justify-center items-end mb-16 space-x-4">
+        {# Deuxième place : médaille d'argent #}
+        <div class="w-1/4 flex flex-col gap-2 justify-center items-center">
+            {% if leaderboard[1] is defined %}
+                <a href="{{ path('user_show', {'slug': leaderboard[1].user.slug}) }}" class="text-xl font-semibold urbanist font-bold">🥈 {{ leaderboard[1].user.username }}</a>
+                {% if leaderboard[1].user.avatar %}
+                    <img src="/uploads/{{ leaderboard[1].user.avatar }}" alt="{{ leaderboard[1].user.username }}" class="w-20 h-20 rounded-full object-cover mb-2">
+                {% else %}
+                    <img src="/images/nopp.png" alt="{{ leaderboard[1].user.username }}" class="w-20 h-20 rounded-full object-cover mb-2">
+                {% endif %}
+                <div class="bg-gray-300 w-full h-16 flex items-center justify-center text-lg font-semibold">Score: {{ leaderboard[1].totalScore }}</div>
+            {% endif %}
+        </div>
+
+        {# Première place : médaille d'or, plus grande #}
+        <div class="w-1/4 flex flex-col justify-center gap-2 items-center">
+            {% if leaderboard[0] is defined %}
+                <a href="{{ path('user_show', {'slug': leaderboard[0].user.slug}) }}" class="display-md font-semibold urbanist color-tertiary">🥇 {{ leaderboard[0].user.username }}</a>
+                {% if leaderboard[0].user.avatar %}
+                    <img src="/uploads/{{ leaderboard[0].user.avatar }}" alt="{{ leaderboard[0].user.username }}" class="w-24 h-24 rounded-full object-cover mb-2">
+                {% else %}
+                    <img src="/images/nopp.png" alt="{{ leaderboard[0].user.username }}" class="w-24 h-24 rounded-full object-cover mb-2">
+                {% endif %}
+                <div class="bg-yellow-400 w-full h-20 flex items-center justify-center text-lg font-semibold">Score: {{ leaderboard[0].totalScore }}</div>
+            {% endif %}
+        </div>
+
+        {# Troisième place : médaille de bronze #}
+        <div class="w-1/4 flex flex-col justify-center gap-2 items-center">
+            {% if leaderboard[2] is defined %}
+                <a href="{{ path('user_show', {'slug': leaderboard[2].user.slug}) }}" class="text-xl font-semibold urbanist">🥉 {{ leaderboard[2].user.username }}</a>
+                {% if leaderboard[2].user.avatar %}
+                    <img src="/uploads/{{ leaderboard[2].user.avatar }}" alt="{{ leaderboard[2].user.username }}" class="w-20 h-20 rounded-full object-cover mb-2">
+                {% else %}
+                    <img src="/images/nopp.png" alt="{{ leaderboard[2].user.username }}" class="w-20 h-20 rounded-full object-cover mb-2">
+                {% endif %}
+                <div class="bg-orange-400 w-full h-16 flex items-center justify-center text-lg font-semibold">Score: {{ leaderboard[2].totalScore }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# Section du classement général #}
+    <div class="w-3/4 mx-auto">
+        {% for entry in leaderboard %}
+            {# Ignorer les trois premiers car ils sont déjà affichés sur le podium #}
+            {% if loop.index > 3 %}
+                <div class="flex items-center justify-between bg-white shadow-md rounded-lg p-4 mb-4">
+                    <a href="{{ path('user_show', {'slug': entry.user.slug}) }}" class="flex items-center">
+                        <span class="text-xl font-semibold mr-4">{{ loop.index }}</span>
+                        {% if entry.user.avatar %}
+                            <img src="/uploads/{{ entry.user.avatar }}" alt="{{ entry.user.username }}" class="w-12 object-cover h-12 rounded-full mr-4">
+                        {% else %}
+                            <img src="/images/nopp.png" alt="{{ entry.user.username }}" class="w-12 object-cover h-12 rounded-full mr-4">
+                        {% endif %}
+                        <span class="text-lg">{{ entry.user.username }}</span>
+                    </a>
+                    <div class="text-xl font-bold">{{ entry.totalScore }}</div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
