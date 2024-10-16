@@ -42,10 +42,11 @@ class ContactController extends AbstractController
                 ->to('dylan.quenon.04@gmail.com')  
                 ->replyTo($contact->getMail())
                 ->subject($contact->getObject())
-                ->htmlTemplate('mail/applicationMail.html.twig') 
-                ->context([
-                    'contact' => $contact 
-                ]);
+                ->html($this->renderView('mail/contactnotif.html.twig', [
+                    'contact' => $contact,
+                ]));
+
+               
             
         
             // Envoi de l'e-mail
