@@ -95,7 +95,7 @@
                            {% if news.author.avatar %}
                               <img src="/uploads/{{news.author.avatar}}" alt="Avatar de {{news.author.fullName}}" class="w-[40px] h-[40px] rounded-full object-cover">
                            {% else %}
-                              <img src="/images/nopp.png" class="w-[40px] h-[40px] rounded-full" alt="Avatar de {{news.author.fullName}}">
+                              <img src="/images/nopp.png" class="w-[40px] h-[40px] object-cover rounded-full" alt="Avatar de {{news.author.fullName}}">
                            
                            {% endif %}
                            </div>
@@ -162,7 +162,7 @@
                                                    {% if app.user.avatar %}
                                                          <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-2 border-purple-500 w-[30px] h-[30px] object-cover rounded-full">
                                                       {% else %}
-                                                         <img src="/images/nopp.png" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full" alt="Image de l'utilisateur {{app.user.username}}">
+                                                         <img src="/images/nopp.png" class="border-2 object-cover border-purple-500 w-[30px] h-[30px] rounded-full" alt="Image de l'utilisateur {{app.user.username}}">
                                                    
                                                    {% endif %}
                                                       {{ form_widget(replyForms[comment.id].content) }}
@@ -201,7 +201,7 @@
                         {% if app.user.avatar %}
                            <img src="/uploads/{{app.user.avatar}}" alt="Image de l'utilisateur {{app.user.username}}" class="border-8 border-white absolute -top-[4.3rem] w-[100px] h-[100px] object-cover rounded-full">
                         {% else %}
-                           <img src="/images/nopp.png" class="border-8 border-white absolute -top-[4.3rem] w-[100px] h-[100px] rounded-full" alt="Image de l'utilisateur {{app.user.username}}">
+                           <img src="/images/nopp.png" class="object-cover border-8 border-white absolute -top-[4.3rem] w-[100px] h-[100px] rounded-full" alt="Image de l'utilisateur {{app.user.username}}">
                         {% endif %}
                         </div>
                            <div class="w-full flex gap-5">

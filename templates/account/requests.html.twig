@@ -23,7 +23,7 @@
                         {% if request.requester.avatar %}
                             <img src="/uploads/{{ request.requester.avatar }}" alt="{{ request.requester.username }}" class="w-12 h-12 object-cover rounded-full">
                         {% else %}
-                            <img src="http://placehold.it/64x64" class="w-12 h-12 rounded-full mr-3" alt="{{ request.requester.username }}">
+                            <img src="/images/nopp.png" class="w-12 h-12 rounded-full mr-3 object-cover" alt="{{ request.requester.username }}">
                         
                         {% endif %}
                         <div>

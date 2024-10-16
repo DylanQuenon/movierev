@@ -227,7 +227,10 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_show', ['slug' => $user->getSlug()]);
         }
         
-        $allNews= $user->getNews();
+        $allNews = $user->getNews()->toArray();
+        usort($allNews, function($a, $b) {
+            return $b->getCreatedAt() <=> $a->getCreatedAt();
+        });
         $isPrivate = $user->getIsPrivate() && $this->getUser() !== $user;
         $isFollowing = ($this->getUser() && $followingRepo->isFollowing($this->getUser(), $user));
 

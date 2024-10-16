@@ -37,6 +37,48 @@
                         'author': 'Ludovic Boul', 
                         'movie': 'Un p\'tit truc en plus'
                     },
+                    { 
+                        'picture': '/images/sliderquotes/image4.jpg', 
+                        'quote': '“Nous ne lisons et n\'écrivons pas de poésie parce que c\'est mignon. Nous lisons et écrivons de la poésie parce que nous faisons partie de la race humaine ”', 
+                        'author': 'Robin Williams', 
+                        'movie': 'Le cercle des poètes disparus'
+                    },
+                    { 
+                        'picture': '/images/sliderquotes/image5.webp', 
+                        'quote': '“Je suis le Comte de Monte-Cristo ”', 
+                        'author': 'Pierre Niney', 
+                        'movie': 'Le Comte de Monte-Cristo'
+                    },
+                    { 
+                        'picture': '/images/sliderquotes/image6.jpg', 
+                        'quote': '“Aujourd’hui j’ai joué devant 80 000 personnes, mais je ne me suis jamais senti aussi seul ”', 
+                        'author': 'Nekfeu', 
+                        'movie': 'Les étoiles vagabondes'
+                    },
+                    { 
+                        'picture': '/images/sliderquotes/image7.jpg', 
+                        'quote': '“Je ne suis pas chanceux. Je provoque ma propre chance. ”', 
+                        'author': 'Gabriel Macht', 
+                        'movie': 'Suits'
+                    },
+                    { 
+                        'picture': '/images/sliderquotes/image8.jpg', 
+                        'quote': '“C\'est la vie, pas le paradis. Tu n\'as pas besoin d\'être parfait. ”', 
+                        'author': 'Angelina Jolie', 
+                        'movie': 'Gia'
+                    },
+                    { 
+                        'picture': '/images/sliderquotes/image9.webp', 
+                        'quote': '“- Ne me dis pas qu\'on a perdu un moteur. <br> - Ok je ne te le dis pas. ”', 
+                        'author': 'Tom Cruise', 
+                        'movie': 'Top gun : Maverick'
+                    },
+                    { 
+                        'picture': '/images/sliderquotes/image10.webp', 
+                        'quote': '“ Pour ceux qui font les règles, il n\'y a pas de règles ”', 
+                        'author': 'Cillian Murphy', 
+                        'movie': 'Peaky Blinders'
+                    },
                 ] %}
                 <div class="slider_baseform max-md:mt-3 max-lg:w-full w-1/2 min-h-[100vh] relative">
                     <div class="swiper h-full">
@@ -45,7 +87,7 @@
                                 <div class="swiper-slide relative max-sm:rounded-tl-none" style="background-image:url('{{slide.picture}}')">
                                     <div class="overlay"></div>
                                     <div class="swiper-slide-content flex flex-col h-full gap-10 pb-16 px-6 justify-end">
-                                        <p class="display-md urbanist color-secondary">{{slide.quote}}</p>
+                                        <p class="display-md urbanist color-secondary">{{slide.quote|raw|nl2br}}</p>
                                         <div class="info-secondary flex flex-col gap-2">
                                             <p class=" author display-sm max-md:text-xl urbanist color-secondary">
                                             {{slide.author}}

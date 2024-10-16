@@ -6,8 +6,11 @@
     <div class="slide flex py-24 justify-center items-center" id="addReview">
         <div class="max-w-lg w-full bg-white shadow-md rounded-lg p-4">
             <!-- En-tête avec l'avatar et le nom de l'utilisateur -->
-            <div class="flex items-center mb-4">
-                <img src="/uploads/{{ app.user.avatar }}" alt="Avatar" class="w-10 h-10 rounded-full mr-2">
+                {% if app.user.avatar %}
+                    <img src="/uploads/{{ app.user.avatar }}" alt="Avatar" class="w-10 h-10 object-cover rounded-full mr-2">
+                {% else %}
+                    <img src="/images/nopp.png" alt="Avatar" class="w-10 h-10 object-cover rounded-full mr-2">
+                {% endif %}
                 <div>
                     <h2 class="text-lg font-semibold">{{ app.user.username }}</h2>
                     <p class="text-gray-500 text-sm">Ajoutez votre avis</p>
@@ -48,28 +51,28 @@
 {% endblock %}
 
 {% block javascripts %}
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const stars = document.querySelectorAll('.rating i');
-        const ratingInput = document.querySelector('.rating-input');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const stars = document.querySelectorAll('.rating i');
+            const ratingInput = document.querySelector('.rating-input');
 
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                const ratingValue = star.getAttribute('data-value');
-                ratingInput.value = ratingValue;
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const ratingValue = star.getAttribute('data-value');
+                    ratingInput.value = ratingValue;
 
-                // Met à jour l'affichage des étoiles
-                stars.forEach(s => {
-                    if (s.getAttribute('data-value') <= ratingValue) {
-                        s.classList.remove('far');
-                        s.classList.add('fas');
-                    } else {
-                        s.classList.remove('fas');
-                        s.classList.add('far');
-                    }
+                    // Met à jour l'affichage des étoiles
+                    stars.forEach(s => {
+                        if (s.getAttribute('data-value') <= ratingValue) {
+                            s.classList.remove('far');
+                            s.classList.add('fas');
+                        } else {
+                            s.classList.remove('fas');
+                            s.classList.add('far');
+                        }
+                    });
                 });
             });
         });
-    });
-</script>
+    </script>
 {% endblock %}

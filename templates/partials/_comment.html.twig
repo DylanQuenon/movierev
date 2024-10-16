@@ -71,9 +71,9 @@
                 <div class="list-group-item md:w-11/12 bg-purple-50 border-l-2 border-purple-500 flex flex-col gap-2 w-full bg-background-hover ml-auto p-3">
                     <div class="flex gap-2 items-center">
                         {% if reply.author.avatar %}
-                            <img src="/uploads/{{ reply.author.avatar }}" alt="Image de l'utilisateur {{ reply.author.username }}" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
+                            <img src="/uploads/{{ reply.author.avatar }}" alt="Image de l'utilisateur {{ reply.author.username }}" class="object-cover border-2 border-purple-500 w-[30px] h-[30px] rounded-full">
                         {% else %}
-                            <img src="http://placehold.it/64x64" class="border-2 border-purple-500 w-[30px] h-[30px] rounded-full" alt="Image de l'utilisateur {{ reply.author.username }}">
+                            <img src="/images/nopp.png" class="border-2 border-purple-500 object-cover w-[30px] h-[30px] rounded-full" alt="Image de l'utilisateur {{ reply.author.username }}">
                         {% endif %}
                         <a href="{{ path('user_show', {'slug': reply.author.slug}) }}" class="hover:text-purple-500 text-md urbanist">{{ reply.author.fullName }}</a>
                     </div>

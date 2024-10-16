@@ -38,18 +38,15 @@ class ContactController extends AbstractController
             $manager->flush();
 
             $email = (new Email())
-                ->from('contact@laligzz.dylanquenon.com')  // E-mail de l'expéditeur
-                ->to('dylan.quenon.04@gmail.com')  // Utilisation de l'e-mail du destinataire récupéré depuis .env
+                ->from('contact@movierev.dylanquenon.com')
+                ->to('dylan.quenon.04@gmail.com')  
                 ->replyTo($contact->getMail())
                 ->subject($contact->getObject())
-                ->html("
-                <html>
-                    <body>
-                        <h1>Titre de l'e-mail</h1>
-                        <p>{$contact->getMessage()}</p>
-                    </body>
-                </html>
-            ");
+                ->htmlTemplate('mail/applicationMail.html.twig') 
+                ->context([
+                    'contact' => $contact 
+                ]);
+            
         
             // Envoi de l'e-mail
             $mailer->send($email);

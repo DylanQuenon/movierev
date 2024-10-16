@@ -7,16 +7,18 @@
         <div class="max-w-lg w-full bg-white shadow-md rounded-lg p-4">
             <!-- En-tête avec l'avatar et le nom de l'utilisateur -->
             <div class="flex items-center mb-4">
-                <img src="/uploads/{{ app.user.avatar }}" alt="Avatar" class="w-10 h-10 rounded-full mr-2">
+                {% if app.user.avatar %}
+                    <img src="/uploads/{{ app.user.avatar }}" alt="Avatar" class="w-10 h-10 object-cover rounded-full mr-2">
+                {% else %}
+                    <img src="/images/nopp.png" alt="Avatar" class="w-10 h-10 object-cover rounded-full mr-2">
+                {% endif %}
                 <div>
                     <h2 class="text-lg font-semibold">{{ app.user.username }}</h2>
                     <p class="text-gray-500 text-sm">Ajoutez votre avis</p>
                 </div>
             </div>
-
             <!-- Formulaire pour modifier une review -->
             {{ form_start(myForm) }}
-
             <div class="form-group text-lg urbanist">
                 <label for="content">Titre</label>
                 {{ form_widget(myForm.title, {'attr': {'placeholder': 'Écrivez votre avis ici...', 'class': 'w-full p-2 border rounded-md', 'rows': 4}}) }}
@@ -47,14 +49,14 @@
         </div>
     </div>
     {% include '/partials/_delete_modal.html.twig' with {
-    modal_id: 'deleteModal',
-    form_id: 'deleteForm',
-    title: 'Confirmation de suppression',
-    message: 'Êtes-vous sûr de vouloir supprimer votre review ? Cette action est irréversible.',
-    action_url: '#',  
-    confirm_text: 'Supprimer',
-    cancel_text: 'Annuler'
-} %}
+        modal_id: 'deleteModal',
+        form_id: 'deleteForm',
+        title: 'Confirmation de suppression',
+        message: 'Êtes-vous sûr de vouloir supprimer votre review ? Cette action est irréversible.',
+        action_url: '#',  
+        confirm_text: 'Supprimer',
+        cancel_text: 'Annuler'
+    } %}
 
 {% endblock %}
 

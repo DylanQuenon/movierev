@@ -3,52 +3,52 @@
 {% block title %}Rapports{% endblock %}
 
 {% block body %}
-<div class="slide mx-auto px-4 py-24">
-    <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Rapports</h1>
+    <div class="slide mx-auto px-4 py-24">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Rapports</h1>
 
-    <div class="grid gap-6 text-lg urbanist md:grid-cols-2 lg:grid-cols-3">
-        {% for report in reports %}
-            <div class="bg-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105">
-                <p class="text-lg font-semibold mb-2 text-gray-700">
-                    {% if report.comment is not null %}
-                        L'utilisateur <span class="font-bold">{{ report.reportedBy.username }}</span> a signalé un commentaire
-                    {% elseif report.review is not null %}
-                        L'utilisateur <span class="font-bold">{{ report.reportedBy.username }}</span> a signalé une critique
-                    {% elseif report.reportedUser is not null %}
-                        L'utilisateur <span class="font-bold">{{ report.reportedBy.username }}</span> a signalé <span class="font-bold">{{ report.reportedUser.username }}</span>
-                    {% endif %}
-                </p>
-                <p class="mb-4 text-gray-600">Raison : <span class="font-bold">{{ report.reason }}</span></p>
-
-                {% if report.comment is not null %}
-                    <p class="mb-4 text-gray-800">Contenu du commentaire : <span class="font-bold">{{ report.comment.content }}</span></p>
-                {% elseif report.review is not null %}
-                    <p class="mb-4 text-gray-800">
-                        Lien vers la critique : 
-                        <a href="{{ path('reviews_show', {'slug': report.review.slug}) }}" class="text-blue-500 hover:underline">{{ report.review.title }}</a>
+        <div class="grid gap-6 text-lg urbanist md:grid-cols-2 lg:grid-cols-3">
+            {% for report in reports %}
+                <div class="bg-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105">
+                    <p class="text-lg font-semibold mb-2 text-gray-700">
+                        {% if report.comment is not null %}
+                            L'utilisateur <span class="font-bold">{{ report.reportedBy.username }}</span> a signalé un commentaire
+                        {% elseif report.review is not null %}
+                            L'utilisateur <span class="font-bold">{{ report.reportedBy.username }}</span> a signalé une critique
+                        {% elseif report.reportedUser is not null %}
+                            L'utilisateur <span class="font-bold">{{ report.reportedBy.username }}</span> a signalé <span class="font-bold">{{ report.reportedUser.username }}</span>
+                        {% endif %}
                     </p>
-                {% endif %}
-                
-                <div class="flex space-x-4">
-                    {% if report.comment is not null %}
-                        <a href="{{ path('comment_delete', {'id': report.comment.id}) }}" class="bg-red-500 hover:bg-red-600 text-white font-bold h-fit py-2 px-4 rounded transition duration-150 ease-in-out">
-                            Supprimer le commentaire
-                        </a>
-                    {% elseif report.review is not null %}
-                        <a href="{{ path('review_delete', {'slug': report.review.slug}) }}" class="bg-red-500 hover:bg-red-600 text-white font-bold h-fit py-2 px-4 rounded transition duration-150 ease-in-out">
-                            Supprimer la critique
-                        </a>
-                    {% endif %}
-                    <a href="{{ path('report_delete', {'id': report.id}) }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 h-fit font-bold py-2 px-4 rounded transition duration-150 ease-in-out">
-                        Effacer le signalement
-                    </a>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+                    <p class="mb-4 text-gray-600">Raison : <span class="font-bold">{{ report.reason }}</span></p>
 
-    <div class="mt-8">
-        {{ knp_pagination_render(reports) }}
+                    {% if report.comment is not null %}
+                        <p class="mb-4 text-gray-800">Contenu du commentaire : <span class="font-bold">{{ report.comment.content }}</span></p>
+                    {% elseif report.review is not null %}
+                        <p class="mb-4 text-gray-800">
+                            Lien vers la critique : 
+                            <a href="{{ path('reviews_show', {'slug': report.review.slug}) }}" class="text-blue-500 hover:underline">{{ report.review.title }}</a>
+                        </p>
+                    {% endif %}
+                    
+                    <div class="flex space-x-4">
+                        {% if report.comment is not null %}
+                            <a href="{{ path('comment_delete', {'id': report.comment.id}) }}" class="bg-red-500 hover:bg-red-600 text-white font-bold h-fit py-2 px-4 rounded transition duration-150 ease-in-out">
+                                Supprimer le commentaire
+                            </a>
+                        {% elseif report.review is not null %}
+                            <a href="{{ path('review_delete', {'slug': report.review.slug}) }}" class="bg-red-500 hover:bg-red-600 text-white font-bold h-fit py-2 px-4 rounded transition duration-150 ease-in-out">
+                                Supprimer la critique
+                            </a>
+                        {% endif %}
+                        <a href="{{ path('report_delete', {'id': report.id}) }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 h-fit font-bold py-2 px-4 rounded transition duration-150 ease-in-out">
+                            Effacer le signalement
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-8">
+            {{ knp_pagination_render(reports) }}
+        </div>
     </div>
-</div>
 {% endblock %}

@@ -7,38 +7,30 @@
 
 {% block profile_content %}
     <div class="w-full">
-            {#Listes des films & séries#}
-            {% if user.isPrivate != true %}
-                    {% if reviews|length <= 0 %}
-            <div class="flex flex-col gap-2 justify-center items-center">
-                <div class="w-[50px] h-[50px] rounded-full border-2 border-[#a051de] flex justify-center items-center color-tertiary">
-                    <span class="material-symbols-outlined">
-                    favorite
-                    </span>
+        {#Listes des films & séries#}
+            {% if reviews|length <= 0 %}
+                <div class="flex flex-col gap-2 justify-center items-center">
+                    <div class="w-[50px] h-[50px] rounded-full border-2 border-[#a051de] flex justify-center items-center color-tertiary">
+                        <span class="material-symbols-outlined">
+                        favorite
+                        </span>
+                    </div>
+                    <p class="text-lg urbanist">Pas encore de likes</p>
                 </div>
-                <p class="text-lg urbanist">Pas encore de likes</p>
-            </div>
-        {% else %}
-          <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 place-items-center w-full">
-                {% for review in reviews %}
-                    {% include "partials/_card_reviews.html.twig" with {"review": review} %}
-                {% endfor %}
-            </div>
-    
-            
-        {% endif %}
-            
+            {% else %}
+                <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 place-items-center w-full">
+                    {% for review in reviews %}
+                        {% include "partials/_card_reviews.html.twig" with {"review": review} %}
+                    {% endfor %}
+                </div>
             {% endif %}
-    
         
-            
-          
     </div>
-        {% if reviews|length > 0 %}
-            <div class="pagination">
-                {{ knp_pagination_render(reviews) }}
-            </div>
-        {% endif %}
-    </div>
+    {% if reviews|length > 0 %}
+        <div class="pagination">
+            {{ knp_pagination_render(reviews) }}
+        </div>
+    {% endif %}
+
 {% endblock %}
 

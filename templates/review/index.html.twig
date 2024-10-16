@@ -8,11 +8,11 @@
 <div class="slide bg-secondary" id="reviewsPage">
     <div class="wrapper flex flex-col gap-10">
        <div class="reviewsPage_heading flex flex-col gap-4 justify-between wrap">
-                <div>
-                    <h2 class="display-xl object uppercase font-bold mb-4 color-tertiary">Reviews</h2>
-                    <p class="text-lg urbanist color-primary md:w-[85%]">Découvrez les films et séries que nos utilisateurs passionnés vous recommandent.</p>
-                </div>
-                   {% include "partials/_search_reviews.html.twig" %}
+            <div>
+                <h2 class="display-xl object uppercase font-bold mb-4 color-tertiary">Reviews</h2>
+                <p class="text-lg urbanist color-primary md:w-[85%]">Découvrez les films et séries que nos utilisateurs passionnés vous recommandent.</p>
+            </div>
+            {% include "partials/_search_reviews.html.twig" %}
         </div>
         <div class="flex justify-center gap-2">
             <div class="flex justify-center mb-4">
@@ -28,17 +28,16 @@
                 {% endif %}
             </div>
         </div>
-            {#Listes des films & séries#}
+        {#Listes des films & séries#}
         <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 w-full">
             {% for review in reviews %}
                 {% include "partials/_card_reviews.html.twig" with {"review": review} %}
             {% endfor %}
         </div>
-    
     </div>
-            <div class="pagination">
-            {{ knp_pagination_render(reviews) }}
-        </div>
+    <div class="pagination">
+        {{ knp_pagination_render(reviews) }}
+    </div>
         
 </div>
 {% endblock %}

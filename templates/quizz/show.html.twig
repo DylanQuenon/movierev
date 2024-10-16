@@ -3,45 +3,42 @@
 {% block title %}{{ quizz.title }}{% endblock %}
 
 {% block body %}
-<div class="slide bg-secondary mx-auto h-fit py-24">
-    <div class="wrapper wrapperQuizz">
-        <h1 class="display-md object uppercase color-tertiary font-bold text-center mb-8">{{ quizz.title }}</h1>
+    <div class="slide bg-secondary mx-auto h-fit py-24">
+        <div class="wrapper wrapperQuizz">
+            <h1 class="display-md object uppercase color-tertiary font-bold text-center mb-8">{{ quizz.title }}</h1>
+            <div class="w-full flex justify-center">
+                <button id="start-quiz" class="py-2 px-4 bg-purple-500 text-white rounded-lg text-lg urbanist mb-8 transition-colors duration-200 hover:bg-purple-600" onclick="startQuiz()">
+                    Commencer le Quiz
+                </button>
+            </div>
 
-        <!-- Ajoutez un bouton Commencer -->
-        <div class="w-full flex justify-center">
-        <button id="start-quiz" class="py-2 px-4 bg-purple-500 text-white rounded-lg text-lg urbanist mb-8 transition-colors duration-200 hover:bg-purple-600" onclick="startQuiz()">
-            Commencer le Quiz
-        </button>
-        
-        </div>
+            <div class="flex flex-col gap-5 items-center">
+                {% for question in questions %}
+                    <div id="question-{{ loop.index }}" class="question-step bg-white p-6 w-[70%] max-md:w-full rounded-lg relative shadow-md {% if loop.first == false %}hidden{% endif %}">
+                        <h2 class="text-xl font-semibold mb-4">{{ question.title }}</h2>
+                        <p class="display-md object uppercase color-tertiary absolute right-4 top-2">{{loop.index}}</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {% for answer in question.answers %}
+                                <button 
+                                    id="answer-{{ answer.id }}" 
+                                    class="p-4 bg-purple-100 hover:bg-purple-200 rounded-lg text-lg urbanist w-full transition-colors duration-200"
+                                    onclick="checkAnswer({{ question.id }}, {{ answer.id }})">
+                                    {{ answer.content }}
+                                </button>
+                            {% endfor %}
+                        </div>
 
-        <div class="flex flex-col gap-5 items-center">
-            {% for question in questions %}
-                <div id="question-{{ loop.index }}" class="question-step bg-white p-6 w-[70%] max-md:w-full rounded-lg relative shadow-md {% if loop.first == false %}hidden{% endif %}">
-                    <h2 class="text-xl font-semibold mb-4">{{ question.title }}</h2>
-                    <p class="display-md object uppercase color-tertiary absolute right-4 top-2">{{loop.index}}</p>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {% for answer in question.answers %}
-                            <button 
-                                id="answer-{{ answer.id }}" 
-                                class="p-4 bg-purple-100 hover:bg-purple-200 rounded-lg text-lg urbanist w-full transition-colors duration-200"
-                                onclick="checkAnswer({{ question.id }}, {{ answer.id }})">
-                                {{ answer.content }}
-                            </button>
-                        {% endfor %}
+                        <div id="timer-{{ loop.index }}" class="text-center text-lg font-semibold mt-4">15</div>
                     </div>
+                {% endfor %}
+            </div>
 
-                    <div id="timer-{{ loop.index }}" class="text-center text-lg font-semibold mt-4">15</div>
-                </div>
-            {% endfor %}
-        </div>
-
-        <div id="score-display" class="hidden text-2xl font-semibold mt-10">
-            Votre score: <span id="final-score"></span>/10
+            <div id="score-display" class="hidden text-2xl font-semibold mt-10">
+                Votre score: <span id="final-score"></span>/10
+            </div>
         </div>
     </div>
-</div>
 
 <script>
     let currentStep = 1; // Garde la trace de l'étape actuelle

@@ -14,6 +14,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminApplicationController extends AbstractController
 {
+    /**
+     * Voir les demandes
+     *
+     * @param ApplicationRepository $repo
+     * @param PaginationService $pagination
+     * @param integer $page
+     * @return Response
+     */
     #[Route('/admin/applications/{page<\d+>?1}', name: 'admin_application_index')]
     public function index(ApplicationRepository $repo, PaginationService $pagination, int $page): Response
     {
@@ -26,6 +34,12 @@ class AdminApplicationController extends AbstractController
     }
 
 
+    /**
+     * Voir une demande
+     *
+     * @param Application $application
+     * @return Response
+     */
     #[Route('/admin/application/{id}', name: 'admin_application_show')]
     public function show(Application $application): Response
     {
@@ -34,6 +48,14 @@ class AdminApplicationController extends AbstractController
         ]);
     }
 
+    /**
+     * Accepter une demande
+     *
+     * @param Application $application
+     * @param EntityManagerInterface $manager
+     * @param MailerInterface $mailer
+     * @return Response
+     */
     #[Route('/admin/application/{id}/accept', name: 'admin_application_accept')]
     public function accept(Application $application, EntityManagerInterface $manager, MailerInterface $mailer): Response
     {
@@ -46,10 +68,13 @@ class AdminApplicationController extends AbstractController
         $manager->persist($user);
         // Envoyer un email de notification à l'utilisateur
         $email = (new Email())
-            ->from('no-reply@tonsite.com') // Remplace par ton adresse email
+            ->from('contact@movierev.dylanquenon.com') 
             ->to($user->getEmail())
             ->subject('Votre candidature a été acceptée')
-            ->text('Félicitations, votre candidature pour le rôle de ' . ($role === 'moderator' ? 'modérateur' : 'rédacteur') . ' a été acceptée ! Bienvenue dans notre équipe.');
+            ->htmlTemplate('mail/applicationMail.html.twig') // Utilise le template
+            ->context([
+                'role' => ($role === 'moderator' ? 'modérateur' : 'rédacteur'), // Passer le rôle au template
+            ]);
 
         $mailer->send($email);
 
@@ -65,16 +90,24 @@ class AdminApplicationController extends AbstractController
         return $this->redirectToRoute('admin_application_index');
     }
 
+    /**
+     * Rejeter une demande
+     *
+     * @param Application $application
+     * @param EntityManagerInterface $manager
+     * @param MailerInterface $mailer
+     * @return Response
+     */
     #[Route('/admin/application/{id}/reject', name: 'admin_application_reject')]
     public function reject(Application $application, EntityManagerInterface $manager, MailerInterface $mailer): Response
     {
         // Envoyer un email de notification à l'utilisateur
         $user = $application->getUser();
         $email = (new Email())
-            ->from('no-reply@tonsite.com') // Remplace par ton adresse email
+            ->from('contact@movierev.dylanquenon.com') // Remplace par ton adresse email
             ->to($user->getEmail())
-            ->subject('Votre candidature a été rejetée')
-            ->text('Nous vous remercions d\'avoir postulé. Cependant, votre candidature pour le rôle de ' . $application->getRole() . ' n\'a pas été retenue.');
+            ->subject('Votre candidature')
+            ->htmlTemplate('mail/rejectedMail.html.twig'); // Utilise le template
 
         $mailer->send($email);
 

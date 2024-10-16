@@ -295,79 +295,76 @@
 {% block javascripts %}
 	<script>
 		const copyLinkButton = document.querySelector('.copyLink')
-copyLinkButton.addEventListener('click', function (event) {
-event.preventDefault();
-navigator.clipboard.writeText(window.location.href).then(function () {
-copyLinkButton.innerHTML = 'Lien copié';
-setTimeout(function () {
-copyLinkButton.innerHTML = 'Copier l\'url du profil';
-}, 3000);
-}, function (err) {
-console.error('Erreur lors de la copie du lien : ', err);
-});
-});
+		copyLinkButton.addEventListener('click', function (event) {
+			event.preventDefault();
+			navigator.clipboard.writeText(window.location.href).then(function () {
+				copyLinkButton.innerHTML = 'Lien copié';
+				setTimeout(function () {
+					copyLinkButton.innerHTML = 'Copier l\'url du profil';
+				}, 3000);
+				}, function (err) {
+				console.error('Erreur lors de la copie du lien : ', err);
+			});
+		});
 
+		// affiche l'overlay
+		function showFollowedOverlay() {
+			if ({% if app.user == user or user.isPrivate==false or isFollowing %}true{% else %}false{% endif %}) { // Create and show overlay for followeds
+				let overlay = document.createElement('div');
+				overlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+				overlay.innerHTML = `
+						<div class="bg-white p-5 rounded-lg max-w-md w-full">
+							<h2 class="text-2xl font-bold mb-4">Abonné(e)s</h2>
+							<ul>
 
-function showFollowedOverlay() {
-if ({% if app.user == user or user.isPrivate==false or isFollowing %}true
-{% else %}
-false{% endif %}) { // Create and show overlay for followeds
-let overlay = document.createElement('div');
-overlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-overlay.innerHTML = `
-			<div class="bg-white p-5 rounded-lg max-w-md w-full">
-				<h2 class="text-2xl font-bold mb-4">Abonné(e)s</h2>
-				<ul>
-
-					{% for followed in user.followeds %}
-						<li class="mb-2">
-							<a href="{{ path('user_show', {'slug': followed.follower.slug}) }}" class="text-lg urbanist flex items-center hover:text-[#a051de] transition-all">
-								{% if followed.follower.avatar %}
-									<img src="{{ asset('uploads/' ~ followed.follower.avatar) }}" alt="{{ followed.follower.username }}" class=" object-cover w-10 h-10 rounded-full mr-3">
-								{% else %}
-									<img src="/images/nopp.png" alt="{{ followed.follower.username }}" class="w-10 h-10 rounded-full mr-3">
-								{% endif %}
-								
-								<span>{{ followed.follower.username }}</span>
-							</a>
-						</li>
-					{% endfor %}
-				</ul>
-				<button onclick="this.closest('.fixed').remove()" class="mt-4 bg-[#a051de] text-white text-lg urbanist px-4 py-2 rounded">Fermer</button>
-			</div>
-		`;
-document.body.appendChild(overlay);
-}
-}
-function showFollowersOverlay() {
-if ({% if app.user == user or user.isPrivate == false or isFollowing %}true
-{% else %}
-false{% endif %}) { // Create and show overlay for followers
-let overlay = document.createElement('div');
-overlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-overlay.innerHTML = `
-			<div class="bg-white p-5 rounded-lg max-w-md w-full">
-				<h2 class="text-2xl font-bold mb-4">Suivis</h2>
-				<ul>
-					{% for follower in user.followers %}
-						<li class="mb-2">
-							<a href="{{ path('user_show', {'slug': follower.followed.slug}) }}" class="text-lg urbanist flex items-center hover:text-[#a051de] transition-all">
-								{% if follower.followed.avatar %}
-									<img src="{{ asset('uploads/' ~ follower.followed.avatar) }}" alt="{{ follower.followed.username }}" class=" object-cover w-10 h-10 rounded-full mr-3">
-								{% else %}
-									<img src="/images/nopp.png" alt="{{ follower.followed.username }}" class="w-10 h-10 rounded-full mr-3">
-								{% endif %}
-								<span>{{ follower.followed.username }}</span>
-							</a>
-						</li>
-					{% endfor %}
-				</ul>
-				<button onclick="this.closest('.fixed').remove()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded bg-[#a051de] text-lg urbanist">Fermer</button>
-			</div>
-		`;
-document.body.appendChild(overlay);
-}
-}
+								{% for followed in user.followeds %}
+									<li class="mb-2">
+										<a href="{{ path('user_show', {'slug': followed.follower.slug}) }}" class="text-lg urbanist flex items-center hover:text-[#a051de] transition-all">
+											{% if followed.follower.avatar %}
+												<img src="{{ asset('uploads/' ~ followed.follower.avatar) }}" alt="{{ followed.follower.username }}" class=" object-cover w-10 h-10 rounded-full mr-3">
+											{% else %}
+												<img src="/images/nopp.png" alt="{{ followed.follower.username }}" class="w-10 h-10 rounded-full mr-3">
+											{% endif %}
+											
+											<span>{{ followed.follower.username }}</span>
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+							<button onclick="this.closest('.fixed').remove()" class="mt-4 bg-[#a051de] text-white text-lg urbanist px-4 py-2 rounded">Fermer</button>
+						</div>
+						`;
+				document.body.appendChild(overlay);
+			}
+		}
+		// affiche l'overlay des followers
+		function showFollowersOverlay() {
+			if ({% if app.user == user or user.isPrivate == false or isFollowing %}true{% else %}false{% endif %}) { // Create and show overlay for followers
+				let overlay = document.createElement('div');
+				overlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+				overlay.innerHTML = `
+					<div class="bg-white p-5 rounded-lg max-w-md w-full">
+						<h2 class="text-2xl font-bold mb-4">Suivis</h2>
+						<ul>
+							{% for follower in user.followers %}
+								<li class="mb-2">
+									<a href="{{ path('user_show', {'slug': follower.followed.slug}) }}" class="text-lg urbanist flex items-center hover:text-[#a051de] transition-all">
+										{% if follower.followed.avatar %}
+											<img src="{{ asset('uploads/' ~ follower.followed.avatar) }}" alt="{{ follower.followed.username }}" class=" object-cover w-10 h-10 rounded-full mr-3">
+										{% else %}
+											<img src="/images/nopp.png" alt="{{ follower.followed.username }}" class="w-10 h-10 rounded-full mr-3">
+										{% endif %}
+										<span>{{ follower.followed.username }}</span>
+									</a>
+								</li>
+							{% endfor %}
+						</ul>
+						<button onclick="this.closest('.fixed').remove()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded bg-[#a051de] text-lg urbanist">Fermer</button>
+					</div>
+					`;
+			document.body.appendChild(overlay);
+			}
+		}
 	</script>
 
 {% endblock %}

@@ -8,144 +8,147 @@
 {% form_theme myForm 'admin/media/_collection.html.twig' %}
 
 {% block body %}
-    <div class="slide bg-secondary flex" id="baseform">
-        <div class="slider_baseform max-md:mt-3 max-lg:w-full w-1/2 min-h-[100vh] bg-tertiary relative">
+    <div class="slide bg-secondary flex flex-wrap" id="baseform">
+        <div class="slider_baseform max-md:order-3 max-md:mt-3 max-lg:w-full w-1/2 min-h-[100vh] relative" style="background-image: linear-gradient(to bottom, rgba(160, 81, 222, 0.3), rgba(160, 81, 222, 0.8)), url('/images/wallpaper.jpeg'); background-size: cover; background-position: center;">
         </div>
-        <div class="w-1/2">
-                
-            <div class="content_block max-md:w-full max-md:rounded-bl-[100px] flex-wrap w-[85%] min-h-[100vh] flex justify-between">
-                <div class="left_baseform  max-lg:w-full w-full flex flex-col gap-5  max-md:p-5 p-24">
-                    <img src="/images/movierevlogo.png" alt="Logo - Movierev" class= "w-[100px] mb-3">
-                    <div class="heading flex flex-col gap-2">
-                        <h2 class="display-sm object uppercase color-tertiary">Ajoutez un film </h2>
-                        <p class="text-md urbanist">Faites nous découvrir un nouveau <span class="font-semibold color-tertiary"> classique !</span> </p>
-                    </div>
-                                    <!-- Barre de progression (Stepper) -->
-                    <ol class=" stepper items-center w-full  flex max-sm:justify-between sm:space-x-12 max-sm:space-y-0 rtl:space-x-reverse">
-                        {% for i in 1..5 %}
-                            <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 rtl:space-x-reverse step-item" data-step="{{ i }}">
-                                <span class="flex items-center justify-center w-8 h-8 border rounded-full shrink-0 step-circle" data-step="{{ i }}">
-                                    {{ i }}
-                                </span>
-                            
-                            </li>
-                        {% endfor %}
-                    </ol>
-                  
-                      <form action="{{ path('medias_new') }}" method="POST" enctype="multipart/form-data" class="space-y-4" id="mediaForm" >
-                        <div id="multistep-form" >
 
-                            <!-- Étape 1 : Informations majeures -->
-                            <div class="step flex flex-col gap-6" id="step-1">
-                                <div class="space-y-6">
-                                      <button id="add-actor-btn" class="bg-tertiary text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300 text-lg urbanist ">Ajouter un acteur</button>
-                                    {{ form_row(myForm.castings) }}
-                                    {{ form_row(myForm.title) }}
-                                    {{ form_row(myForm.type) }}
-
-                                </div>
-                                <button type="button" class="w-fit next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
-                            </div>
-
-                            <!-- Étape 2 : Informations de date -->
-                            <div class="step hidden flex flex-col gap-6" id="step-2">
-                                <div class="space-y-6">
-                                    {{ form_row(myForm.duration) }}
-                                    {{ form_row(myForm.release_date) }}
-                                    {{ form_row(myForm.genres) }}
-                                </div>
-                                <div class="flex justify-between mt-4">
-
-
-                                    <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
-                                    <button type="button" class="next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
-                                </div>
-                            </div>
-
-                            <!-- Étape 3 : Informations de sécurité -->
-                            <div class="step hidden flex flex-col gap-6" id="step-3">
-                                <div class="space-y-6">
-                                    {{ form_row(myForm.trailer) }}
-                                    {{ form_row(myForm.synopsis) }}
-                                     {{ form_row(myForm.producer) }}
-                               
-                                  
-                                </div>
-                                <div class="flex justify-between mt-4">
-
-
-                                    <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
-                                    <button type="button" class="next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
-                                </div>
-                            </div>
-
-                            <!-- Étape 4 : Avatar et confidentialité -->
-                            <div class="step hidden flex flex-col gap-6" id="step-4">
-                                <div class="space-y-6">
-                                    {{ form_row(myForm.poster) }}
-                                    {{ form_row(myForm.cover) }}
-                                  
-                                </div>
-                                <div class="flex justify-between mt-4">
-                                    <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
-                                    <button type="button" class="next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
-                                </div>
-                            </div>
-
-                            <!-- Étape 5 : Récapitulatif -->
-                            <div class="step hidden flex flex-col gap-6" id="step-5">
-                                <h3 class="text-lg font-semibold">Récapitulatif du film à ajouter</h3>
-                                <ul class="list-none space-y-4 text-gray-600">
-                                    <li class="flex justify-between">
-                                        <span class="text-lg font-semibold urbanist color-primary">Titre:</span>
-                                        <span id="recap-title" class="text-lg color-tertiary text-right"></span>
-                                    </li>
-                                    <li class="flex justify-between">
-                                        <span class="text-lg font-semibold urbanist color-primary">Type:</span>
-                                        <span id="recap-type" class="text-lg color-tertiary text-right"></span>
-                                    </li>
-                                    <li class="flex justify-between">
-                                        <span class="text-lg font-semibold urbanist color-primary">Durée:</span>
-                                        <span id="recap-duration" class="text-lg color-tertiary text-right"></span>
-                                    </li>
-                                    <li class="flex justify-between">
-                                        <span class="text-lg font-semibold urbanist color-primary">Genre:</span>
-                                        <span id="recap-genre" class="text-lg color-tertiary text-right"></span>
-                                    </li>
-                                    <li class="flex justify-between">
-                                        <span class="text-lg font-semibold urbanist color-primary">Date:</span>
-                                        <span id="recap-date" class="text-lg color-tertiary text-right"></span>
-                                    </li>
-                                    <li class="flex justify-between">
-                                        <span class="text-lg font-semibold urbanist color-primary">Url du trailer:</span>
-                                        <span id="recap-trailer" class="text-lg color-tertiary text-right"></span>
-                                    </li>
-                                      <li class="flex justify-between">
-                                        <span class="text-lg font-semibold urbanist color-primary">Synopsis:</span>
-                                        <span id="recap-synopsis" class="text-lg color-tertiary text-right"></span>
-                                    </li>
-                               
-                                  
-                           
-                                </ul>
-                                <div class="flex justify-between mt-4 ">
-
-                                    <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
-                                    {{ form_widget(myForm) }}
-
-                                <button type="submit" class="button w-inline-block">
-                                    <div class="button_dot">
-                                        <div class="button_arrow w-embed">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><title>arrow-right</title><g fill="currentcolor"><path d="M1,7H8.586L6.293,9.293a1,1,0,1,0,1.414,1.414l4-4a1,1,0,0,0,0-1.416l-4-4A1,1,0,0,0,6.293,2.707L8.586,5H1A1,1,0,0,0,1,7Z" fill="currentColor"></path></g></svg>
-                                        </div>
-                                    </div>
-                                    <div class="button_text text-lg urbanist">Confirmer</div></button>
-                                </div>
-                            </div>
-
+        <div class=" max-md:py-24 max-md:w-full max-lg:order-2 lg:w-1/2 ">
+            <div class="wrapper ">
+                <div class="content_block max-md:w-full max-md:rounded-bl-[100px] flex-wrap w-full min-h-[100vh] flex justify-between">
+                    <div class="left_baseform  max-lg:w-full w-full flex flex-col gap-5  max-md:p-5 p-24">
+                        <img src="/images/movierevlogo.png" alt="Logo - Movierev" class= "w-[100px] mb-3">
+                        <div class="heading flex flex-col gap-2">
+                            <h2 class="display-sm object uppercase color-tertiary">Ajoutez un film </h2>
+                            <p class="text-md urbanist">Faites nous découvrir un nouveau <span class="font-semibold color-tertiary"> classique !</span> </p>
                         </div>
-                    </form>
+                                        <!-- Barre de progression (Stepper) -->
+                        <ol class=" stepper items-center w-full  flex max-sm:justify-between sm:space-x-12 max-sm:space-y-0 rtl:space-x-reverse">
+                            {% for i in 1..5 %}
+                                <li class="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 rtl:space-x-reverse step-item" data-step="{{ i }}">
+                                    <span class="flex items-center justify-center w-8 h-8 border rounded-full shrink-0 step-circle" data-step="{{ i }}">
+                                        {{ i }}
+                                    </span>
+                                
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    
+                        <form action="{{ path('medias_new') }}" method="POST" enctype="multipart/form-data" class="space-y-4" id="mediaForm" >
+                            <div id="multistep-form" >
+
+                                <!-- Étape 1 : Informations majeures -->
+                                <div class="step flex flex-col gap-6" id="step-1">
+                                    <div class="space-y-6">
+                                        <button id="add-actor-btn" class="bg-tertiary text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300 text-lg urbanist ">Ajouter un acteur</button>
+                                        {{ form_row(myForm.castings) }}
+                                        {{ form_row(myForm.title) }}
+                                        {{ form_row(myForm.type) }}
+
+                                    </div>
+                                    <button type="button" class="w-fit next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
+                                </div>
+
+                                <!-- Étape 2 : Informations de date -->
+                                <div class="step hidden flex flex-col gap-6" id="step-2">
+                                    <div class="space-y-6">
+                                        {{ form_row(myForm.duration) }}
+                                        {{ form_row(myForm.release_date) }}
+                                        {{ form_row(myForm.genres) }}
+                                    </div>
+                                    <div class="flex justify-between mt-4">
+
+
+                                        <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
+                                        <button type="button" class="next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
+                                    </div>
+                                </div>
+
+                                <!-- Étape 3 : Informations de sécurité -->
+                                <div class="step hidden flex flex-col gap-6" id="step-3">
+                                    <div class="space-y-6">
+                                        {{ form_row(myForm.trailer) }}
+                                        {{ form_row(myForm.synopsis) }}
+                                        {{ form_row(myForm.producer) }}
+                                
+                                    
+                                    </div>
+                                    <div class="flex justify-between mt-4">
+
+
+                                        <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
+                                        <button type="button" class="next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
+                                    </div>
+                                </div>
+
+                                <!-- Étape 4 : Avatar et confidentialité -->
+                                <div class="step hidden flex flex-col gap-6" id="step-4">
+                                    <div class="space-y-6">
+                                        {{ form_row(myForm.poster) }}
+                                        {{ form_row(myForm.cover) }}
+                                    
+                                    </div>
+                                    <div class="flex justify-between mt-4">
+                                        <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
+                                        <button type="button" class="next-step bg-tertiary text-white py-2 px-4 rounded flex gap-2 hover:bg-opacity-80 transition-all duration-300">Etape suivante <span class="material-symbols-outlined">arrow_right_alt</span> </button>
+                                    </div>
+                                </div>
+
+                                <!-- Étape 5 : Récapitulatif -->
+                                <div class="step hidden flex flex-col gap-6" id="step-5">
+                                    <h3 class="text-lg font-semibold">Récapitulatif du film à ajouter</h3>
+                                    <ul class="list-none space-y-4 text-gray-600">
+                                        <li class="flex justify-between">
+                                            <span class="text-lg font-semibold urbanist color-primary">Titre:</span>
+                                            <span id="recap-title" class="text-lg color-tertiary text-right"></span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span class="text-lg font-semibold urbanist color-primary">Type:</span>
+                                            <span id="recap-type" class="text-lg color-tertiary text-right"></span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span class="text-lg font-semibold urbanist color-primary">Durée:</span>
+                                            <span id="recap-duration" class="text-lg color-tertiary text-right"></span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span class="text-lg font-semibold urbanist color-primary">Genre:</span>
+                                            <span id="recap-genre" class="text-lg color-tertiary text-right"></span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span class="text-lg font-semibold urbanist color-primary">Date:</span>
+                                            <span id="recap-date" class="text-lg color-tertiary text-right"></span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span class="text-lg font-semibold urbanist color-primary">Url du trailer:</span>
+                                            <span id="recap-trailer" class="text-lg color-tertiary text-right"></span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span class="text-lg font-semibold urbanist color-primary">Synopsis:</span>
+                                            <span id="recap-synopsis" class="text-lg color-tertiary text-right"></span>
+                                        </li>
+                                
+                                    
+                            
+                                    </ul>
+                                    <div class="flex justify-between mt-4 ">
+
+                                        <button type="button" class="flex gap-2 items-center prev-step text-white py-2 px-4 rounded hover:bg-opacity-80 transition-all duration-300"> <span class="material-symbols-outlined">arrow_left_alt</span>Précédent</button>
+                                        {{ form_widget(myForm) }}
+
+                                    <button type="submit" class="button w-inline-block">
+                                        <div class="button_dot">
+                                            <div class="button_arrow w-embed">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><title>arrow-right</title><g fill="currentcolor"><path d="M1,7H8.586L6.293,9.293a1,1,0,1,0,1.414,1.414l4-4a1,1,0,0,0,0-1.416l-4-4A1,1,0,0,0,6.293,2.707L8.586,5H1A1,1,0,0,0,1,7Z" fill="currentColor"></path></g></svg>
+                                            </div>
+                                        </div>
+                                        <div class="button_text text-lg urbanist">Confirmer</div></button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
                 </div>
+            
             </div>
         
         </div>

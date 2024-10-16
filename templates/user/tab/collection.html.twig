@@ -5,6 +5,7 @@
 {% block stylesheets %}{{encore_entry_link_tags('accountStyle')}}{% endblock %}
 
 {% block profile_content %}
+    {#collection#}
     <div class="w-1/2">
         {% if collections is empty %}
             <div class="flex flex-col gap-2 justify-center items-center">
@@ -14,13 +15,12 @@
                         </span>
                 </div>
                 <p class="text-center text-lg urbanist flex justify-center">Pas de collections</p>
-            
             </div>
         {% endif %}
         <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 place-items-center w-full">
-        {% if app.user and app.user.id == user.id %}
-             <button class="w-[200px] h-[200px] addCollection bg-tertiary rounded-[20px] display-2xl color-secondary justify-center flex items-center" data-tippy-content="Créer une collection">+</button>
-        {% endif %}
+            {% if app.user and app.user.id == user.id %}
+                <button class="w-[200px] h-[200px] addCollection bg-tertiary rounded-[20px] display-2xl color-secondary justify-center flex items-center" data-tippy-content="Créer une collection">+</button>
+            {% endif %}
             {% if app.user and app.user.id == user.id or not user.isPrivate  %}
                 {% for collection in collections %}
                     {% set randomMedia = randomMediaByCollection[collection.id] %}
@@ -37,7 +37,6 @@
        
         </div>
     </div>
-
     <!-- Overlay pour ajouter une collection -->
     {% if app.user and app.user.id == user.id %}
         <div id="collectionOverlay" class="fixed inset-0 hidden bg-black bg-opacity-50 flex justify-center items-center z-50">

@@ -1,0 +1,35 @@
+{# templates/emails/contact_notification_email.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvelle demande de contact</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="container mx-auto max-w-lg bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold text-blue-600 mb-4">Nouvelle demande de contact</h1>
+        
+        <p class="text-gray-700 mb-4">Vous avez reçu un nouveau message de contact :</p>
+        
+        <div class="bg-gray-50 border border-gray-200 p-4 rounded-lg mb-4">
+            <strong>Nom :</strong>
+            <p class="text-gray-700">{{ contact.name }}</p>
+            
+            <strong>Email :</strong>
+            <p class="text-gray-700">{{ contact.email }}</p>
+
+            <strong>Message :</strong>
+            <p class="text-gray-700">{{ contact.message }}</p>
+        </div>
+
+        <p class="text-gray-700 mb-4">Vérifiez les détails ci-dessus pour répondre à cette demande.</p>
+
+        <div class="footer mt-8">
+            <p class="text-gray-600 font-semibold">Dylan Quenon</p>
+            <p class="text-gray-600">Gérant, MovieRev</p>
+        </div>
+    </div>
+</body>
+</html>

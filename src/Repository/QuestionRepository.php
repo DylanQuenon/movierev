@@ -16,6 +16,12 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
+    /**
+     * Trouve la bonne réponse
+     *
+     * @param [type] $questionId
+     * @return void
+     */
     public function getCorrectAnswerId($questionId)
     {
         $question = $this->find($questionId);

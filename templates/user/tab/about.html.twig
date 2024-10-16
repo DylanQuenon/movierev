@@ -12,11 +12,8 @@
             <p class="text-md urbanist text-[#a4a4a4] flex items-center gap-2"><i class="fa-solid fa-calendar-days"></i> a rejoint Movierev en<span class="font-semibold color-tertiary">
             {{user.createdAt |date('F Y', 'Europe/Paris')|format_datetime(pattern="MMMM yyyy", locale='fr')}}
             </p>
-
-        
         </div>
         <p class="text-lg urbanist">{{user.description}}</p>
-
     </div>
 
 {% endblock %}
