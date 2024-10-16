@@ -10,7 +10,7 @@
 	{% set infos = [
         {
             title: 'Opportunité de collaboration',
-            text: 'Nous sommes toujours ouverts aux nouvelles opportunités. Envoyez-nous un message pour discuter de vos idées et projets.',
+            text: 'Nous sommes toujours ouverts aux nouvelles opportunités. Envoyez-nous un message pour discuter de vos idées et projets. <a href="/postuler" class="color-tertiary hover:underline font-semibold">Rejoignez-nous</a>',
         },
         {
             title: 'Partenariats',
@@ -32,13 +32,13 @@
         {#Body contact #}
         <div class="wrapper flex flex-wrap">
                 {#Info contact#}
-                <div class="w-4/12 max-sm:w-full flex flex-col gap-10">
+                <div class="w-4/12 max-md:w-full flex flex-col gap-10">
                     <div class="flex flex-col gap-5 contact_infos">
                         {#Info titre et text#}
                         {% for info in infos %}
                             <div class="flex flex-col gap-3">
                                 <p class="display-sm color-tertiary urbanist font-semibold">{{ info.title }}</p>
-                                <p class="text-lg urbanist">{{ info.text }}</p>
+                                <p class="text-lg urbanist">{{ info.text|raw|nl2br }}</p>
                             </div>
                         {% endfor %}
                     </div>
@@ -58,10 +58,10 @@
                 </div>
 
                 <!-- Espace de 3 colonnes -->
-                <div class="w-3/12 max-sm:hidden"></div>
+                <div class="w-3/12 max-md:hidden"></div>
 
                 {#formulaire #}
-                <div class="w-5/12 max-sm:w-full ">
+                <div class="w-5/12 max-md:my-5 max-md:w-full ">
                     <div class="content_form flex flex-col gap-5 py-6 px-8">
                         <h2 class="text-xl font-semibold urbanist  color-tertiary">Contactez-nous</h2>
                         {{ form_start(form) }}

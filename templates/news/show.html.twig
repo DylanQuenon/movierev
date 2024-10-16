@@ -66,8 +66,10 @@
                             <span class="text-xl urbanist color-primary uppercase font-semibold">{{news.getAvgRatings()}}/5</span>
                      </div>
                      {% endif %}
+               
                      {#Titre de l'article et liens#}
                      <div class="card_news_content_info1 flex max-sm:flex-col justify-between">
+                     
                         {#Titre de l'article#}
                         <p class="w-[75%] display-md urbanist font-semibold my-5">{{news.title}}</p>
                         {#Liens#}
@@ -107,9 +109,8 @@
                               <p class="text-sm text-gray-400 urbanist">Publié le
                                  <span class="font-semibold color-primary">{{news.createdAt |date('d/m/Y', 'Europe/Paris')}}</span>
                                  à
-                                 <span class="font-semibold color-primary">{{news.createdAt |date('H','Europe/Paris')}}</span>
-                                 <span class="font-semibold color-primary">h</span>
-                                 <span class="font-semibold color-primary">{{news.createdAt |date('i', 'Europe/Paris')}}</span>
+                                 <span class="font-semibold color-primary">{{news.createdAt |date('H:i','Europe/Paris')}}</span>
+                         
                               </p>
                            </div>
 
@@ -126,11 +127,17 @@
                      </div>
                   </div>
                </div>
+                        <div class="mt-4 text-sm text-gray-500">
+                  {% set words = news.content|striptags|split(' ')|length %}
+                  {% set minutes = (words / 200)|round(0, 'ceil') %}
+                  <p class="flex items-center gap-2"><i data-tippy-content="Temps de lecture estimé" class="fa-regular fa-clock"></i> {{ minutes }} minute{% if minutes > 1 %}s{% endif %}</p>
+               </div>
                {#Contenu de l'article#}
                <div class="text-lg urbanist">
-                  {{news.content|raw|nl2br}}
+                  {{ news.content|raw|nl2br }}
                </div>
-
+               
+            
                {#Commentaires#}
                <h2 class="object uppercase display-xl color-tertiary w-full">Commentaires ({{news.comments|length}}) </h2>
                   {% if news.comments|length <= 0 %}

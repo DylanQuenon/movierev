@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Candidatures{% endblock %}
+
+{% block body %}
+<div class="slide min-h-screen py-24 bg-cover bg-center bg-no-repeat" style="background-image: url('/images/bgdelete.jpg')">
+    <div class="wrapper mx-auto">
+        <div class="mb-12">
+            <h2 class="display-md object uppercase font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                Rejoignez <span class="color-tertiary">notre équipe.</span>
+            </h2>
+            <p class="mt-3 max-w-md text-gray-500 sm:text-lg md:mt-5 md:text-xl text-xl urbanist md:max-w-3xl">
+                Rejoindre notre équipe, c'est contribuer à un projet passionnant, tout en laissant sa marque dans une communauté dynamique. Ensemble, nous construisons l'avenir.
+            </p>
+        </div>
+        
+        <div class="mt-10 sm:mt-12">
+            <div class="bg-[#ffffff8f] text-lg urbanist backdrop-blur-md shadow overflow-hidden sm:rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    {{form_start(myForm, {'attr': {'class': 'space-y-6'}})}}
+                    {{form_widget(myForm)}}
+                    <div class="flex justify-end">
+                        <button type="submit" class="inline-flex items-center px-6 py-2 border border-transparent font-medium rounded-md shadow-sm text-white bg-tertiary hover:bg-purple-700 transition-all text-lg urbanist urbanist focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Envoyer
+                        </button>
+                    </div>
+                    {{form_end(myForm)}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

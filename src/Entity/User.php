@@ -154,6 +154,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Report::class, mappedBy: 'reportedUser')]
     private Collection $reported;
 
+    /**
+     * @var Collection<int, Application>
+     */
+    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $applications;
+
     public function __construct()
     {
         $this->news = new ArrayCollection();
@@ -169,6 +175,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userScores = new ArrayCollection();
         $this->reports = new ArrayCollection();
         $this->reported = new ArrayCollection();
+        $this->applications = new ArrayCollection();
     }
 
       /**
@@ -779,6 +786,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($reported->getReportedUser() === $this) {
                 $reported->setReportedUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Application>
+     */
+    public function getApplications(): Collection
+    {
+        return $this->applications;
+    }
+
+    public function addApplication(Application $application): static
+    {
+        if (!$this->applications->contains($application)) {
+            $this->applications->add($application);
+            $application->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplication(Application $application): static
+    {
+        if ($this->applications->removeElement($application)) {
+            // set the owning side to null (unless already changed)
+            if ($application->getUser() === $this) {
+                $application->setUser(null);
             }
         }
 

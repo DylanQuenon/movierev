@@ -1,0 +1,52 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Détails de la candidature{% endblock %}
+
+{% block body %}
+<div class="flex items-center justify-center min-h-screen bg-gray-100 p-6">
+    <div class="w-[85%] max-w-3xl bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="bg-primary text-white p-6">
+            <h1 class="text-xl font-bold text-center">Détails de la candidature</h1>
+        </div>
+        
+        <div class="p-6">
+            <div class="flex items-center mb-6 border-b pb-4">
+                {% if application.user.avatar %}
+                    <img src="/uploads/{{ application.user.avatar }}" alt="Photo de profil" class="w-20 h-20 rounded-full object-cover mr-4 border-4 border-primary">
+                {% else %}
+                    <img src="/images/nopp.png" alt="Photo de profil" class="w-20 h-20 rounded-full mr-4 object-cover border-4 border-primary">
+                {% endif %}
+                <a href="{{ path('user_show', {'slug': application.user.slug}) }}" target="_blank" class="flex flex-col">
+                    <h2 class="text-xl font-semibold text-gray-800">{{ application.user.fullName }}</h2>
+                    <p class="text-gray-600 text-lg">@{{ application.user.username }}</p>
+                </a>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Rôle demandé</h3>
+                <p class="text-lg text-primary font-medium">
+                    {% if application.role == 'redactor' %}
+                        Rédacteur
+                    {% elseif application.role == 'moderator' %}
+                        Modérateur
+                    {% else %}
+                        {{ application.role|capitalize }}
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="mb-6">
+                <h4 class="text-xl font-semibold text-gray-800 mb-2">Motivation</h4>
+                <p class="text-gray-700 text-lg urbanist bg-gray-100 p-4 rounded-lg">{{ application.motivation }}</p>
+            </div>
+
+            
+                <div class="flex justify-space-between mt-6 space-x-4">
+                    <a href="{{ path('admin_application_accept', { id: application.id }) }}" class="inline-block bg-green-600 text-lg urbanist  text-white rounded-full px-4 py-2 hover:bg-green-500 transition duration-300 ease-in-out">Accepter</a>
+                    <a href="{{ path('admin_application_reject', { id: application.id }) }}" class="inline-block bg-red-600 text-lg urbanist text-white rounded-full px-4 py-2 hover:bg-red-500 transition duration-300 ease-in-out">Refuser</a>
+                </div>
+         
+        </div>
+    </div>
+</div>
+{% endblock %}

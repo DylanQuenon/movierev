@@ -14,7 +14,7 @@
         background-color: white;
         border-radius: $radius-3xl;
         transform: translateY(-20%);
-        @media all and (max-width:650px) {
+        @media all and (max-width:992px) {
             transform: translateY(0);
             margin-top: 20px;
             
