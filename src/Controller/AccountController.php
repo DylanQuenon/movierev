@@ -104,10 +104,9 @@ class AccountController extends AbstractController
             ->to($user->getEmail()) 
             ->replyTo($user->getEmail())
             ->subject("Bienvenue chez Movierev")
-            ->htmlTemplate('emails/registration_email.html.twig') // Utiliser le template
-            ->context([
-                'user' => $user // Passer l'utilisateur au template
-            ]);
+            ->html($this->renderView('mail/registrationmail.html.twig', [
+                'user' => $user,
+            ]));
     
 
             $mailer->send($email);

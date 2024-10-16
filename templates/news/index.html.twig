@@ -9,14 +9,14 @@
             <div class="newsPage flex justify-between wrap">
                 <div class="flex-col flex gap-5">
                     {#heading#}
-                    <div>
+                    <div class="w-full">
                         <h2 class="display-xl object uppercase font-bold mb-4 color-tertiary">Actualités</h2>
-                        <p class="text-lg urbanist color-primary md:w-6/12">Ne manquez rien des dernières sorties, des rumeurs, et de tout ce qui fait vibrer le cinéma, des premières bandes-annonces aux coulisses des tournages, en passant par les critiques des films les plus attendus.</p>
+                        <p class="text-lg urbanist color-primary max-md:w-full md:w-6/12">Ne manquez rien des dernières sorties, des rumeurs, et de tout ce qui fait vibrer le cinéma, des premières bandes-annonces aux coulisses des tournages, en passant par les critiques des films les plus attendus.</p>
                     </div>
                     {#Filtres & recherche#}
                     <div class="flex items-center justify-between filters flex-wrap gap-5">
                         {% include "partials/_search_news.html.twig" %}
-                        <form method="GET" action="{{ path('news_index') }}" class="flex gap-2 items-center">
+                        <form method="GET" action="{{ path('news_index') }}" class="flex max-md:flex-col lg:flex-row gap-2 max-md:items-start lg:items-center">
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined"> instant_mix</span>
                                 <span class="text-md color-tertiary">Filtrer par</span>

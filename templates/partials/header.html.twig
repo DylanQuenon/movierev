@@ -53,7 +53,7 @@
 			</nav>
 		</div>
 		<div class="relative">
-			<li class="{% if app.user %}max-md:ml-5 lg:ml-44 {% else %} max-md:mr-16{% endif %}  color-[#a051de] cursor-pointer openSearchUser w-[40px] rounded-full border border-[#a051de] h-[40px]  transition-all flex justify-center items-center list-none hover:bg-[#a051de] hover:text-white hover:border-white"><i class="list-none rotate-[85deg] fa-solid fa-magnifying-glass"></i></li>
+			<li class="{% if app.user %}max-md:-ml-2 lg:ml-44 {% else %} max-md:mr-16{% endif %}  color-[#a051de] cursor-pointer openSearchUser w-[40px] rounded-full border border-[#a051de] h-[40px]  transition-all flex justify-center items-center list-none hover:bg-[#a051de] hover:text-white hover:border-white"><i class="list-none rotate-[85deg] fa-solid fa-magnifying-glass"></i></li>
 			<div class="dropdown">
 				<form id="searchUserForm" class="{% if not app.user %}  max-md:-left-40 {% else %} left-5 {% endif %} text-lg urbanist hidden absolute  flex flex-col gap-3 mt-2 w-64 bg-white rounded-lg shadow-lg p-5 text-gray-800">
 					<input 

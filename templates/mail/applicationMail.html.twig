@@ -5,19 +5,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Votre candidature a été acceptée</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* Ajoutez votre CSS personnalisé ici, si nécessaire */
+        body {
+            background-color: #f7fafc; /* bg-gray-100 */
+            padding: 1.5rem; /* p-6 */
+            font-family: 'Urbanist', Arial, sans-serif; /* Police Urbanist */
+        }
+        .container {
+            max-width: 32rem; /* max-w-lg */
+            background-color: #ffffff; /* bg-white */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* shadow-lg */
+            padding: 1.5rem; /* p-6 */
+            border-left: 4px solid #6b46c1; /* Border left color */
+        }
+        h1 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: bold; /* font-bold */
+            color: #6b46c1; /* text-purple-600 */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        p {
+            color: #4a5568; /* text-gray-700 */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        .footer {
+            margin-top: 2rem; /* mt-8 */
+        }
+        .footer p {
+            color: #4a5568; /* text-gray-600 */
+            font-weight: 600; /* font-semibold */
+        }
+        .highlight {
+            background-color: #edf2f7; /* Light background for highlights */
+            padding: 0.5rem; /* Padding for the highlight */
+            border-radius: 0.25rem; /* Rounded corners for the highlight */
+        }
     </style>
 </head>
-<body class="bg-gray-100 p-6 text-lg urbanist">
-    <div class="container mx-auto max-w-lg bg-white rounded-lg shadow-lg p-6">
-        <h1 class="text-2xl font-bold text-purple-600  mb-4">Félicitations !</h1>
-        <p class="text-gray-700 mb-4">Votre candidature pour le rôle de <span class="font-semibold">{{ role }}</span> a été acceptée !</p>
-        <p class="text-gray-700 mb-6">Bienvenue dans notre équipe. Nous sommes ravis de vous avoir avec nous !</p>
-        <div class="footer mt-8">
-            <p class="text-gray-600">Merci,</p>
-            <p class="text-gray-600 font-semibold">L'équipe Movierev</p>
+<body>
+    <div class="container">
+        <h1>Félicitations !</h1>
+        <p>Votre candidature pour le rôle de <span class="highlight font-semibold">{{ role }}</span> a été acceptée !</p>
+        <p>Bienvenue dans notre équipe. Nous sommes ravis de vous avoir avec nous !</p>
+        <p>Nous vous contacterons bientôt avec plus de détails concernant votre intégration.</p>
+        <div class="footer">
+            <p>Merci,</p>
+            <p>L'équipe MovieRev</p>
         </div>
     </div>
 </body>

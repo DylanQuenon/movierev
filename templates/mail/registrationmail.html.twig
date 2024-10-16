@@ -5,18 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenue chez MovieRev</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7fafc; /* bg-gray-100 */
+            padding: 1.5rem; /* p-6 */
+            font-family: 'Urbanist', Arial, sans-serif; /* Police Urbanist */
+        }
+        .container {
+            max-width: 32rem; /* max-w-lg */
+            background-color: #fff; /* bg-white */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* shadow-lg */
+            padding: 1.5rem; /* p-6 */
+        }
+        h1 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: bold; /* font-bold */
+            color: #3182ce; /* text-blue-600 */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        p {
+            color: #4a5568; /* text-gray-700 */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        .footer {
+            margin-top: 2rem; /* mt-8 */
+        }
+        .footer p {
+            color: #4a5568; /* text-gray-600 */
+            font-weight: 600; /* font-semibold */
+        }
+    </style>
 </head>
-<body class="bg-gray-100 p-6">
-    <div class="container mx-auto max-w-lg bg-white rounded-lg shadow-lg p-6">
-        <h1 class="text-2xl font-bold text-blue-600 mb-4">Bienvenue chez Movierev!</h1>
-        <p class="text-gray-700 mb-4">Bonjour {{ user.fullName }},</p>
-        <p class="text-gray-700 mb-4">Merci de vous être inscrit sur notre plateforme. Nous sommes ravis de vous accueillir dans notre communauté.</p>
-        <p class="text-gray-700 mb-4">Vous pouvez dès maintenant commencer à explorer notre site, partager vos avis sur vos films préférés, et rejoindre notre équipe si vous le souhaitez!</p>
-        <p class="text-gray-700 mb-6">Si vous avez des questions, n'hésitez pas à nous contacter.</p>
-        <div class="footer mt-8">
-            <p class="text-gray-600">Merci de votre inscription,</p>
-            <p class="text-gray-600 font-semibold">L'équipe Movierev</p>
+<body>
+    <div class="container">
+        <h1>Bienvenue chez MovieRev!</h1>
+        <p>Bonjour {{ user.fullName }},</p>
+        <p>Merci de vous être inscrit sur notre plateforme. Nous sommes ravis de vous accueillir dans notre communauté.</p>
+        <p>Vous pouvez dès maintenant commencer à explorer notre site, partager vos avis sur vos films préférés, et rejoindre notre équipe si vous le souhaitez!</p>
+        <p>Si vous avez des questions, n'hésitez pas à nous contacter.</p>
+        <div class="footer">
+            <p>Merci de votre inscription,</p>
+            <p>L'équipe MovieRev</p>
         </div>
     </div>
 </body>

@@ -71,10 +71,9 @@ class AdminApplicationController extends AbstractController
             ->from('contact@movierev.dylanquenon.com') 
             ->to($user->getEmail())
             ->subject('Votre candidature a été acceptée')
-            ->htmlTemplate('mail/applicationMail.html.twig') // Utilise le template
-            ->context([
-                'role' => ($role === 'moderator' ? 'modérateur' : 'rédacteur'), // Passer le rôle au template
-            ]);
+            ->html($this->renderView('mail/applicationMail.html.twig', [
+                'role' => $role === 'redactor' ? 'rédacteur' : 'modérateur',
+            ]));
 
         $mailer->send($email);
 
@@ -107,8 +106,9 @@ class AdminApplicationController extends AbstractController
             ->from('contact@movierev.dylanquenon.com') // Remplace par ton adresse email
             ->to($user->getEmail())
             ->subject('Votre candidature')
-            ->htmlTemplate('mail/rejectedMail.html.twig'); // Utilise le template
-
+            ->html($this->renderView('mail/rejectedMail.html.twig', [
+         
+            ]));
         $mailer->send($email);
 
         // Supprimer la candidature

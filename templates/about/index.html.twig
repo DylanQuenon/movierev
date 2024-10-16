@@ -27,7 +27,7 @@
 								{% if team.avatar %}
 									<img src="/uploads/{{team.avatar}}" alt="Photo de profil de {{team.fullName}}" class="object-cover rounded-3xl">
 								{% else %}
-									<img src="http://placehold.it/64x64" class="object-cover rounded-3xl" alt="Photo de profil de {{team.fullName}}">
+									<img src="/images/nopp.png" class="object-cover rounded-3xl" alt="Photo de profil de {{team.fullName}}">
 								{% endif %}
 							</div>
 							{#heading avec le nom #}
@@ -74,7 +74,7 @@
 			{#video #}
 			<video src="/video/video.mp4" autoplay muted playsinline loop></video>
 			<div class="team_roles_right flex flex-col gap-4 pt-24 max-md:w-full lg:w-1/2" data-aos="fade-up">
-				<h4 class="display-xl object uppercase color-primary" data-aos="fade-up" data-aos-delay="100">Nos
+				<h4 class="display-md object uppercase color-primary" data-aos="fade-up" data-aos-delay="100">Nos
 					<span class="color-tertiary">rédacteurs</span>
 				</h4>
 				<p class="text-lg urbanist" data-aos="fade-up" data-aos-delay="200">Les rédacteurs de Movierev sont les artisans des actualités qui rythment notre site. Chaque jour, ils scrutent l'univers du cinéma pour vous apporter les dernières nouvelles, les rumeurs les plus intrigantes, et les annonces les plus attendues. Grâce à leur passion et leur réactivité, ils vous tiennent informés en temps réel, vous offrant un aperçu des coulisses du septième art. Leur travail est essentiel pour que MovieRev soit toujours à la pointe de l'actualité cinématographique.</p>
@@ -84,7 +84,7 @@
 		<div class="team_roles_second">
 			<div class="wrapper flex justify-between flex-wrap ">
 				<div class="team_roles_second_left sm flex flex-col gap-4 max-md:w-full lg:w-1/2" data-aos="fade-up">
-					<h4 class="display-xl object uppercase color-primary" data-aos="fade-up" data-aos-delay="100">Nos
+					<h4 class="display-md object uppercase color-primary" data-aos="fade-up" data-aos-delay="100">Nos
 						<span class="color-tertiary">Modérateurs</span>
 					</h4>
 					<p class="text-lg urbanist w-11/12" data-aos="fade-up" data-aos-delay="200">Les modérateurs de MovieRev jouent un rôle clé dans le maintien d'une communauté respectueuse et bienveillante. Grâce à leur vigilance, ils s'assurent que les échanges restent courtois et constructifs, en appliquant les règles du site avec impartialité. Leur engagement garantit que chaque membre puisse partager ses avis et critiques dans un environnement serein, où le respect de chacun est primordial. Les modérateurs sont les gardiens de l'harmonie au sein de notre communauté cinéphile.</p>
@@ -103,7 +103,7 @@
 									{% if team.avatar %}
 										<img src="/uploads/{{team.avatar}}" alt="Avatar de {{team.fullName}}" class=" rounded-full w-[130px] h-[130px] object-cover">
 									{% else %}
-										<img src="http://placehold.it/64x64" class="rounded-full w-[130px] h-[130px] object-cover" alt="Avatar de {{team.fullName}}">
+										<img src="/images/nopp.png" class="rounded-full w-[130px] h-[130px] object-cover" alt="Avatar de {{team.fullName}}">
 									{% endif %}
 								</div>
 							</div>
