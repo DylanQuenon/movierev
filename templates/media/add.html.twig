@@ -3,13 +3,15 @@
 
 {% block title %}Ajouter un film{% endblock %}
 
-{% block stylesheets %}{{encore_entry_link_tags('addMovieStyle')}}{% endblock %}
+{% block stylesheets %}{{encore_entry_link_tags('addMovieStyle')}}
+{{encore_entry_link_tags('buttonStyle')}}
+{% endblock %}
 
 {% form_theme myForm 'admin/media/_collection.html.twig' %}
 
 {% block body %}
     <div class="slide bg-secondary flex flex-wrap" id="baseform">
-        <div class="slider_baseform max-md:order-3 max-md:mt-3 max-lg:w-full w-1/2 min-h-[100vh] relative" style="background-image: linear-gradient(to bottom, rgba(160, 81, 222, 0.3), rgba(160, 81, 222, 0.8)), url('/images/wallpaper.jpeg'); background-size: cover; background-position: center;">
+        <div class="slider_baseform max-md:order-3 max-md:mt-3 max-lg:w-full w-1/2 h-auto relative" style="background-image: linear-gradient(to bottom, rgba(160, 81, 222, 0.3), rgba(160, 81, 222, 0.8)), url('/images/wallpaper.jpeg'); background-size: cover; background-position: center;">
         </div>
 
         <div class=" max-md:py-24 max-md:w-full max-lg:order-2 lg:w-1/2 ">
@@ -155,39 +157,39 @@
         </div>
     </div>
 
-<!-- Overlay pour ajouter un acteur -->
-<!-- Overlay pour ajouter un acteur -->
-<div id="actor-modal" class="z-50 fixed  inset-0 bg-black bg-opacity-50 hidden flex w justify-center items-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg h-[500px] overflow-y-scroll w-[50%] mx-4">
-        <h2 class="text-xl font-bold text-center mb-4">Ajouter un acteur</h2>
-        {{ form_start(actorForm, {'action': path('actors_new'), 'method': 'POST'}) }}
-        <div class="grid grid-cols-1 gap-4 mt-4">
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    {{ form_row(actorForm.name) }}
+    <!-- Overlay pour ajouter un acteur -->
+
+    <div id="actor-modal" class="z-50 fixed  inset-0 bg-black bg-opacity-50 hidden flex w justify-center items-center">
+        <div class="bg-white relative p-6 rounded-lg shadow-lg h-[500px] overflow-y-scroll w-[50%] mx-4">
+        <button id="close-actor-modal" class="text-xl w-[40px] h-[40px] flex justify-center items-center rounded-full bg-tertiary absolute top-2 right-2 text-white">×</button>
+            <h2 class="text-xl font-bold text-center mb-4">Ajouter un acteur</h2>
+            {{ form_start(actorForm, {'action': path('actors_new'), 'method': 'POST'}) }}
+            <div class="grid grid-cols-1 gap-4 mt-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        {{ form_row(actorForm.firstName) }}
+                    </div>
+                    <div>
+                        {{ form_row(actorForm.name) }}
+                    </div>
                 </div>
                 <div>
-                    {{ form_row(actorForm.firstName) }}
+                    {{ form_row(actorForm.birthdate) }}
+                </div>
+                <div>
+                    {{ form_row(actorForm.picture) }}
+                </div>
+                <div class="col-span-1">
+                    {{ form_row(actorForm.biography) }}
                 </div>
             </div>
-            <div>
-                {{ form_row(actorForm.birthdate) }}
+            <div class="flex gap-5">
+                <button type="submit" class="w-fit bg-tertiary text-white rounded-md text-lg mt-4 px-4 py-2 hover:bg-opacity-80">Soumettre</button>
+                {{ form_end(actorForm) }}
+            
             </div>
-            <div>
-                {{ form_row(actorForm.picture) }}
-            </div>
-            <div class="col-span-1">
-                {{ form_row(actorForm.biography) }}
-            </div>
-        </div>
-        <div class="flex gap-5">
-            <button type="submit" class="w-fit bg-tertiary text-white rounded-md text-lg mt-4 px-4 py-2 hover:bg-opacity-80">Soumettre</button>
-            {{ form_end(actorForm) }}
-            <button type="button" id="close-actor-modal" class="mt-2 text-gray-600 hover:underline w-fit text-center">Fermer</button>
-        
         </div>
     </div>
-</div>
 
 
 {% endblock %}

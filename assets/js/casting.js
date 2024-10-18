@@ -25,8 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 removeItemButton: true,
                 searchEnabled: true,
                 itemSelectText: '',
-                placeholder: true,
-                placeholderValue: 'Sélectionnez ou ajoutez un acteur'
             });
         });
     };

@@ -6,16 +6,18 @@
     <div class="slide flex py-24 justify-center items-center" id="addReview">
         <div class="max-w-lg w-full bg-white shadow-md rounded-lg p-4">
             <!-- En-tête avec l'avatar et le nom de l'utilisateur -->
-                {% if app.user.avatar %}
-                    <img src="/uploads/{{ app.user.avatar }}" alt="Avatar" class="w-10 h-10 object-cover rounded-full mr-2">
-                {% else %}
-                    <img src="/images/nopp.png" alt="Avatar" class="w-10 h-10 object-cover rounded-full mr-2">
-                {% endif %}
-                <div>
-                    <h2 class="text-lg font-semibold">{{ app.user.username }}</h2>
-                    <p class="text-gray-500 text-sm">Ajoutez votre avis</p>
+                <div class="flex items-center mb-4">
+                    {% if app.user.avatar %}
+                        <img src="/uploads/{{ app.user.avatar }}" alt="Avatar" class="w-10 h-10 object-cover rounded-full mr-2">
+                    {% else %}
+                        <img src="/images/nopp.png" alt="Avatar" class="w-10 h-10 object-cover rounded-full mr-2">
+                    {% endif %}
+                    <div>
+                        <h2 class="text-lg font-semibold">{{ app.user.username }}</h2>
+                        <p class="text-gray-500 text-sm">Ajoutez votre avis</p>
+                    </div>
                 </div>
-            </div>
+          
 
             <!-- Formulaire pour ajouter une review -->
             {{ form_start(myForm) }}
@@ -47,7 +49,9 @@
             <button type="submit" class="text-lg my-4 urbanist py-2 px-4 rounded-md bg-tertiary color-secondary">Publier</button>
             {{ form_end(myForm) }}
         </div>
+    
     </div>
+
 {% endblock %}
 
 {% block javascripts %}

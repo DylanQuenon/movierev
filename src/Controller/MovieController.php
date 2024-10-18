@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MovieController extends AbstractController
@@ -140,6 +141,7 @@ class MovieController extends AbstractController
      * @return Response
      */
     #[Route("/medias/new", name:"medias_new")]
+    #[IsGranted('ROLE_USER')]
     public function create(Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploader): Response
     {
         $media = new Media();
@@ -198,6 +200,7 @@ class MovieController extends AbstractController
      * @return Response
      */
     #[Route("/actors/new", name:"actors_new")]
+    #[IsGranted('ROLE_USER')]
     public function createActor(Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploader): Response
     {
         $actor = new Actor();
@@ -206,6 +209,20 @@ class MovieController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
+            
+                        $existingActor = $manager->getRepository(Actor::class)->findOneBy([
+                            'firstName' => $actor->getFirstName(),
+                            'name' => $actor->getName()
+                        ]);
+            
+                        if ($existingActor) {
+                            $this->addFlash(
+                                'error',
+                                "L'acteur <strong>" . $actor->getFullName() . "</strong> existe déjà"
+                            );
+                            return $this->redirectToRoute('medias_new');
+                        }
+            
             $file = $form['picture']->getData();
             if($file){
                 $imageName = $fileUploader->upload($file);

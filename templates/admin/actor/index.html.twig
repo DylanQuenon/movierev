@@ -3,7 +3,7 @@
 {% block title %}Liste des Acteurs{% endblock %}
 
 {% block body %}
-<div class="container mx-auto p-6">
+<div class="container min-h-screen mx-auto p-6">
     <h1 class="text-2xl font-bold mb-4">Liste des Acteurs</h1>
         	{# Formulaire de recherche #}
 		<div class="flex justify-center my-6">
@@ -56,7 +56,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        {% if isSubmitted %}
+        {% if not isSubmitted %}
             {{ pagination.display() }}
         
         {% endif %}

@@ -146,7 +146,7 @@ class ReviewController extends AbstractController
      * @return Response
      */
     #[Route("/reviews/{slug}", name:"reviews_show")]
-    public function show(string $slug, ReviewRepository $repo, Review $reviews, Request $request, SubscriptionRepository $subrepo, CommentRepository $commentRepo, EntityManagerInterface $manager,LikesRepository $repoLikes): Response
+    public function show(string $slug, ReviewRepository $repo, NotificationService $notifService, Review $reviews, Request $request, SubscriptionRepository $subrepo, CommentRepository $commentRepo, EntityManagerInterface $manager,LikesRepository $repoLikes): Response
     {
 
         $author = $reviews->getAuthor();
@@ -173,11 +173,18 @@ class ReviewController extends AbstractController
 
             $comment->setReview($reviews)  // Associe la review au commentaire
                     ->setAuthor($this->getUser());  // Associe l'auteur
-
-                 
-
+                    
             // Persiste le commentaire
-            $manager->persist($comment);
+            $manager->persist($comment); 
+            $notifService->addNotification(
+                'comment',
+                $comment->getAuthor(), // Utilisateur qui a commenté la review
+                $reviews->getAuthor(),
+                $reviews, // La review associée
+                $comment // Le commentaire lui-même
+            );
+
+        
             $manager->flush();
             $form = $this->createForm(CommentType::class);
 

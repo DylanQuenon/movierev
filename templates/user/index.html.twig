@@ -138,6 +138,14 @@
 										<p class="display-sm urbanist font-semibold">{{user.fullName}}</p>
 										<p class="text-lg urbanist">@{{user.username}}</p>
 									</div>
+									    {% if app.user and ( app.user != user)%}
+										<div class="report transition-all flex gap-2 items-center text-lg font">
+											<button data-id="{{ user.id }}" data-type="reported_user" data-tippy-content="Signaler l'utilisateur" class="bg-tertiary color-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center text-md urbanist hover:underline-offset-4" onclick="openReportModal('reportModal-user-{{ user.id }}')">
+												<i class="fa-regular fa-flag"></i>
+											</button>
+										</div>
+                            
+                            			{% endif %}
 								</div>
 								<p class="biography text-lg urbanist">{{user.biography}}</p>
 								<div class="accountBanneer_info_user_stats w-full flex justify-between px-5 py-3 bg-secondary rounded-3xl">
@@ -291,9 +299,17 @@
 
 		</div>
 	</div>
+{% include 'partials/_modal.html.twig' with { 'type': 'reported_user', 'id': user.id, 'modal_id': 'reportModal-user-' ~ user.id } %}
 {% endblock %}
 {% block javascripts %}
 	<script>
+
+	    function openReportModal(modalId) {
+        var modal = document.getElementById(modalId);
+
+            modal.classList.remove('hidden');
+        
+    }
 		const copyLinkButton = document.querySelector('.copyLink')
 		copyLinkButton.addEventListener('click', function (event) {
 			event.preventDefault();

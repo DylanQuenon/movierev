@@ -111,8 +111,8 @@
                             </div>
                                {% if app.user and ( app.user != review.author)%}
                                 <div class="report transition-all flex gap-2 items-center text-lg font">
-                                    <button data-tippy-content="Signaler la review" class="bg-tertiary color-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center text-md urbanist hover:underline-offset-4" onclick="openReportModal('reportModal')">
-                                    <i class="fa-regular fa-flag"></i>
+                                    <button data-id="{{ review.id }}" data-type="review" data-tippy-content="Signaler la review" class="bg-tertiary color-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center text-md urbanist hover:underline-offset-4" onclick="openReportModal('reportModal-review-{{ review.id }}')">
+                                        <i class="fa-regular fa-flag"></i>
                                     </button>
                                 </div>
                             
@@ -171,7 +171,7 @@
                                                     {{ form_end(replyForms[comment.id]) }}
                                                 </form>
                                                 {% else %}
-                                                <p class="flex gap-2 text-lg urbanist font-semibold ">Vous devez être connecté pour répondre <a href="{{path('account_login')}}"class="color-tertiary">Connectez-vous</a></p>
+                                                <p class="flex gap-2 text-lg urbanist font-semibold ">Vous devez être connecté pour répondre <a href="{{path('account_login')}}"class="color-tertiary"> Connectez-vous</a></p>
                                             
                                             {% endif %}
                                             
@@ -206,15 +206,16 @@
                             {{ form_end(myForm) }}
                             {% else %}
                                 <div>                        
-                                    <p class="flex text-md urbanist font-semibold ">Vous devez être connecté pour commenter <a href="{{path('account_login')}}"class="color-tertiary">Connectez-vous</a></p>
+                                    <p class="flex gap-1  text-md urbanist font-semibold ">Vous devez être connecté pour commenter <a href="{{path('account_login')}}"class="underline color-tertiary"> Connectez-vous</a></p>
                                 </div>
                             {% endif %}
                         </div>
                 </div>
 			</div>
 		</div>
-	</div>
+        </div>
     <!-- Modal pour afficher les utilisateurs qui ont aimé -->
+	</div>
     <div id="likesModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
         <div class="bg-white rounded-lg shadow-lg w-96 p-5">
             <div class="flex justify-between items-center">
@@ -250,7 +251,7 @@
 
     {% include "partials/_sliderReviews.html.twig" %}
 
-    {% include 'partials/_modal.html.twig' with { 'type': 'review', 'id': review.id } %}
+   {% include 'partials/_modal.html.twig' with { 'type': 'review', 'id': review.id, 'modal_id': 'reportModal-review-' ~ review.id } %}
 
 {% endblock %}
 {% block javascripts %}

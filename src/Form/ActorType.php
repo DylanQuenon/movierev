@@ -20,6 +20,7 @@ class ActorType extends ApplicationType
             ->add('firstName',TextType::class,$this->getConfiguration('Prénom',"Prénom de l'acteur"))
             ->add('birthdate', DateType::class, [
                 'widget' => 'single_text',
+                'label' => 'Date de naissance',
             ])
             ->add('picture',FileType::class,$this->getConfiguration('Photo',"Photo de l'acteur"))
             ->add('biography',TextareaType::class,$this->getConfiguration('Biographie',"Biographie de l'acteur") )

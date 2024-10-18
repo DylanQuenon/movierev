@@ -15,7 +15,7 @@
                         {% elseif report.review is not null %}
                             L'utilisateur <span class="font-bold">{{ report.reportedBy.username }}</span> a signalé une critique
                         {% elseif report.reportedUser is not null %}
-                            L'utilisateur <span class="font-bold">{{ report.reportedBy.username }}</span> a signalé <span class="font-bold">{{ report.reportedUser.username }}</span>
+                            L'utilisateur <span class="font-bold">{{ report.reportedBy.username }}</span> a signalé <a href='{{path('user_show',{'slug':report.reportedUser.slug})}}' data-tippy-content="Voir le compte" class="font-bold color-tertiary underline">{{ report.reportedUser.username }}</a>
                         {% endif %}
                     </p>
                     <p class="mb-4 text-gray-600">Raison : <span class="font-bold">{{ report.reason }}</span></p>

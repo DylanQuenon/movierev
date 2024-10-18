@@ -12,6 +12,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -19,8 +20,12 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class ReportController extends AbstractController
 {
 
-    #[IsGranted('ROLE_MODERATEUR')]
+
     #[Route('/reports/{page<\d+>?1}', name: 'reports_index')]
+    #[IsGranted(
+        attribute: new Expression('(is_granted("ROLE_MODERATEUR")) or is_granted("ROLE_ADMIN")'),
+        message: "Vous n'avez pas l'autorisation d'accéder à cette partie"
+    )]
     public function index(Request $request, ReportRepository $repo, PaginatorInterface $paginator, int $page = 1): Response
     {
         // Pagination avec KnpPaginator
@@ -40,6 +45,7 @@ class ReportController extends AbstractController
      * Signaler un utilisateur, une review ou un commentaire
      */
     #[Route('/report/{type}/{id}', name: 'app_report', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function report(string $type, int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $reason = $request->request->get('reason');
@@ -70,7 +76,7 @@ class ReportController extends AbstractController
             if (!$user) {
                 throw $this->createNotFoundException('Utilisateur non trouvé.');
             }
-            $report->setUser($user);
+            $report->setReportedUser($user);
         } else {
             throw new BadRequestHttpException('Type de signalement invalide.');
         }
@@ -87,15 +93,19 @@ class ReportController extends AbstractController
         }
 
         // Si le referer n'est pas disponible, redirigez vers la page d'accueil ou une autre page par défaut
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('home');
     }
 
 
     /**
      * Supprimer un signalement
      */
-    #[Route('/report/delete/{id}', name: 'report_delete', methods: ['POST'])]
-    public function deleteReport(int $id, EntityManagerInterface $entityManager): Response
+    #[Route('/report/delete/{id}', name: 'report_delete')]
+    #[IsGranted(
+        attribute: new Expression('(is_granted("ROLE_MODERATEUR")) or is_granted("ROLE_ADMIN")'),
+        message: "Vous n'avez pas l'autorisation d'accéder à cette partie"
+    )]
+    public function deleteReport(int $id, EntityManagerInterface $entityManager, Request $request): Response
     {
         $report = $entityManager->getRepository(Report::class)->find($id);
 
@@ -109,7 +119,7 @@ class ReportController extends AbstractController
         $this->addFlash('success', 'Le signalement a été supprimé avec succès.');
 
         // Redirection vers la page précédente
-        $referer = $this->requestStack->getCurrentRequest()->headers->get('referer');
+        $referer = $request->headers->get('referer');
         if ($referer) {
             return $this->redirect($referer);
         }

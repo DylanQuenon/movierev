@@ -74,16 +74,20 @@
                             {#casting du film#}
                             <div class="people max-sm:pt-0 relative real" data-aos="fade-left" data-aos-delay="1000" data-aos-duration="1000">
                                 <p class="text-lg bord bold color-tertiary urbanist font-semibold uppercase">Castings</p>
-                                {% for cast in media.castings %}
-                                    {% if cast is not null %}
-                                        <div class="flex items-center gap-2 my-2">
-                                            <img src="/uploads/{{cast.actor.picture}}" alt="Image de {{cast.actor.fullName}}" class=" shadow-none resize-none min-h-[40px]  min-w-[40px] max-h-[40px] max-w-[40px] w-[40px] h-[40px] object-cover rounded-full">
-                                            <div class="name text-md urbanist font-semibold"> <a href="{{path('actor_show', {'slug': cast.actor.slug})}}" class="color-tertiary">{{cast.actor.fullName}}</a> <span class="color-tertiary">-</span> {{cast.role}}</div>
-                                        </div>
+                                {% if media.castings|length > 0 %}
+                                    {% for cast in media.castings %}
+                                        {% if cast is not null %}
+                                            <div class="flex items-center gap-2 my-2">
+                                                <img src="/uploads/{{cast.actor.picture}}" alt="Image de {{cast.actor.fullName}}" class=" shadow-none resize-none min-h-[40px]  min-w-[40px] max-h-[40px] max-w-[40px] w-[40px] h-[40px] object-cover rounded-full">
+                                                <div class="name text-md urbanist font-semibold"> <a href="{{path('actor_show', {'slug': cast.actor.slug})}}" class="color-tertiary">{{cast.actor.fullName}}</a> <span class="color-tertiary">-</span> {{cast.role}}</div>
+                                            </div>
+                                        {% endif %}
+                                        
+                                    {% endfor %}
+                                {% else %}
                                     
-                                    {% endif %}
-                                    
-                                {% endfor %}
+                                    <p class="text-md color-primary urbanist">Pas de casting disponible.</p>
+                                {% endif %}
                             
                             </div>
                         </div>
@@ -108,7 +112,7 @@
                                 {{ loop.index }}
                             </span>
                                 {% include "partials/_card_reviews.html.twig" with {'review':review} %}
-                                <span class="z-10 absolute top-0 right-0 bg-[#a151deb3] border-2 border-[#a051de] flex justify-center items-center w-[50px] h-[50px] rounded-full text-lg font-semibold color-secondary urbanist flex-col my-2"><i class="pt-2 fa-solid fa-heart text-red-500"></i> <span class="mb-2">{{review.likes|length}}</span></span>
+                                <span data-tippy-content="{{review.likes|length}} {% if review.likes|length > 1 %}likes{% else %}like{% endif %}" class="z-10 absolute top-0 right-0 bg-[#a151de] border-2 border-[#a051de] flex justify-center items-center w-[50px] h-[50px] rounded-full text-xl font-semibold color-secondary urbanist flex-col my-2"><i class="pt-2 fa-solid fa-heart text-red-500"></i> <span class="mb-2">{{review.likes|length}}</span></span>
                             </div>
                             
                         {% endfor %}

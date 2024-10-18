@@ -12,6 +12,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -150,6 +151,7 @@ class NotificationController extends AbstractController
         $unreadCountLikes = $notificationRepo->countUnreadLikesNotifications($user, $reviews, $comments);
         $unreadCountFollows = $notificationRepo->countUnreadFollowsNotifications($user);
         $unreadCountReviews = $notificationRepo->countUnreadReviewsNotifications($user);
+        $unreadCountQuizz = $notificationRepo->countUnreadQuizzNotifications($user);
 
         return $this->render('account/notifications/index.html.twig', [
             'notifications' => $notifpagin,
@@ -199,6 +201,7 @@ class NotificationController extends AbstractController
         $unreadCountLikes = $notificationRepo->countUnreadLikesNotifications($user, $reviews, $comments);
         $unreadCountComments = $notificationRepo->countUnreadCommentsNotifications($user);
         $unreadCountReviews = $notificationRepo->countUnreadReviewsNotifications($user);
+        $unreadCountQuizz = $notificationRepo->countUnreadQuizzNotifications($user);
 
         return $this->render('account/notifications/index.html.twig', [
             'notifications' => $notifpagin,
@@ -246,6 +249,7 @@ class NotificationController extends AbstractController
         $unreadCountLikes = $notificationRepo->countUnreadLikesNotifications($user, $reviews, $comments);
         $unreadCountComments = $notificationRepo->countUnreadCommentsNotifications($user);
         $unreadCountReviews = $notificationRepo->countUnreadReviewsNotifications($user);
+        $unreadCountQuizz = $notificationRepo->countUnreadQuizzNotifications($user);
 
         return $this->render('account/notifications/index.html.twig', [
             'notifications' => $notifpagin,
@@ -272,16 +276,17 @@ class NotificationController extends AbstractController
         );
         
         // Récupérer tous les quizz de l'utilisateur
-        $quizzes = $reviewRepo->findBy(['author' => $user, 'type' => 'quizz']);
+        $reviews = $reviewRepo->findBy(['author' => $user]);
         $comments = $commentRepo->findBy(['author' => $user]);
 
         // Compter les notifications non lues
         $unreadCount = $notificationRepo->countUnreadNotifications($user);
         $unreadCountFollows = $notificationRepo->countUnreadFollowsNotifications($user);
        
-        $unreadCountLikes = $notificationRepo->countUnreadLikesNotifications($user, $quizzes, $comments);
+        $unreadCountLikes = $notificationRepo->countUnreadLikesNotifications($user, $reviews, $comments);
         $unreadCountComments = $notificationRepo->countUnreadCommentsNotifications($user);
         $unreadCountQuizz = $notificationRepo->countUnreadQuizzNotifications($user);
+        $unreadCountReviews = $notificationRepo->countUnreadReviewsNotifications($user);
 
         return $this->render('account/notifications/index.html.twig', [
             'notifications' => $notifpagin,
@@ -289,6 +294,7 @@ class NotificationController extends AbstractController
             'unreadCountLikes' => $unreadCountLikes,
             'unreadCountComments' => $unreadCountComments,
             'unreadCount' => $unreadCount,
+            'unreadCountReviews' => $unreadCountReviews,
             'unreadCountQuizz' => $unreadCountQuizz,
         ]);
     }

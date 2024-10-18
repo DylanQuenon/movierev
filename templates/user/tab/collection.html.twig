@@ -70,12 +70,12 @@
 {% block javascripts %}
 
     <script>
-
+    {% if app.user and app.user.id == user.id %}
         document.addEventListener('DOMContentLoaded', function () {
         const privacyToggle = document.querySelector('#collection_isPrivate');
         const privacyIcon = document.getElementById('privacyIcon');
         const privacyText = document.getElementById('privacyText');
-
+        
         function updatePrivacyStatus() {
             if (privacyToggle.checked) {
                 // Private mode
@@ -109,8 +109,6 @@
                 overlay.classList.add('hidden');
             }
         });
-
-        
-
+    {% endif %}
     </script>
 {% endblock %}

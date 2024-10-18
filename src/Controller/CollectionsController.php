@@ -121,6 +121,7 @@ class CollectionsController extends AbstractController
      * @return Response
      */
     #[Route('/collections/new', name: 'collection_new')]
+    #[IsGranted('ROLE_USER')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $collection = new Collections();

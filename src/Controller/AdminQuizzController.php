@@ -58,7 +58,7 @@ class AdminQuizzController extends AbstractController
                 'success',
                 "Le quizz <strong>{$quizz->getTitle()}</strong> a bien été enregistré !"
             );
-            return $this->redirectToRoute('admin_quizz_index');
+            return $this->redirectToRoute('admin_quizz_show', ['slug' => $quizz->getSlug()]);
         }
 
         return $this->render('admin/quizz/create.html.twig', [

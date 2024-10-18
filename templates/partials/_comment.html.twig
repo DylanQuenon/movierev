@@ -22,14 +22,7 @@
                 {% if comment.rating %}
                     {% include "partials/rating.html.twig" with {'rating': comment.rating} %}
                 {% endif %}
-                   {% if app.user and ( app.user != comment.author)%}
-            <div class="absolute top-[55%] right-2 commentsCard_actions report transition-all flex gap-2 items-center text-lg font">
-                <button data-tippy-content="Signaler le commentaire" class="bg-tertiary color-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center text-md urbanist hover:underline-offset-4" onclick="openReportModal('reportModal')">
-                  <i class="fa-regular fa-flag"></i>
-                </button>
-            </div>
-        
-        {% endif %}
+              
             </div>
         </div>
         <div class="commentsCard_content">
@@ -58,6 +51,14 @@
                 Répondre
             </button>
         </div>
+             {% if app.user and ( app.user != comment.author)%}
+            <div class="commentsCard_actions report border-purple-500 border-l-2 pl-3 transition-all flex gap-2 items-center text-lg font">
+               <button data-id="{{ comment.id }}" data-type="comment" data-tippy-content="Signaler le commentaire" class="bg-tertiary color-secondary w-[30px] h-[30px] rounded-full flex justify-center items-center text-md urbanist hover:underline-offset-4" onclick="openReportModal('reportModal-comment-{{ comment.id }}')">
+    <i class="fa-regular fa-flag"></i>
+</button>
+            </div>
+        
+        {% endif %}
         {% if app.user and (app.user == comment.author or is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATEUR')) %}
             <div class="commentsCard_actions answer transition-all border-purple-500 border-l-2 pl-3 flex gap-2 items-center text-lg font">
                 <button onclick="openDeleteModal('deleteModal', 'deleteForm', '{{ path('comment_delete', { 'id': comment.id }) }}', 'Supprimer', 'Annuler')" class="fa-solid fa-trash color-secondary rounded-md py-2 px-2 bg-tertiary"></button>
@@ -100,7 +101,10 @@
 } %}
 
 {# Inclure le modal de signalement #}
-{% include 'partials/_modal.html.twig' with { 'type': 'review_comment', 'id': comment.id } %}
+{# Inclure le modal de signalement avec un ID dynamique #}
+{% include 'partials/_modal.html.twig' with { 'type': 'review_comment', 'id': comment.id, 'modal_id': 'reportModal-comment-' ~ comment.id } %}
+
+
 
 <script>
 function openReportModal(modalId) {

@@ -1,0 +1,90 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Page non trouvée{% endblock %}
+{% block stylesheets %}
+<style>
+  .eye {
+    width: 150px;
+    height: 150px;
+    background-color: white;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin: 0 20px;
+  }
+
+  .pupil {
+    width: 30px;
+    height: 30px;
+    background-color: #a051de;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+   <div class="slide flex py-24 items-center justify-center " id="page404">
+        <div class="flex flex-col gap-10">
+            <div class="high_404">
+                <p class="text403 text-center">500</p>
+                <div class="content404 text-center items-center  flex flex-col gap-2">
+                <p class=" display-md object color-tertiary">
+                OOPS
+                </p>
+                <p class="display-md color-primary w-[85%] font-semibold">OOPS, une erreur s'est produite</p>
+                </div>
+
+            </div>
+                 <div class="flex justify-center items-center py-10">
+                <div class="eye" id="left-eye">
+                    <div class="pupil" id="left-pupil"></div>
+                </div>
+                <div class="eye" id="right-eye">
+                    <div class="pupil" id="right-pupil"></div>
+                </div>
+            </div>
+            <div class="actions404 flex justify-center items-center gap-5 flex-wrap w-[85%] mx-auto">
+            {% include "partials/_button.html.twig" with {text: "Revenir à l'accueil", href: path('home')} %}
+            {% include "partials/_button.html.twig" with {text: "Voir les films & séries", href: path('medias')} %}
+            {% include "partials/_button.html.twig" with {text: "Voir les reviews", href: path("reviews_index")} %}
+
+            </div>
+        </div>
+
+   </div>
+{% endblock %}
+{% block javascripts %}
+
+<script>
+  const leftEye = document.getElementById('left-eye');
+  const rightEye = document.getElementById('right-eye');
+  const leftPupil = document.getElementById('left-pupil');
+  const rightPupil = document.getElementById('right-pupil');
+
+  document.addEventListener('mousemove', (event) => {
+    moveEye(leftEye, leftPupil, event.clientX, event.clientY);
+    moveEye(rightEye, rightPupil, event.clientX, event.clientY);
+  });
+
+  function moveEye(eye, pupil, mouseX, mouseY) {
+    const eyeRect = eye.getBoundingClientRect();
+    const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+    const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+    const dx = mouseX - eyeCenterX;
+    const dy = mouseY - eyeCenterY;
+    const angle = Math.atan2(dy, dx);
+    const distance = Math.min(Math.sqrt(dx * dx + dy * dy), eyeRect.width / 3);
+    const maxDistance = eyeRect.width / 3;
+    const pupilX = Math.cos(angle) * Math.min(distance, maxDistance);
+    const pupilY = Math.sin(angle) * Math.min(distance, maxDistance);
+    pupil.style.transform = `translate(${pupilX}px, ${pupilY}px)`;
+  }
+</script>
+
+{% endblock %}

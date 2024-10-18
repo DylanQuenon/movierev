@@ -91,13 +91,15 @@ video{
             position: absolute;
             font-size: 60px;
             font-style: italic;
+            z-index: 2;
             &.start{
                 top: -15%;
                 left: 0%;
             }
             &.end{
-                bottom: -25%;
+                bottom: -30%;
                 right: 2%;
+                
             }
         }
         img{

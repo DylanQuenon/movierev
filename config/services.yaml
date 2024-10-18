@@ -8,6 +8,13 @@ parameters:
     contact_email: '%env(CONTACT_EMAIL)%'
 
 services:
+    App\Twig\NotificationExtension:
+        arguments:
+            $notificationRepository: '@App\Repository\NotificationRepository'
+            $security: '@security.helper'
+        tags:
+            - { name: twig.extension }
+    
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -29,6 +36,8 @@ services:
     App\Service\FileUploaderService:
         arguments:
             $targetDirectory: '%kernel.project_dir%/public/uploads'
+
+  
 
 
     # add more service definitions when explicit configuration is needed

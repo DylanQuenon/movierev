@@ -72,12 +72,12 @@ body{
 }
 .shadowWhite{
     width: 119%;
-    height: 30vh;
+    height: 15vh;
     background-color: $color-secondary;
     filter: blur(15px);
     position: absolute;
     left: -40px;
-    bottom: -130px;
+    bottom: -50px;
     z-index: 6;
     @media all and (max-width:1200px) {
         display: none;

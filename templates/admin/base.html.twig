@@ -14,8 +14,9 @@
 </head>
 <body>
     {% include 'admin/partials/header.html.twig' %}  
-
-    {% block body %}{% endblock %}
+    <div class="min-h-screen">
+        {% block body %}{% endblock %}
+    </div>
 
     {% include 'admin/partials/footer.html.twig' %}
 

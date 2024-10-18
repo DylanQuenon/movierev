@@ -40,4 +40,17 @@ class ReportRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    /**
+     * Compter le nombre de signalements
+     *
+     * @return integer
+     */
+    public function countReports(): int
+    {
+        return $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

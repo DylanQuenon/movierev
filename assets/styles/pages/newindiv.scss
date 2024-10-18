@@ -4,6 +4,13 @@
         list-style: disc;
         margin-left: 2%;
     }
+    iframe{
+        @media all and (max-width:768px) {
+            width: 100%;
+           
+            
+        }
+    }
     .wrapper{
         padding:$spacing-9xl 0;
         .card_news{
