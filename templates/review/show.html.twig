@@ -30,11 +30,19 @@
 									<span class="material-symbols-outlined">chevron_right</span>
 								</a>
 								{#Copier le lien#}
-								<button id="copyLink" class="w-fit text-md items-center bg-tertiary rounded-md color-secondary urbanist font-semibold py-2 px-4 flex gap-2">
-									<span class="material-symbols-outlined -rotate-45">
-										link</span>
-									<span class="textCopyLink">Copier le lien</span>
-								</button>
+                                <div class="flex flex-wrap gap-2">
+                                    <button id="copyLink" class="w-fit text-md items-center bg-tertiary rounded-md color-secondary urbanist font-semibold py-2 px-4 flex gap-2">
+                                        <span class="material-symbols-outlined -rotate-45">
+                                            link</span>
+                                        <span class="textCopyLink">Copier le lien</span>
+                                    </button>
+                                    <button id="shareLink" class="bg-[rgba(161,81,222,0.15)] border-[#a051de] border w-fit text-md items-center rounded-md urbanist font-semibold py-2 px-4 flex gap-2">
+                                        <span class="material-symbols-outlined">
+                                            share
+                                        </span>Partager sur
+                                    </button>
+                                
+                                </div>
 
                              
 							</div>
@@ -253,9 +261,51 @@
 
    {% include 'partials/_modal.html.twig' with { 'type': 'review', 'id': review.id, 'modal_id': 'reportModal-review-' ~ review.id } %}
 
+    <div id="share-overlay" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center hidden z-50">
+      <div class="bg-white p-8 rounded-lg shadow-lg">
+         <h3 class="text-2xl font-bold mb-6 font-urbanist text-gray-800">Partager cette page</h3>
+         <div class="flex gap-6 text-lg urbanist">
+               <a href="https://www.facebook.com/sharer/sharer.php?u={{ app.request.uri }}" target="_blank" class="flex items-center share-button justify-center bg-blue-600 text-white px-6 py-3 rounded-full font-urbanist transition-all hover:bg-blue-700">
+                  <svg class="w-6 h-6 mr-2" fill="white" viewBox="0 0 24 24" aria-hidden="true">
+                     <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                  </svg>
+                  Facebook
+               </a>
+               <a href="https://twitter.com/intent/tweet?url={{ app.request.uri }}" target="_blank" class="flex items-center share-button justify-center bg-black text-white px-6 py-3 rounded-full font-urbanist transition-all hover:bg-gray-800">
+                  <svg class="w-6 h-6 mr-2" fill="white" viewBox="0 0 24 24" aria-hidden="true">
+                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                  X (Twitter)
+               </a>
+               <button id="copyLink" class="flex items-center justify-center bg-gray-600 text-white px-6 py-3 rounded-full font-urbanist transition-all hover:bg-gray-700">
+                  <svg class="w-6 h-6 mr-2" fill="none" stroke="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                  </svg>
+                  Copier le lien
+               </button>
+         </div>
+      </div>
+   </div>
+
 {% endblock %}
 {% block javascripts %}
 <script>
+   const openShareOverlay = document.getElementById('shareLink');
+    const shareOverlay = document.getElementById('share-overlay');
+
+           // Ouvrir l'overlay de partage
+        openShareOverlay.addEventListener('click', function(event) {
+            event.preventDefault();
+            shareOverlay.classList.remove('hidden');
+        });
+
+        // Fermer l'overlay en cliquant en dehors de la boîte
+        shareOverlay.addEventListener('click', function(event) {
+            if (event.target === shareOverlay) {
+                shareOverlay.classList.add('hidden');
+            }
+        });
+
     function openReportModal(modalId) {
         var modal = document.getElementById(modalId);
 
