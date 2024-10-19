@@ -6,6 +6,7 @@ use App\Entity\Quizz;
 use App\Form\QuizzType;
 use App\Entity\Question;
 use App\Form\QuestionType;
+use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
 use App\Service\PaginationService;
 use App\Repository\QuizzRepository;
@@ -13,8 +14,10 @@ use App\Service\NotificationService;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminQuizzController extends AbstractController
@@ -246,11 +249,13 @@ class AdminQuizzController extends AbstractController
                     'quizz' => $quizz
                 ]);
             }
+           
             foreach ($question->getAnswers() as $answer) {
+                
                 $answer->setQuestion($question); 
                 $manager->persist($answer);
             }
-    
+            $manager->persist($question);
             $manager->flush(); // Sauvegarder les modifications
     
             // Ajouter un message flash
@@ -308,14 +313,37 @@ class AdminQuizzController extends AbstractController
         return $this->redirectToRoute('admin_quizz_show', ['slug' => $quizz->getSlug()]);
     }
 
+    /**
+     * Prevenir les users
+     *
+     * @param Quizz $quizz
+     * @param UserRepository $userRepo
+     * @param EntityManagerInterface $manager
+     * @param NotificationService $notificationService
+     * @return Response
+     */
     #[Route('/admin/quizz/{slug}/finish', name: 'admin_quiz_finish')]
-    public function finishQuiz(Quizz $quizz, UserRepository $userRepo, EntityManagerInterface $manager, NotificationService $notificationService): Response
+    public function finishQuiz(Quizz $quizz, UserRepository $userRepo, MailerInterface $mailer, EntityManagerInterface $manager, NotificationService $notificationService): Response
     {
         
         $users = $userRepo->findAll();
+        $quizUrl = $this->generateUrl('quizz_show', ['slug' => $quizz->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL);
 
         foreach ($users as $user) {
             $notificationService->addNotification('new_quizz', $this->getUser(), $user, null, null, null, $quizz);
+            
+            $email = (new Email())
+            ->from('contact@movierev.dylanquenon.com')  
+            ->to($user->getEmail()) 
+            ->replyTo($user->getEmail())
+            ->subject("Nouveau quizz disponible")
+            ->html($this->renderView('mail/newquizz.html.twig', [
+                'quiz_url' => $quizUrl,  // Passer l'URL du quiz au template
+                'quizz' => $quizz,
+            ]));
+    
+
+            $mailer->send($email);
         }
 
         $this->addFlash('success', "Les utilisateurs ont été notifiés que le quiz <strong>{$quizz->getTitle()}</strong> est maintenant disponible !");

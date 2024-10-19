@@ -1,0 +1,62 @@
+{# templates/emails/new_quiz_notification_email.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Quiz Disponible !</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #555;
+            line-height: 1.6;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            color: white !important;
+            text-decoration: none;
+            background-color: #007bff;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #aaa;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Un Nouveau Quiz Vous Attend !</h1>
+        <p>Bonjour,</p>
+        <p>Nous sommes ravis de vous annoncer qu'un nouveau quiz est maintenant disponible sur notre plateforme ! Testez vos connaissances et défiez vos amis.</p>
+        <p>Ne manquez pas l'occasion de participer et de voir comment vous vous situez par rapport aux autres.</p>
+        <a href="{{ quiz_url }}" class="button">Voir le Quiz</a>
+        <p>Amusez-vous bien !</p>
+        <p>L'équipe de MovieRev</p>
+        <div class="footer">
+            <p>Si vous n'avez pas demandé à recevoir cet e-mail, veuillez nous en excuser.</p>
+        </div>
+    </div>
+</body>
+</html>

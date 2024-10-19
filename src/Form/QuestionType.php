@@ -20,14 +20,8 @@ class QuestionType extends ApplicationType
             ->add('title',TextType::class,$this->getConfiguration('Titre','Choisir un énoncé pour la question'))
             ->add('answers', CollectionType::class, [
                 'entry_type' => AnswerType::class,
-                'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
-                'prototype' => true,
-                'attr' => [
-                    'class' => 'answers-container',
-                    'data-prototype' => '<div class="form-group">__name__</div>', // Assurez-vous que le prototype est correctement défini ici
-                ],
             ]);
         ;
     }

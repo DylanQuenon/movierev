@@ -12,22 +12,22 @@
 {% endblock %}
 
 {% block _question_answers_entry_widget %}
-    <div class="my-6 border border-gray-300 rounded-lg p-6 shadow-sm" id="block_{{ id }}">
+    <div class="my-6 border border-gray-300 rounded-lg p-6 shadow-sm form-group" id="block_{{id}}">
         <div class="flex flex-col md:flex-row items-start md:items-center">
             <div class="flex-1 w-full md:w-auto mb-4 md:mb-0 md:mr-4">
                 <div class="flex flex-col md:flex-row">
                     <div class="flex-1 mb-4 md:mb-0 md:mr-4">
-                        {{ form_widget(form.content, {'attr': {'class': 'w-full'}}) }}
+                        {{ form_widget(form.content) }}
                         {{ form_errors(form.content) }}
                     </div>
                     <div class="flex items-center mb-4 md:mb-0">
                         {{ form_widget(form.isCorrect) }}
-                        {{ form_label(form.isCorrect, 'Correct ?', {'label_attr': {'class': 'ml-2'}}) }}
+                        {{ form_label(form.isCorrect) }}
                         {{ form_errors(form.isCorrect) }}
                     </div>
                 </div>
             </div>
-            <button type="button" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300" data-action="delete" data-target="#block_{{ id }}">Supprimer</button>
+            <button type="button" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300" data-action="delete" data-target="#block_{{id}}">Supprimer</button>
         </div>
 
     </div>

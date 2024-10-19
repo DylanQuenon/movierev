@@ -315,7 +315,7 @@ class AccountController extends AbstractController
     */
    #[Route("/account/delete", name: "account_delete")]
    #[IsGranted('ROLE_USER')]
-   public function deleteAccount(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $manager, TokenStorageInterface $tokenStorage): Response
+   public function deleteAccount(Request $request, UserPasswordHasherInterface $hasher, MailerInterface $mailer, EntityManagerInterface $manager, TokenStorageInterface $tokenStorage): Response
    {
        $user = $this->getUser();
        $form = $this->createForm(DeleteType::class);
@@ -356,6 +356,17 @@ class AccountController extends AbstractController
 
                    //effacer la connexion
                    $tokenStorage->setToken(null);
+                   $email = (new Email())
+                   ->from('contact@movierev.dylanquenon.com')  
+                   ->to($user->getEmail()) 
+                   ->replyTo($user->getEmail())
+                   ->subject("Au revoir !")
+                   ->html($this->renderView('mail/deletemail.html.twig', [
+                       'user' => $user,
+                   ]));
+           
+       
+                   $mailer->send($email);
                    //retirer
                    $manager->remove($user);
                    $manager->flush();
