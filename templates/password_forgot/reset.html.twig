@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialiser le mot de passe de votre compte{% endblock %}
+
+{% block body %}
+    <div class="slide bg-center py-24 flex justify-center items-center bg-cover bg-no-repeat" id="deleteAccount" style="background-image: url('/images/bgdelete.jpg')">
+        <div class="content_delete flex flex-col items-center gap-5">
+            <div class="content_delete_heading flex items-center flex-col gap-5">
+                <div class="content_delete_heading_title flex items-center flex-col gap-2">
+                    <div class="square rounded-xl w-[50px] h-[50px] border border-[#252525]  flex justify-center items-center color-tertiary">
+                        <span class="material-symbols-outlined" style="font-size:30px">fingerprint</span>
+                    </div>
+                    <h3 class="display-md urbanist font-semibold color-tertiary">Un nouveau mot de passe ?</h3>
+                </div>
+                <p class="text-lg urbanist text-center w-[70%] max-md:w-full">Avant de quitter le grand écran, nous aimerions savoir si vous êtes sûr de vouloir mettre fin à votre histoire avec nous.</p>
+            </div>
+            <div class="w-[60%] text-lg urbanist">
+                {{form_start(myForm)}}
+                {{form_widget(myForm)}}
+                <button class="py-3 text-center border border-[#a051de] w-full text-lg urbanist transition-all bg-tertiary rounded-md color-secondary hover:bg-[rgba(161,81,222,0.15)] hover:text-[rgb(161,81,222)]">Valider</button>
+                {{form_end(myForm)}}
+            
+            </div>
+        
+        </div>
+    </div>
+    
+{% endblock %}
+
+

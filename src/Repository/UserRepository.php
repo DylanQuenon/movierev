@@ -78,6 +78,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                     ->getResult();
     }
 
+       // Crée une méthode pour charger un utilisateur par email
+       public function loadUserByUsername(string $email): ?User
+       {
+           $user = $this->findOneBy(['email' => $email]);
+           return $user;
+       }
+
     
 
 
