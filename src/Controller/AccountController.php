@@ -347,8 +347,7 @@ class AccountController extends AbstractController
                 ->from('contact@movierev.dylanquenon.com')  
                 ->to($user->getEmail()) 
                 ->subject("Au revoir !")
-                ->html($this->renderView('mail/deletemail.html.twig', [
-                    'user' => $user,
+                ->html($this->renderView('mail/deleteMail.html.twig', [
                 ]));
         
     
