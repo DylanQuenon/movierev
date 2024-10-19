@@ -343,6 +343,17 @@ class AccountController extends AbstractController
 
                //password valide ? 
                if ($isPasswordValid) {
+                // $email = (new Email())
+                // ->from('contact@movierev.dylanquenon.com')  
+                // ->to($user->getEmail()) 
+                // ->replyTo($user->getEmail())
+                // ->subject("Au revoir !")
+                // ->html($this->renderView('mail/deletemail.html.twig', [
+                //     'user' => $user,
+                // ]));
+        
+    
+                // $mailer->send($email);
 
                    $avatarFilename = $user->getAvatar();
 
@@ -356,17 +367,7 @@ class AccountController extends AbstractController
 
                    //effacer la connexion
                    $tokenStorage->setToken(null);
-                   $email = (new Email())
-                   ->from('contact@movierev.dylanquenon.com')  
-                   ->to($user->getEmail()) 
-                   ->replyTo($user->getEmail())
-                   ->subject("Au revoir !")
-                   ->html($this->renderView('mail/deletemail.html.twig', [
-                       'user' => $user,
-                   ]));
-           
-       
-                   $mailer->send($email);
+                
                    //retirer
                    $manager->remove($user);
                    $manager->flush();
@@ -390,5 +391,7 @@ class AccountController extends AbstractController
            'myForm' => $form->createView()
        ]);
    }
+
+
 
 }
