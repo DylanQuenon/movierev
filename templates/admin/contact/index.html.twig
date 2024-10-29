@@ -27,7 +27,7 @@
                             <td class="py-2 px-4">{{ contact.firstName }}</td>
                             <td class="py-2 px-4">{{ contact.mail }}</td>
                             <td class="py-2 px-4">{{ contact.object }}</td>
-                            <td class="py-2 px-4">{{ contact.message }}</td>
+                            <td class="py-2 px-4">{{ contact.message|slice(0, 50) ~ '...' }}</td>
                             <td class="py-2 px-4">{{ contact.sentAt|date("d-m-Y H:i:s") }}</td>
                             <td class="py-2 px-4 flex space-x-2">
                                 <a href="{{ path('admin_contacts_show', {'id': contact.id}) }}" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
