@@ -3,22 +3,29 @@
 {% block title %}Ajouter un Genre{% endblock %}
 
 {% block body %}
-<div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-4">Ajouter un Genre</h1>
 
-    {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+<div class="container mx-auto p-6 bg-white shadow-md rounded-lg">
+    <h1 class="text-2xl font-bold mb-6 text-gray-800">Ajouter un Genre</h1>
+
+    {{ form_start(form, {'attr': {'class': 'space-y-5'}}) }}
         <div>
             {{ form_label(form.name, 'Nom du genre', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-            {{ form_widget(form.name, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
-            {{ form_errors(form.name) }}
+            <div class="mt-1">
+                {{ form_widget(form.name, {'attr': {'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
+                {{ form_errors(form.name, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+            </div>
         </div>
 
-        <div class="flex items-center justify-between mt-4">
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        <div class="flex items-center justify-between mt-5">
+            <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                 Ajouter
             </button>
-            <a href="{{ path('admin_genre_index') }}" class="text-gray-600 hover:text-gray-800">Retour à la liste</a>
+
+            <a href="{{ path('admin_genre_index') }}" class="text-purple-600 hover:text-purple-800 font-medium">
+                Retour à la liste
+            </a>
         </div>
     {{ form_end(form) }}
 </div>
+
 {% endblock %}

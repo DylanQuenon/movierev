@@ -80,10 +80,10 @@ class QuizzController extends AbstractController
         $questionId = $data['questionId'];
         $answerId = $data['answerId'];
 
-        // Récupérez la bonne réponse depuis votre base de données ou un service
+        // Récupère la bonne réponse
         $correctAnswerId = $quizzRepository->getCorrectAnswerId($questionId); 
 
-        // Vérifiez si la réponse est correcte
+        // Vérifie si la réponse est correcte
         $isCorrect = $answerId == $correctAnswerId;
 
         return new JsonResponse([

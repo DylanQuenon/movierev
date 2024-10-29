@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\GenreRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\GenreRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GenreRepository::class)]
+#[UniqueEntity(fields:["name"], message:"Ce genre existe déjà")]
 class Genre
 {
     #[ORM\Id]
@@ -16,6 +19,7 @@ class Genre
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom est obligatoire")]
     private ?string $name = null;
 
     /**
