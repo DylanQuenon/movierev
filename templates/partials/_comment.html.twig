@@ -100,8 +100,7 @@
     cancel_text: 'Annuler'
 } %}
 
-{# Inclure le modal de signalement #}
-{# Inclure le modal de signalement avec un ID dynamique #}
+
 {% include 'partials/_modal.html.twig' with { 'type': 'review_comment', 'id': comment.id, 'modal_id': 'reportModal-comment-' ~ comment.id } %}
 
 

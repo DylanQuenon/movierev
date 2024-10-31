@@ -19,7 +19,7 @@
             {#Filtres des séries & films#}
             <div class="flex flex-wrap items-center justify-between filters">
                 {% include "partials/_search.html.twig" %}
-                <form method="GET" action="{{ path('medias') }}" class="flex gap-2 items-center">
+                <form method="GET" action="{{ path('medias') }}" class="flex flex-wrap gap-2 items-center">
                     <div class="flex items-center gap-2">
                         <span class="material-symbols-outlined"> instant_mix</span>
                         <span class="text-md color-tertiary">Filtrer par</span>
