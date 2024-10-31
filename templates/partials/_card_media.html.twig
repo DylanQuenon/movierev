@@ -56,7 +56,7 @@
                 
                 {% for collection in app.user.collections %}
                     <li class="flex justify-between text-md urbanist items-center w-full p-2 border-b">
-                        <span>{{ collection.name }}</span>
+                        <span class="w-1/2">{{ collection.name }}</span>
                         <button class="add-media-btn rounded-full h-[30px] w-[30px] flex justify-center items-center bg-tertiary text-lg color-secondary font-semibold urbanist" data-collection-id="{{ collection.id }}" data-media-id="{{ media.id }}">
                             +
                         </button>
