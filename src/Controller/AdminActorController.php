@@ -37,7 +37,7 @@ class AdminActorController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $query = $form->get('query')->getData();
-            $isSubmited=true;
+            $isSubmitted=true;
             $actors = $repo->searchActorByName($query);
         }else{
         $pagination->setDataSource(Actor::class)->setPage($page)->setLimit(9)->setRoute('admin_actors_index');

@@ -154,7 +154,7 @@ class AdminMediaController extends AbstractController
     
             $this->addFlash(
                 'success',
-                "Le Média <strong>".$media->getTitle()."</strong> a bien été modifiée"
+                "Le média <strong>".$media->getTitle()."</strong> a bien été modifié"
             );
     
             return $this->redirectToRoute('admin_medias_index');
