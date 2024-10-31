@@ -232,6 +232,11 @@ body{
     }
     #trailerModal{
       z-index: 999;
+      iframe{
+        width: 100% !important;
+        height: 300px !important;
+    }
+
 
     }
 .choices{
