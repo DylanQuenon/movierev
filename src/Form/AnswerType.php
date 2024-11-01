@@ -18,7 +18,7 @@ class AnswerType extends ApplicationType
     {
         $builder
             ->add('content',TextType::class,$this->getConfiguration('Contenu','Choisir le contenu de la réponse'))
-            ->add('isCorrect', null, ['attr' => ['id' => 'myForm_isCorrect']])
+            ->add('isCorrect', CheckboxType::class, $this->getConfiguration("Bonne réponse ?", "Cochez si c'est la bonne réponse", ['required' => false]))
         ;
     }
 
