@@ -23,9 +23,9 @@
                   {#Contenu de l'article#}
                   <div class="card_news_content flex flex-col gap-5">
                      {#Stats de l'article#}
-                     <div class="card_news_content_info2 flex justify-between">
+                     <div class="card_news_content_info2 flex items-center flex-wrap justify-between">
                         {#Statut de l'article#}
-                        <div class="card_news_content_info2_status">
+                        <div class="card_news_content_info2_status max-md:my-2">
                            {% if news.status == 'officiel' %}
                               <p class="font-semibold urbanist uppercase text-lg status-officiel">{{news.status}}</p>
                            {% elseif news.status == 'rumeur' %}
@@ -71,9 +71,9 @@
                      <div class="card_news_content_info1 flex max-sm:flex-col justify-between">
                      
                         {#Titre de l'article#}
-                        <p class="w-[75%] display-md urbanist font-semibold my-5">{{news.title}}</p>
+                        <p class="lg:w-[75%] max-md:w-full display-md urbanist font-semibold my-5">{{news.title}}</p>
                         {#Liens#}
-                        <div class="card_news_content_info1_actions flex max-sm:flex-row md:flex-col gap-4">
+                        <div class="card_news_content_info1_actions flex flex-col gap-4">
                            {#Copier le lien#}
                            <button id="copyLink" class="w-fit text-lg urbanist font-semibold py-2 px-4 flex gap-2">
                               <span class="material-symbols-outlined"> link</span>
@@ -103,7 +103,7 @@
                            <div class="card_news_content_info1_author_infos_name flex flex-col gap-1">
                               {#Nom de l'auteur#}
                               <p class="text-sm text-gray-400 urbanist">Par
-                                 <a href="#" class="font-semibold color-primary">{{news.author.fullName}}</a>
+                                 <a href="{{path('user_show', {'slug': news.author.slug})}}" class="font-semibold color-primary">{{news.author.fullName}}</a>
                               </p>
                               {#date de l'article#}
                               <p class="text-sm text-gray-400 urbanist">Publié le
@@ -139,7 +139,7 @@
                
             
                {#Commentaires#}
-               <h2 class="object uppercase display-xl color-tertiary w-full">Commentaires ({{news.comments|length}}) </h2>
+               <h2 class="object uppercase display-md color-tertiary w-full">Commentaires ({{news.comments|length}}) </h2>
                   {% if news.comments|length <= 0 %}
                      <div class="flex items-center justify-center h-full w-full">
                         <p class="text-lg urbanist">Pas encore de commentaire <span class="color-tertiary font-semibold">Soyez le premier</span></p>
@@ -176,7 +176,7 @@
                                              </form>
                                           </div>
                                           {% else %}
-                                          <div class="flex gap-2">
+                                          <div class="flex flex-wrap gap-2">
                                              <p class="text-lg urbanist font-semibold">Vous devez être connecté pour pouvoir répondre</p>
                                                 <a href="{{path('account_login')}}" class="text-lg urbanist color-tertiary font-semibold underline">Se connecter</a>
                                           
@@ -228,7 +228,7 @@
                   
                   </div>
                   {% else %}
-                  <div class="flex gap-2 items-center justify-center">
+                  <div class="flex gap-2 flex-wrap items-center justify-center">
                      <p class="text-lg text-center urbanist">Vous devez être connecté pour pouvoir commenter</p>
                      <a href="{{path('account_login')}}" class="text-lg urbanist color-tertiary font-semibold underline">Se connecter</a>
                             

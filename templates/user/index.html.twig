@@ -162,7 +162,7 @@
 										Suivis
 									</div>
 								</div>
-								<div class="accountBanneer_info_user_actions flex justify-between">
+								<div class="accountBanneer_info_user_actions flex flex-wrap justify-between">
 									{% if app.user %}
 										{% if app.user.id == user.id %}
 											<a href="{{path('account_profile')}}" class="py-2 w-2/5 h-fit bg-tertiary color-secondary text-center rounded-md text-lg urbanist">
@@ -188,7 +188,7 @@
 									{% endif %}
 
 
-									<button class="py-2 w-2/5 h-fit bg-secondary transition-all ease-in-out hover:bg-[rgba(161,81,222,0.15)] border border-[#A051DE] copyLink color-tertiary text-center rounded-md text-lg urbanist ">Copier l'url du profil</button>
+									<button class="py-2 w-2/5 h-fit bg-secondary transition-all ease-in-out hover:bg-[rgba(161,81,222,0.15)] border border-[#A051DE] copyLink color-tertiary text-center rounded-md text-lg urbanist ">Copier le lien</button>
 								</div>
 							</div>
 
@@ -316,7 +316,7 @@
 			navigator.clipboard.writeText(window.location.href).then(function () {
 				copyLinkButton.innerHTML = 'Lien copié';
 				setTimeout(function () {
-					copyLinkButton.innerHTML = 'Copier l\'url du profil';
+					copyLinkButton.innerHTML = 'Copier le lien';
 				}, 3000);
 				}, function (err) {
 				console.error('Erreur lors de la copie du lien : ', err);
